@@ -10,13 +10,13 @@
         <shpandrak-version>1.0-SNAPSHOT</shpandrak-version>
         <gae.version>1.7.7</gae.version>
     </properties>
-<!--
-    <modules>
-        <module>shpanlist-model</module>
-        <module>shpanlist-gds</module>
-        <module>shpanlist-web</module>
-    </modules>
--->
+    <!--
+        <modules>
+            <module>shpanlist-model</module>
+            <module>shpanlist-gds</module>
+            <module>shpanlist-web</module>
+        </modules>
+    -->
 
     <build>
         <plugins>
@@ -73,13 +73,13 @@
                             <artifactId>gae-codegen</artifactId>
                             <version>${shpandrak-version}</version>
                         </dependency>
-<!--
-                        <dependency>
-                            <groupId>com.shpandrak</groupId>
-                            <artifactId>db-codegen</artifactId>
-                            <version>${shpandrak-version}</version>
-                        </dependency>
--->
+                        <!--
+                                                <dependency>
+                                                    <groupId>com.shpandrak</groupId>
+                                                    <artifactId>db-codegen</artifactId>
+                                                    <version>${shpandrak-version}</version>
+                                                </dependency>
+                        -->
                         <dependency>
                             <groupId>com.shpandrak</groupId>
                             <artifactId>xml-codegen</artifactId>
@@ -95,13 +95,13 @@
                             <artifactId>rest-codegen</artifactId>
                             <version>${shpandrak-version}</version>
                         </dependency>
-<!--
-                        <dependency>
-                            <groupId>com.shpandrak</groupId>
-                            <artifactId>db</artifactId>
-                            <version>${shpandrak-version}</version>
-                        </dependency>
--->
+                        <!--
+                                                <dependency>
+                                                    <groupId>com.shpandrak</groupId>
+                                                    <artifactId>db</artifactId>
+                                                    <version>${shpandrak-version}</version>
+                                                </dependency>
+                        -->
                         <dependency>
                             <groupId>com.shpandrak</groupId>
                             <artifactId>gae-datastore</artifactId>
