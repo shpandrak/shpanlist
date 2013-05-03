@@ -1,5 +1,5 @@
-<generatorConfiguration name ='vote-root'>
-    <storeFile>/src/main/resources/vote.xml</storeFile>
+<generatorConfiguration name ='shpanlist-root'>
+    <storeFile>/src/main/resources/shpanlist.xml</storeFile>
     <generators>
         <generator>
             <class>com.shpandrak.codegen.PojoGenerator</class>

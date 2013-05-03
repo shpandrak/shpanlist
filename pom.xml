@@ -1,6 +1,6 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.shpandrak.shanlist</groupId>
+    <groupId>com.shpandrak.shpanlist</groupId>
     <version>1.0</version>
     <artifactId>shpanlist-parent</artifactId>
     <packaging>pom</packaging>
@@ -10,13 +10,13 @@
         <shpandrak-version>1.0-SNAPSHOT</shpandrak-version>
         <gae.version>1.7.7</gae.version>
     </properties>
-    <!--
         <modules>
             <module>shpanlist-model</module>
+<!--
             <module>shpanlist-gds</module>
             <module>shpanlist-web</module>
+-->
         </modules>
-    -->
 
     <build>
         <plugins>

@@ -17,10 +17,6 @@
                     <max-length>255</max-length>
                     <mandatory>false</mandatory>
                 </string-field>
-                <enum-field name ="email">
-                    <max-length>255</max-length>
-                    <mandatory>false</mandatory>
-                </enum-field>
                 <string-field name ="firstName">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
