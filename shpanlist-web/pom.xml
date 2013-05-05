@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <parent>
+        <groupId>com.shpandrak.shpanlist</groupId>
+        <artifactId>shpanlist-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>shpanlist-web</artifactId>
+    <name>ShpanList Web</name>
+    
+    <build>
+        <plugins>
+            <!-- running the sif generator -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <dependencies>
+
+        <!-- For Shpandrak infra -->
+<!--
+        <dependency>
+            <groupId>com.shpandrak</groupId>
+            <artifactId>datamodel</artifactId>
+            <version>${shpandrak-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.shpandrak</groupId>
+            <artifactId>persistence</artifactId>
+            <version>${shpandrak-version}</version>
+        </dependency>
+-->
+        <dependency>
+            <groupId>com.shpandrak</groupId>
+            <artifactId>rest</artifactId>
+            <version>${shpandrak-version}</version>
+        </dependency>
+
+        <!-- End of for shpandrak infra -->
+
+        <dependency>
+            <groupId>com.shpandrak.shpanlist</groupId>
+            <artifactId>shpanlist-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.shpandrak.shpanlist</groupId>
+            <artifactId>shpanlist-gds</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+    </dependencies>
+
+
+</project>

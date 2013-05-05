@@ -1,8 +1,8 @@
-<generatorConfiguration name='shpanlist-model'>
+<generatorConfiguration name='shpanlist-gds'>
     <parentConfiguration>shpanlist-root</parentConfiguration>
     <generators>
         <generator>
-            <class>com.shpandrak.codegen.PojoGenerator</class>
+            <class>com.shpandrak.codegen.GoogleDatastoreLayerGenerator</class>
         </generator>
     </generators>
 </generatorConfiguration>

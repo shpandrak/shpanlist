@@ -92,7 +92,7 @@
                 </many-to-many>
             </relations>
         </entity>
-        <entity name="list" owner-entity="listGroup">
+        <entity name="listTemplate" owner-entity="listGroup">
             <fields>
                 <string-field name ="name">
                     <max-length>255</max-length>

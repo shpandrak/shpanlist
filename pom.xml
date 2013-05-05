@@ -12,10 +12,8 @@
     </properties>
         <modules>
             <module>shpanlist-model</module>
-<!--
             <module>shpanlist-gds</module>
             <module>shpanlist-web</module>
--->
         </modules>
 
     <build>
