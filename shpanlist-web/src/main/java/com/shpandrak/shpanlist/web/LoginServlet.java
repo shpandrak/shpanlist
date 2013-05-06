@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
             if (user == null){
                 httpServletResponse.getWriter().println("Boooo!");
             }else {
-                httpServletResponse.getWriter().println("Yey!");
+                httpServletResponse.sendRedirect("/main.html");
             }
         } catch (PersistenceException e) {
             httpServletResponse.getWriter().println("Baahhhh" + e.getMessage());
