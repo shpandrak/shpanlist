@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hi</title>
+    <script src="webmanage/jquery-1.8.3.js"></script>
+    <script type="text/javascript">
+
+        function doLogin() {
+            window.alert(txtUserName.value + ":" + txtPassword.value)
+            frmLogin.submit();
+        }
+
+    </script>
+</head>
+<body>
+    <form name="frmLogin" action="/auth/login" method="post">
+        <table style="border-spacing:0;padding:0">
+            <tr>
+                <td>
+                    <input name="txtUserName" type="text"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="txtPassword" type="password"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" onClick="doLogin()" value="Login"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

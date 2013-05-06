@@ -6,9 +6,17 @@
         version="3.0">
 
     <servlet>
-        <servlet-name>VoteStartupServlet</servlet-name>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ShpanListStartupServlet</servlet-name>
         <servlet-class>com.shpandrak.shpanlist.rest.ShpanlistStartupServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>ListUserWebManageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.manage.ListUserWebManageServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Jersey Web Application</servlet-name>
@@ -24,8 +32,16 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>VoteStartupServlet</servlet-name>
+        <servlet-name>ShpanListStartupServlet</servlet-name>
         <url-pattern>/whoopee</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListUserWebManageServlet</servlet-name>
+        <url-pattern>/webmanage/listUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/auth/login</url-pattern>
     </servlet-mapping>
 
 <!--

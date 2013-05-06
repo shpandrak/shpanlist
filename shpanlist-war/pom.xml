@@ -13,7 +13,22 @@
     <artifactId>shpanlist-war</artifactId>
     <description>Shpanlist War</description>
     <build>
+
         <plugins>
+            <!-- running the sif generator -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -28,12 +43,9 @@
                                 <include>**/appengine-web.xml</include>
                             </includes>
                         </resource>
-                        <!--
-                            <resource>
-                                <directory>target/generated-resources/shpangen</directory>
-                            </resource>
-                        -->
-
+                        <resource>
+                            <directory>target/generated-resources/shpangen</directory>
+                        </resource>
                     </webResources>
                 </configuration>
             </plugin>
@@ -69,6 +81,14 @@
             <scope>test</scope>
         </dependency>
         <!-- jersey end-->
+
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Logging -->
 
