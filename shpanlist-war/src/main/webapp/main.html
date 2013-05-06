@@ -5,6 +5,7 @@
     <script src="/webmanage/prototype.js"></script>
     <script src="/webmanage/jquery-1.8.3.js"></script>
     <script src="/webmanage/listGroupLibrary.js"></script>
+    <script src="/webmanage/listUserLibrary.js"></script>
 
     <script type="text/javascript">
 
@@ -12,7 +13,8 @@
 
         }
         function listSuccess(xml){
-            alert(xml);
+            //alert(xml);
+            ListGroupLibrary.fillTable(tabLists,xml);
         }
         function listFailure(errorText){
             alert(errorText);
