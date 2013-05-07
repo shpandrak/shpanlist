@@ -67,6 +67,11 @@
             <artifactId>shpanlist-gds</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.shpandrak.shpanlist</groupId>
+            <artifactId>shpanlist-services</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>javax</groupId>

@@ -6,8 +6,8 @@
         version="3.0">
 
     <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.shpandrak.shpanlist.web.LoginServlet</servlet-class>
+        <servlet-name>DoItServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.DoItServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InitDataServlet</servlet-name>
@@ -44,8 +44,8 @@
         <url-pattern>/webmanage/listUser</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/auth/login</url-pattern>
+        <servlet-name>DoItServlet</servlet-name>
+        <url-pattern>/doIt</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>InitDataServlet</servlet-name>

@@ -1,36 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Shopping list utility</title>
-    <script src="/webmanage/prototype.js"></script>
-    <script src="/webmanage/jquery-1.8.3.js"></script>
-    <script src="/webmanage/listGroupLibrary.js"></script>
-    <script src="/webmanage/listUserLibrary.js"></script>
+    <title>User List Groups</title>
 
-    <script type="text/javascript">
+<script src="/webmanage/jquery-1.8.3.js"></script>
+<script src="/webmanage/prototype.js"></script>
+<script src="/webmanage/listGroupLibrary.js"></script>
+<script type="text/javascript">
 
-        function log(msg){
+    function log(msg){
 
-        }
-        function listSuccess(xml){
-            //alert(xml);
-            ListGroupLibrary.fillTable(tabLists,xml);
-        }
-        function listFailure(errorText){
-            alert(errorText);
-        }
+    }
+    function listSuccess(xmlData){
+        tabGroups.innerHTML = "<thead><td><b>Name</b></td><td>&nbsp;</td></thead>";
+        jQuery(xmlData).find("listGroup").each(function () {
+            var currEntity = jQuery(this);
+            var currEntityId = currEntity.attr("id");
+            var row = tabGroups.insertRow(tabGroups.rows.length);
+            //row.innerHTML = "<td><input type=\"checkbox\" /><input type=\"button\" value=\"Delete\" onClick=\"ListGroupLibrary.deleteEntity('" + currEntityId + "')\"/></td>";
+            var cell;
+            cell = row.insertCell(row.cells.length);
+            cell.innerHTML = currEntity.find("name").text();
+            cell = row.insertCell(row.cells.length);
+            cell.innerHTML = '<a HREF=\"javascript:alert(\'' + currEntityId + '\')\">Open</a>';
+        });
+    }
+    function listFailure(errorText){
+        alert(errorText);
+    }
 
-        function loadMe(){
-            ListGroupLibrary.list(listSuccess, listFailure);
-        }
+    function loadMe(){
+        ListGroupLibrary.list(listSuccess, listFailure);
+    }
 
 
-
-
-    </script>
+</script>
 </head>
+
 <body onload="loadMe()">
     <h1>My Lists</h1>
-    <table id="tabLists"></table>
+    <table id="tabGroups"></table>
 </body>
 </html>
+

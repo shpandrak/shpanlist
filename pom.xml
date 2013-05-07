@@ -15,6 +15,7 @@
             <module>shpanlist-gds</module>
             <module>shpanlist-web</module>
             <module>shpanlist-war</module>
+            <module>shpanlist-services</module>
         </modules>
 
     <build>
