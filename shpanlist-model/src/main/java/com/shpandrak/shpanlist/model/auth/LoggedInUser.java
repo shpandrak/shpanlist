@@ -1,5 +1,7 @@
 package com.shpandrak.shpanlist.model.auth;
 
+import com.shpandrak.datamodel.field.Key;
+
 import java.io.Serializable;
 
 /**
@@ -9,10 +11,16 @@ import java.io.Serializable;
  * Time: 17:45
  */
 public class LoggedInUser implements Serializable {
+    private final Key userId;
     private final String userName;
 
-    public LoggedInUser(String userName) {
+    public LoggedInUser(Key userId, String userName) {
+        this.userId = userId;
         this.userName = userName;
+    }
+
+    public Key getUserId() {
+        return userId;
     }
 
     public String getUserName() {

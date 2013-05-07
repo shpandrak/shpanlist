@@ -7,6 +7,21 @@ var ShpanlistController = {
         window.location.replace("/main.html")
     },
 
+    listListGroups: function(successFunction){
+        jQuery.post(
+            "/doIt",
+            { what: "listListGroups"}
+        )
+            .done(
+            function(responseText){
+                successFunction(responseText);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
+    },
+
     signIn: function (userName, password) {
             jQuery.post(
                 "/doIt",

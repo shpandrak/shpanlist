@@ -5,7 +5,7 @@
 
 <script src="/webmanage/jquery-1.8.3.js"></script>
 <script src="/webmanage/prototype.js"></script>
-<script src="/webmanage/listGroupLibrary.js"></script>
+<script src="ShpanlistController.js"></script>
 <script type="text/javascript">
 
     function log(msg){
@@ -25,12 +25,9 @@
             cell.innerHTML = '<a HREF=\"javascript:alert(\'' + currEntityId + '\')\">Open</a>';
         });
     }
-    function listFailure(errorText){
-        alert(errorText);
-    }
 
     function loadMe(){
-        ListGroupLibrary.list(listSuccess, listFailure);
+        ShpanlistController.listListGroups(listSuccess);
     }
 
 

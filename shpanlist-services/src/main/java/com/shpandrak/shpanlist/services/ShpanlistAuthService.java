@@ -1,4 +1,4 @@
-package com.shpandrak.shpanlist.services.auth;
+package com.shpandrak.shpanlist.services;
 
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
@@ -20,7 +20,7 @@ public abstract class ShpanlistAuthService {
             ListUserManager listUserManager = new ListUserManager();
             ListUser byField = listUserManager.getByField(ListUser.DESCRIPTOR.userNameFieldDescriptor, userName);
             if (byField != null && byField.getShpanPassword().equals(password)){
-                return new LoggedInUser(byField.getUserName());
+                return new LoggedInUser(byField.getId(), byField.getUserName());
             }
             return null;
         }finally {
