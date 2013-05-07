@@ -4,7 +4,7 @@ var ShpanlistController = {
     },
 
     showListGroups: function(){
-        window.location.replace("/main.html")
+        window.location.replace("/listGroups.html")
     },
 
     listListGroups: function(successFunction){

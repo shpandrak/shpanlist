@@ -57,7 +57,6 @@ public class DoItServlet extends HttpServlet {
                 response.getWriter().println("Boooo!");
             }else {
                 request.getSession().setAttribute("user", user);
-                //response.sendRedirect("/main.html");
                 response.getWriter().println("Yey!");
             }
         } catch (PersistenceException e) {
