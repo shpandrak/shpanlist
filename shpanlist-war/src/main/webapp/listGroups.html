@@ -22,7 +22,7 @@
             cell = row.insertCell(row.cells.length);
             cell.innerHTML = currEntity.find("name").text();
             cell = row.insertCell(row.cells.length);
-            cell.innerHTML = '<a HREF=\"javascript:alert(\'' + currEntityId + '\')\">Open</a>';
+            cell.innerHTML = '<a HREF=\"javascript:ShpanlistController.showListGroup(\'' + currEntityId + '\')\">Open</a>';
         });
     }
 

@@ -7,6 +7,10 @@ var ShpanlistController = {
         window.location.replace("/listGroups.html")
     },
 
+    showListGroup: function(listGroupId){
+        alert("Showing list group: " + listGroupId);
+    },
+
     listListGroups: function(successFunction){
         jQuery.post(
             "/doIt",
