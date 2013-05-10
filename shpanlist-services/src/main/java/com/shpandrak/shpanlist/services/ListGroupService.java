@@ -1,5 +1,7 @@
 package com.shpandrak.shpanlist.services;
 
+import com.shpandrak.datamodel.field.Key;
+import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
 import com.shpandrak.shpanlist.gae.datastore.ListGroupManager;
@@ -20,6 +22,16 @@ public abstract class ListGroupService {
         try{
             ListGroupManager listGroupManager = new ListGroupManager();
             return listGroupManager.listByMemberRelationship(loggedInUser.getUserId());
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static ListGroup getListGroup(Key listGroupId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListGroupManager listGroupManager = new ListGroupManager();
+            return listGroupManager.getById(listGroupId, RelationshipLoadLevel.FULL);
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

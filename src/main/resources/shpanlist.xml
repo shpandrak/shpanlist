@@ -8,28 +8,28 @@
     <entities>
         <entity name="listUser">
             <fields>
-                <string-field name ="userName">
+                <string-field name="userName">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
                     <key>true</key>
                 </string-field>
-                <string-field name ="email">
+                <string-field name="email">
                     <max-length>255</max-length>
                     <mandatory>false</mandatory>
                 </string-field>
-                <string-field name ="firstName">
+                <string-field name="firstName">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
                 </string-field>
-                <string-field name ="lastName">
+                <string-field name="lastName">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
                 </string-field>
-                <string-field name ="faceBookUserId">
+                <string-field name="faceBookUserId">
                     <max-length>255</max-length>
                     <mandatory>false</mandatory>
                 </string-field>
-                <string-field name ="shpanPassword">
+                <string-field name="shpanPassword">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
                 </string-field>
@@ -37,20 +37,20 @@
                     <enum-name>gender</enum-name>
                     <mandatory>false</mandatory>
                 </enum-field>
-                <date-field name ="birthDate">
+                <date-field name="birthDate">
                     <mandatory>false</mandatory>
                 </date-field>
-                <date-field name ="creationDate">
+                <date-field name="creationDate">
                     <mandatory>true</mandatory>
                 </date-field>
             </fields>
         </entity>
         <entity name="listSession">
             <fields>
-                <boolean-field name ="enabled">
+                <boolean-field name="enabled">
                     <mandatory>true</mandatory>
                 </boolean-field>
-                <date-field name ="loginDate">
+                <date-field name="loginDate">
                     <mandatory>true</mandatory>
                 </date-field>
             </fields>
@@ -64,12 +64,12 @@
         </entity>
         <entity name="listGroup">
             <fields>
-                <string-field name ="name">
+                <string-field name="name">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
                     <key>true</key>
                 </string-field>
-                <date-field name ="creationDate">
+                <date-field name="creationDate">
                     <mandatory>true</mandatory>
                 </date-field>
             </fields>
@@ -84,22 +84,21 @@
                     <mandatory>true</mandatory>
                     <related-entity>listUser</related-entity>
                     <fields>
-                        <date-field name ="joinDate">
+                        <date-field name="joinDate">
                             <mandatory>true</mandatory>
                         </date-field>
                     </fields>
-
                 </many-to-many>
             </relations>
         </entity>
         <entity name="listTemplate" owner-entity="listGroup">
             <fields>
-                <string-field name ="name">
+                <string-field name="name">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
                     <key>true</key>
                 </string-field>
-                <date-field name ="creationDate">
+                <date-field name="creationDate">
                     <mandatory>true</mandatory>
                 </date-field>
             </fields>
@@ -110,6 +109,19 @@
                     <related-entity>listUser</related-entity>
                 </one-to-many>
             </relations>
+        </entity>
+        <entity name="listTemplateItem" owner-entity="listTemplate">
+            <fields>
+                <string-field name="name">
+                    <max-length>255</max-length>
+                    <mandatory>true</mandatory>
+                    <key>true</key>
+                </string-field>
+                <string-field name="description">
+                    <max-length>2000</max-length>
+                    <mandatory>true</mandatory>
+                </string-field>
+            </fields>
         </entity>
     </entities>
 </metadata_store>

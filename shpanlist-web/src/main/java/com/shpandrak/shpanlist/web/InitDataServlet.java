@@ -46,15 +46,20 @@ public class InitDataServlet extends HttpServlet {
                 listUserManager.create(shpandrakUser);
             }
 
-            List<ListGroup> shpandrakListGroups = listGroupManager.listByOwnerUserRelationship(shpandrakUser.getId());
-            if (shpandrakListGroups.isEmpty()){
-                // Creating default list template
-                ListGroup listGroup = new ListGroup("My List Group", new Date(), shpandrakUser);
+//            List<ListGroup> shpandrakListGroups = listGroupManager.listByOwnerUserRelationship(shpandrakUser.getId());
+            ListGroup listGroup = listGroupManager.getByField(ListGroup.DESCRIPTOR.nameFieldDescriptor, "My List Group");
+            if (listGroup == null){
+                // Creating default list group
+                listGroup = new ListGroup("My List Group", new Date(), shpandrakUser);
                 listGroup.getMemberRelationship().addNewRelation(new ListGroupMemberRelationshipEntry(shpandrakUser, listGroup.getCreationDate()));
                 listGroupManager.create(listGroup);
             }
 
-
+            List<ListTemplate> listTemplates = listTemplateManager.listByListGroupRelationship(listGroup.getId());
+            if (listTemplates.isEmpty()){
+                ListTemplate listTemplate = new ListTemplate(listGroup, "My first list", new Date(), shpandrakUser);
+                listTemplateManager.create(listTemplate);
+            }
 
 
         }finally {

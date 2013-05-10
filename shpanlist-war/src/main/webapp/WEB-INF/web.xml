@@ -10,6 +10,10 @@
         <servlet-class>com.shpandrak.shpanlist.web.DoItServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>WelcomeServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.WelcomeServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>InitDataServlet</servlet-name>
         <servlet-class>com.shpandrak.shpanlist.web.InitDataServlet</servlet-class>
     </servlet>
@@ -48,11 +52,15 @@
         <url-pattern>/doIt</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>WelcomeServlet</servlet-name>
+        <url-pattern>/welcome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>InitDataServlet</servlet-name>
         <url-pattern>/initData</url-pattern>
     </servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
+        <welcome-file-list>
+            <welcome-file>welcome</welcome-file>
+        </welcome-file-list>
 </web-app>

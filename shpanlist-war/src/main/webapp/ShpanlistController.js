@@ -1,14 +1,40 @@
+
 var ShpanlistController = {
-    showSignIn: function () {
-        window.location.replace("/login.html");
+
+    signedInUser:null,
+
+
+    loadApp: function(){
+        if (this.signedInUser == null){
+            this.menuSignIn();
+        }else{
+            this.menuListGroups();
+        }
     },
 
-    showListGroups: function(){
-        window.location.replace("/listGroups.html")
+    menuSignIn: function () {
+        ShpanlistView.showSignIn();
     },
 
-    showListGroup: function(listGroupId){
-        alert("Showing list group: " + listGroupId);
+    menuListGroups: function(){
+        ShpanlistView.showListGroups();
+    },
+
+
+
+    menuListGroup: function(listGroupId){
+        jQuery.post(
+            "/doIt",
+            { what: "getListGroup", listGroupId: listGroupId}
+        )
+            .done(
+            function(responseText){
+                ShpanlistView.showListGroup(responseText);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
     },
 
     listListGroups: function(successFunction){
@@ -34,7 +60,7 @@ var ShpanlistController = {
         .done(
             function(responseText){
                 if (responseText == "Yey!\n"){
-                    ShpanlistController.showListGroups();
+                    window.location.reload();
                 }else{
                     alert("Nope... " + responseText);
                 }

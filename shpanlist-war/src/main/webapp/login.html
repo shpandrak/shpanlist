@@ -1,31 +1,19 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Sign In</title>
-    <script src="webmanage/jquery-1.8.3.js"></script>
-    <script src="webmanage/prototype.js"></script>
-    <script src="ShpanlistController.js"></script>
-</head>
-<body>
-    <div>
-        <table style="border-spacing:0;padding:0">
-            <tr>
-                <td>
-                    <input id="txtUserName" type="text"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input id="txtPassword" type="password"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="button" onClick="ShpanlistController.signIn(txtUserName.value, txtPassword.value)"
-                           value="Login"/>
-                </td>
-            </tr>
-        </table>
-    </div>
-</body>
-</html>
+<table style="border-spacing:0;padding:0">
+    <tr>
+        <td>
+            <input id="txtUserName" type="text"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="txtPassword" type="password"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="button" onClick="ShpanlistController.signIn(txtUserName.value, txtPassword.value)"
+                   value="Login"/>
+        </td>
+    </tr>
+</table>
