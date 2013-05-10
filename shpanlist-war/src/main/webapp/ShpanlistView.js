@@ -41,7 +41,7 @@ var ShpanlistView = {
             '<h1>' + ShpanlistController.signedInUser + '\'s Groups</h1>' +
             '<table id="tabListTemplates"></table>';
 
-        alert(jQuery(listGroupXml).find("listGroup").attr("id"));
+        alert(jQuery(listGroupXml).first("listGroup").attr("id"));
 /*
         var tabListTemplates = document.getElementById("tabListTemplates");
         jQuery(listGroupXml).find("listGroup").each(function () {
