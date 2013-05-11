@@ -70,26 +70,22 @@ var ShpanlistController = {
         });
 
 
-/*
-        new Ajax.Request("/auth/login", {
-            method: 'post',
-            evalJS: false,
-            headers: {
-                "userName":userName,
-                "password":password
-            },
-            onSuccess: function (transport) {
-                alert(transport.responseText);
-            },
-            onFailure: function (transport) {
-                alert("Failed oh no!" + transport.status + ": " + transport.statusText);
-            },
-            onException: function (request, e) {
-                alert("Exception occurred boo " + e);
-            }
-        });
-*/
+    },
+
+    menuListTemplate: function(listTemplateId){
+        jQuery.post(
+            "/doIt",
+            { what: "getListTemplateFull", listTemplateId: listTemplateId }
+        )
+            .done(
+            function(responseText){
+                ListTemplateView.show(responseText);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
     }
+
 
 
 }

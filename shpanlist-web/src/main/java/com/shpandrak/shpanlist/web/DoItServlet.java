@@ -1,10 +1,11 @@
 package com.shpandrak.shpanlist.web;
 
-import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.shpanlist.model.ListGroup;
+import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 import com.shpandrak.shpanlist.services.ListGroupService;
+import com.shpandrak.shpanlist.services.ListTemplateService;
 import com.shpandrak.shpanlist.services.ShpanlistAuthService;
 import com.shpandrak.xml.EntityXMLConverter;
 
@@ -38,6 +39,8 @@ public class DoItServlet extends HttpServlet {
                 listListGroups(loggedInUser, request, response);
             }else if ("getListGroup".equals(what)){
                 getListGroup(loggedInUser, request, response);
+            }else if ("getListTemplateFull".equals(what)){
+                getListTemplateFull(loggedInUser, request, response);
             }
 
         } catch (PersistenceException e) {
@@ -51,6 +54,12 @@ public class DoItServlet extends HttpServlet {
         String listGroupId = request.getParameter("listGroupId");
         ListGroup listGroup = ListGroupService.getListGroup(ListGroup.DESCRIPTOR.idFieldDescriptor.fromString(listGroupId));
         response.getWriter().print(new EntityXMLConverter<ListGroup>(ListGroup.DESCRIPTOR).toXML(listGroup));
+    }
+
+    private void getListTemplateFull(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
+        String listTemplateId = request.getParameter("listTemplateId");
+        ListTemplate listTemplate = ListTemplateService.getListTemplateFull(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId));
+        response.getWriter().print(new EntityXMLConverter<ListTemplate>(ListTemplate.DESCRIPTOR).toXML(listTemplate));
     }
 
     private void listListGroups(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {

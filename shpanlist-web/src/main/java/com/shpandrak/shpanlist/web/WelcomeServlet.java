@@ -27,9 +27,9 @@ public class WelcomeServlet extends HttpServlet{
                 "<head>\n" +
                 "    <title>Hi Dude</title>\n" +
                 "    <script src=\"webmanage/jquery-1.8.3.js\"></script>\n" +
-                "    <script src=\"webmanage/prototype.js\"></script>\n" +
                 "    <script src=\"ShpanlistView.js\"></script>\n" +
                 "    <script src=\"ShpanlistController.js\"></script>\n" +
+                "    <script src=\"listTemplateView.js\"></script>\n" +
                 "    <script type=\"text/javascript\">\n" +
                 "\n" +
                 "        function onLoad() {\n");
@@ -41,6 +41,7 @@ public class WelcomeServlet extends HttpServlet{
 
         rw.append(
                 "            ShpanlistView.mainFrame = divMain;\n" +
+                "            ListTemplateView.mainFrame = divMain;\n" +
                 "            ShpanlistController.loadApp();\n" +
                 "        }\n" +
                 "\n" +

@@ -37,26 +37,23 @@ var ShpanlistView = {
     },
 
     showListGroup: function(listGroupXml){
-        this.mainFrame.innerHTML =
-            '<h1>' + ShpanlistController.signedInUser + '\'s Groups</h1>' +
-            '<table id="tabListTemplates"></table>';
 
-        alert(jQuery(listGroupXml).first("listGroup").attr("id"));
-/*
-        var tabListTemplates = document.getElementById("tabListTemplates");
-        jQuery(listGroupXml).find("listGroup").each(function () {
-            var currEntity = jQuery(this);
-            var currEntityId = currEntity.attr("id");
+        //alert(jQuery(listGroupXml).first("listGroup").attr("id"));
+        var groupName = jQuery(listGroupXml).find("name").first().text();
 
-            var row = tabListTemplates.insertRow(tabListTemplates.rows.length);
-            //row.innerHTML = "<td><input type=\"checkbox\" /><input type=\"button\" value=\"Delete\" onClick=\"ListGroupLibrary.deleteEntity('" + currEntityId + "')\"/></td>";
-            var cell;
-            cell = row.insertCell(row.cells.length);
-            cell.innerHTML = currEntity.find("name").text();
-            cell = row.insertCell(row.cells.length);
-            cell.innerHTML = '<a HREF=\"javascript:ShpanlistController.menuListGroup(\'' + currEntityId + '\')\">Open</a>';
-        });
-*/
+        var theHtml =
+            '<h1>' + groupName + '\'s List templates</h1>' +
+            '<table id="tabListTemplates">';
+
+
+            jQuery(listGroupXml).find("listTemplateRelationshipEntries").first().find("listTemplate").each(function () {
+                    var currEntity = jQuery(this);
+                    var currEntityId = currEntity.attr("id");
+                    theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
+                    theHtml += '<td><a HREF=\"javascript:ShpanlistController.menuListTemplate(\'' + currEntityId + '\')\">Open Template</a></td></tr>';
+                });
+
+        this.mainFrame.innerHTML = theHtml;
 
 
 
