@@ -5,11 +5,11 @@ var ListTemplateView = {
 
     show: function(listTemplateXml){
         var listTemplateDoc = $(listTemplateXml).find("listTemplate").first();
-        this.listTemplateId = listTemplateDoc.attr("id");
-        var listTemplateName = listTemplateDoc.find("name").first().text();
+        this.listTemplateId = $(listTemplateXml).find("listTemplate").first().attr("id");
+        var listTemplateName = $(listTemplateXml).find("name").first().text();
         var theHtml = '<h2>' + listTemplateName + '</h2><table id="tabListTemplateItems">';
 
-        listTemplateDoc.find("listTemplateItemRelationshipEntries").find("listTemplateItem") .each(function() {
+        $(listTemplateXml).find("listTemplateItemRelationshipEntries").find("listTemplateItem") .each(function() {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
             theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
