@@ -1,11 +1,14 @@
 package com.shpandrak.shpanlist.services;
 
+import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
+import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.model.ListTemplate;
+import com.shpandrak.shpanlist.model.ListTemplateItem;
 
 /**
  * Created with love
@@ -20,6 +23,26 @@ public abstract class ListTemplateService {
         try{
             ListTemplateManager listTemplateManager = new ListTemplateManager();
             return listTemplateManager.getById(listTemplateId, RelationshipLoadLevel.FULL);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static void addListTemplateItem(Key listTemplateId, String listTemplateItemName, String listTemplateItemDescription) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
+            listTemplateItemManager.create(new ListTemplateItem(listTemplateId, listTemplateItemName, listTemplateItemDescription));
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static void removeListTemplateItem(Key listTemplateItemId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
+            listTemplateItemManager.delete(listTemplateItemId);
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

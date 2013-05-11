@@ -3,6 +3,7 @@ package com.shpandrak.shpanlist.web;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.shpanlist.model.ListGroup;
 import com.shpandrak.shpanlist.model.ListTemplate;
+import com.shpandrak.shpanlist.model.ListTemplateItem;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 import com.shpandrak.shpanlist.services.ListGroupService;
 import com.shpandrak.shpanlist.services.ListTemplateService;
@@ -41,6 +42,12 @@ public class DoItServlet extends HttpServlet {
                 getListGroup(loggedInUser, request, response);
             }else if ("getListTemplateFull".equals(what)){
                 getListTemplateFull(loggedInUser, request, response);
+            }else if ("addListTemplateItem".equals(what)){
+                addListTemplateItem(loggedInUser, request, response);
+            }else if ("removeListTemplateItem".equals(what)){
+                removeListTemplateItem(loggedInUser, request, response);
+            }else {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid action " + what);
             }
 
         } catch (PersistenceException e) {
@@ -48,6 +55,19 @@ public class DoItServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
+    }
+
+    private void addListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listTemplateId = request.getParameter("listTemplateId");
+        String listTemplateItemName = request.getParameter("listTemplateItemName");
+        String listTemplateItemDescription = request.getParameter("listTemplateItemDescription");
+        ListTemplateService.addListTemplateItem(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), listTemplateItemName, listTemplateItemDescription);
+    }
+
+    private void removeListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listTemplateId = request.getParameter("listTemplateId");
+        String listTemplateItemId = request.getParameter("listTemplateItemId");
+        ListTemplateService.removeListTemplateItem(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
     }
 
     private void getListGroup(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {

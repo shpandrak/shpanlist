@@ -84,6 +84,36 @@ var ShpanlistController = {
             .fail(function(jqXHR, textStatus) {
                 alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
+    },
+
+    addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription){
+        jQuery.post(
+            "/doIt",
+            { what: "addListTemplateItem", listTemplateId:listTemplateId, listTemplateItemName: listTemplateItemName, listTemplateItemDescription:listTemplateItemDescription}
+        )
+            .done(
+            function(responseText){
+                ShpanlistController.menuListTemplate(listTemplateId);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
+    },
+
+    removeListTemplateItem: function(listTemplateId, listTemplateItemId){
+        jQuery.post(
+            "/doIt",
+            { what: "removeListTemplateItem", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId}
+        )
+            .done(
+            function(responseText){
+                ShpanlistController.menuListTemplate(listTemplateId);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
     }
 
 
