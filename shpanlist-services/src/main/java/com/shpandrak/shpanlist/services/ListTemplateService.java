@@ -27,7 +27,7 @@ public abstract class ListTemplateService {
         }
     }
 
-    public static void addListTemplateItem(Key listTemplateId, String listTemplateItemName, String listTemplateItemDescription, Integer defaultAmount) throws PersistenceException {
+    public static void addListTemplateItem(Key listTemplateId, String listTemplateItemName, String listTemplateItemDescription, Long defaultAmount) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();

@@ -18,9 +18,11 @@ var ListTemplateView = {
 
         });
 
-        theHtml += '<tr><td>Item:<input type="text" id="txtNewItemName"/></td><td>description:<input type="text" id="txtNewItemDescription"/></td><td>Default Amount:<input type="number" min="1" id="txtNewItemDefaultAmount"/></td><td><a HREF="javascript:ListTemplateView.createNewItem()">Add</a></td></tr>';
+        theHtml += '<tr><td>Item:<input type="text" id="txtNewItemName"/></td><td>description:<input type="text" id="txtNewItemDescription"/></td><td>Default Amount:<input type="number" min="1" id="txtNewItemDefaultAmount"/></td><td><a HREF="javascript:ListTemplateView.createNewItem()">Add</a></td></tr></table>';
 
-        this.mainFrame.innerHTML = theHtml + '</table>';
+        theHtml += '<br/><a href="javascript:ListTemplateView.createListFromTemplate()">Create list from this template</a>';
+
+        this.mainFrame.innerHTML = theHtml;
     },
 
     createNewItem: function(){
@@ -29,5 +31,10 @@ var ListTemplateView = {
 
     removeItem: function(listTemplateItemId){
         ShpanlistController.removeListTemplateItem(ListTemplateView.listTemplateId, listTemplateItemId);
+    },
+
+    createListFromTemplate: function(){
+        ShpanlistController.createListFromTemplate(ListTemplateView.listTemplateId);
     }
+
 }

@@ -121,9 +121,9 @@
                     <max-length>2000</max-length>
                     <mandatory>false</mandatory>
                 </string-field>
-                <integer-field name="defaultAmount">
+                <long-field name="defaultAmount">
                     <mandatory>false</mandatory>
-                </integer-field>
+                </long-field>
             </fields>
         </entity>
         <entity name="listInstance" owner-entity="listGroup">
@@ -131,8 +131,10 @@
                 <string-field name="name">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
-                    <key>true</key>
                 </string-field>
+                <date-field name="expirationDate">
+                    <mandatory>true</mandatory>
+                </date-field>
                 <date-field name="creationDate">
                     <mandatory>true</mandatory>
                 </date-field>
@@ -157,16 +159,13 @@
                     <mandatory>true</mandatory>
                     <key>true</key>
                 </string-field>
-                <date-field name="expirationDate">
-                    <mandatory>true</mandatory>
-                </date-field>
                 <string-field name="description">
                     <max-length>2000</max-length>
                     <mandatory>false</mandatory>
                 </string-field>
-                <integer-field name="amount">
+                <long-field name="amount">
                     <mandatory>false</mandatory>
-                </integer-field>
+                </long-field>
             </fields>
         </entity>
 

@@ -6,6 +6,7 @@ import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.ListTemplateItem;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 import com.shpandrak.shpanlist.services.ListGroupService;
+import com.shpandrak.shpanlist.services.ListInstanceService;
 import com.shpandrak.shpanlist.services.ListTemplateService;
 import com.shpandrak.shpanlist.services.ShpanlistAuthService;
 import com.shpandrak.xml.EntityXMLConverter;
@@ -46,6 +47,8 @@ public class DoItServlet extends HttpServlet {
                 addListTemplateItem(loggedInUser, request, response);
             }else if ("removeListTemplateItem".equals(what)){
                 removeListTemplateItem(loggedInUser, request, response);
+            }else if ("createListFromTemplate".equals(what)){
+                createListFromTemplate(loggedInUser, request, response);
             }else {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid action " + what);
             }
@@ -57,14 +60,19 @@ public class DoItServlet extends HttpServlet {
 
     }
 
+    private void createListFromTemplate(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listTemplateId = request.getParameter("listTemplateId");
+        ListInstanceService.createFromTemplate(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), loggedInUser.getUserId());
+    }
+
     private void addListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
         String listTemplateId = request.getParameter("listTemplateId");
         String listTemplateItemName = request.getParameter("listTemplateItemName");
         String listTemplateItemDescription = request.getParameter("listTemplateItemDescription");
         String listTemplateItemDefaultAmount = request.getParameter("listTemplateItemDefaultAmount");
-        Integer defaultAmount = null;
+        Long defaultAmount = null;
         if (listTemplateItemDefaultAmount != null && !listTemplateItemDefaultAmount.isEmpty()){
-            defaultAmount = Integer.valueOf(listTemplateItemDefaultAmount);
+            defaultAmount = Long.valueOf(listTemplateItemDefaultAmount);
         }
         ListTemplateService.addListTemplateItem(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), listTemplateItemName, listTemplateItemDescription, defaultAmount);
     }

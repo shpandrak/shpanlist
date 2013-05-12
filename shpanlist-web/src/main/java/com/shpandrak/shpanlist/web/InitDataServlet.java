@@ -73,7 +73,7 @@ public class InitDataServlet extends HttpServlet {
 
             List<ListTemplateItem> listTemplateItems = listTemplateItemManager.listByListTemplateRelationship(listTemplate.getId());
             if (listTemplateItems.isEmpty()){
-                ListTemplateItem eggs = new ListTemplateItem(listTemplate, "Eggs", "Size L Eggs", 12);
+                ListTemplateItem eggs = new ListTemplateItem(listTemplate, "Eggs", "Size L Eggs", 12L);
                 ListTemplateItem milk = new ListTemplateItem(listTemplate, "Milk", "3% fat milk", null);
                 listTemplateItemManager.create(Arrays.asList(eggs, milk));
             }

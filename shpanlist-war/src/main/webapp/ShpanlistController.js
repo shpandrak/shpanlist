@@ -114,6 +114,22 @@ var ShpanlistController = {
                 alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
 
+    },
+
+    createListFromTemplate:function(listTemplateId){
+        jQuery.post(
+            "/doIt",
+            { what: "createListFromTemplate", listTemplateId:listTemplateId}
+        )
+            .done(
+            function(responseText){
+                //ShpanlistController.menuListTemplate(listTemplateId);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
+
     }
 
 
