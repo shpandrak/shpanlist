@@ -86,10 +86,10 @@ var ShpanlistController = {
             });
     },
 
-    addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription){
+    addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount){
         jQuery.post(
             "/doIt",
-            { what: "addListTemplateItem", listTemplateId:listTemplateId, listTemplateItemName: listTemplateItemName, listTemplateItemDescription:listTemplateItemDescription}
+            { what: "addListTemplateItem", listTemplateId:listTemplateId, listTemplateItemName: listTemplateItemName, listTemplateItemDescription:listTemplateItemDescription, listTemplateItemDefaultAmount:listTemplateItemDefaultAmount}
         )
             .done(
             function(responseText){

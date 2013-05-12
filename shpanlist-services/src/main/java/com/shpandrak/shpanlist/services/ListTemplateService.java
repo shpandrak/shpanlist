@@ -1,6 +1,5 @@
 package com.shpandrak.shpanlist.services;
 
-import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
@@ -28,11 +27,11 @@ public abstract class ListTemplateService {
         }
     }
 
-    public static void addListTemplateItem(Key listTemplateId, String listTemplateItemName, String listTemplateItemDescription) throws PersistenceException {
+    public static void addListTemplateItem(Key listTemplateId, String listTemplateItemName, String listTemplateItemDescription, Integer defaultAmount) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
-            listTemplateItemManager.create(new ListTemplateItem(listTemplateId, listTemplateItemName, listTemplateItemDescription));
+            listTemplateItemManager.create(new ListTemplateItem(listTemplateId, listTemplateItemName, listTemplateItemDescription, defaultAmount));
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

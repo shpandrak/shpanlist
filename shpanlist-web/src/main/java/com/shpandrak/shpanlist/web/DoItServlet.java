@@ -61,7 +61,12 @@ public class DoItServlet extends HttpServlet {
         String listTemplateId = request.getParameter("listTemplateId");
         String listTemplateItemName = request.getParameter("listTemplateItemName");
         String listTemplateItemDescription = request.getParameter("listTemplateItemDescription");
-        ListTemplateService.addListTemplateItem(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), listTemplateItemName, listTemplateItemDescription);
+        String listTemplateItemDefaultAmount = request.getParameter("listTemplateItemDefaultAmount");
+        Integer defaultAmount = null;
+        if (listTemplateItemDefaultAmount != null && !listTemplateItemDefaultAmount.isEmpty()){
+            defaultAmount = Integer.valueOf(listTemplateItemDefaultAmount);
+        }
+        ListTemplateService.addListTemplateItem(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), listTemplateItemName, listTemplateItemDescription, defaultAmount);
     }
 
     private void removeListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
