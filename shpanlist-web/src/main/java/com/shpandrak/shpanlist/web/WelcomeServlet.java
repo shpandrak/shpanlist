@@ -53,6 +53,7 @@ public class WelcomeServlet extends HttpServlet{
                 "</head>\n" +
                 "\n" +
                 "<body onload=\"onLoad()\">\n" +
+                "<a href=\"javascript:ShpanlistController.signOut()\">Sign Out</a>\n" +
                 "<div id=\"divMain\"></div>\n" +
                 "</body>\n" +
                 "\n" +

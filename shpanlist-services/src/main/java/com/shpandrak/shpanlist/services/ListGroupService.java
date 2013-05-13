@@ -6,8 +6,10 @@ import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
 import com.shpandrak.shpanlist.gae.datastore.ListGroupManager;
 import com.shpandrak.shpanlist.model.ListGroup;
+import com.shpandrak.shpanlist.model.ListGroupMemberRelationshipEntry;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +19,21 @@ import java.util.List;
  * Time: 23:46
  */
 public abstract class ListGroupService {
+    public static ListGroup createListGroup(Key userKey, String groupName) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListGroupManager listGroupManager = new ListGroupManager();
+            Date joinDate = new Date();
+            ListGroup listGroup = new ListGroup(groupName, joinDate, userKey);
+            listGroup.getMemberRelationship().addNewRelation(new ListGroupMemberRelationshipEntry(userKey, joinDate));
+            listGroupManager.create(listGroup);
+            return listGroup;
+
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
     public static List<ListGroup> getListGroups(LoggedInUser loggedInUser) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{

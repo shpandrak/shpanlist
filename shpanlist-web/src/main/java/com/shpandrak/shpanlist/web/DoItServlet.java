@@ -3,10 +3,7 @@ package com.shpandrak.shpanlist.web;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.shpanlist.model.*;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
-import com.shpandrak.shpanlist.services.ListGroupService;
-import com.shpandrak.shpanlist.services.ListInstanceService;
-import com.shpandrak.shpanlist.services.ListTemplateService;
-import com.shpandrak.shpanlist.services.ShpanlistAuthService;
+import com.shpandrak.shpanlist.services.*;
 import com.shpandrak.xml.EntityXMLConverter;
 
 import javax.servlet.ServletException;
@@ -53,6 +50,10 @@ public class DoItServlet extends HttpServlet {
                 removeListTemplateItem(loggedInUser, request, response);
             }else if ("createListFromTemplate".equals(what)){
                 createListFromTemplate(loggedInUser, request, response);
+            }else if ("createUser".equals(what)){
+                createUser(loggedInUser, request, response);
+            }else if ("signOut".equals(what)){
+                signOut(loggedInUser, request, response);
             }else {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid action " + what);
             }
@@ -63,6 +64,23 @@ public class DoItServlet extends HttpServlet {
         }
 
     }
+
+    private void signOut(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) {
+        detachUserFromSession(request, loggedInUser);
+    }
+
+    private void createUser(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String userName = request.getParameter("userName");
+        String password = request.getParameter("password");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        ListUser user = ListUserService.createUser(userName, password, firstName, lastName, email);
+        loggedInUser = ShpanlistAuthService.signIn(userName, password);
+        attachUserToSession(request, loggedInUser);
+
+    }
+
 
     private void createListFromTemplate(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
         String listTemplateId = request.getParameter("listTemplateId");
@@ -133,12 +151,19 @@ public class DoItServlet extends HttpServlet {
             if (user == null){
                 response.getWriter().println("Boooo!");
             }else {
-                request.getSession().setAttribute("user", user);
+                attachUserToSession(request, user);
                 response.getWriter().println("Yey!");
             }
         } catch (PersistenceException e) {
             response.getWriter().println("Baahhhh" + e.getMessage());
         }
+    }
+
+    private void attachUserToSession(HttpServletRequest request, LoggedInUser user) {
+        request.getSession().setAttribute("user", user);
+    }
+    private void detachUserFromSession(HttpServletRequest request, LoggedInUser user) {
+        request.getSession().removeAttribute("user");
     }
 
 }

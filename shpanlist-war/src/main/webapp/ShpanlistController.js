@@ -174,8 +174,38 @@ var ShpanlistController = {
             });
 
 
+    },
+
+    menuCreateUser:function(){
+        window.location.replace("/createUser.html");
+    },
+
+    createUser: function(userName, password, firstName, lastName, email){
+        jQuery.post(
+            "/doIt",
+            { what: "createUser", userName:userName, password:password, firstName:firstName, lastName:lastName, email:email}
+        )
+            .done(
+            function(responseText){
+                window.location.replace("/");
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+    },
+
+    signOut: function(){
+        jQuery.post(
+            "/doIt",
+            { what: "signOut"}
+        )
+            .done(
+            function(responseText){
+                window.location.replace("/");
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
     }
-
-
-
 }

@@ -9,6 +9,8 @@ import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.ListTemplateItem;
 
+import java.util.Date;
+
 /**
  * Created with love
  * User: shpandrak
@@ -16,6 +18,20 @@ import com.shpandrak.shpanlist.model.ListTemplateItem;
  * Time: 23:46
  */
 public abstract class ListTemplateService {
+
+    public static ListTemplate createListTemplate(Key userKey, Key listGroupId, String listName) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListTemplateManager listTemplateManager = new ListTemplateManager();
+            ListTemplate listTemplate = new ListTemplate(listGroupId, listName, new Date(), userKey);
+            listTemplateManager.create(listTemplate);
+            return listTemplate;
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+
+
+    }
 
     public static ListTemplate getListTemplateFull(Key listTemplateId) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
