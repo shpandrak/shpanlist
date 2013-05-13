@@ -1,5 +1,6 @@
 package com.shpandrak.shpanlist.services;
 
+import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
@@ -23,6 +24,16 @@ import java.util.List;
  */
 public abstract class ListInstanceService {
     private static final SimpleDateFormat shortDayDate = new SimpleDateFormat("MMM-dd");
+
+    public static ListInstance getListInstanceFull(Key listTemplateId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListInstanceManager listInstanceManager = new ListInstanceManager();
+            return listInstanceManager.getById(listTemplateId, RelationshipLoadLevel.FULL);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
 
     public static ListInstance createFromTemplate(Key listTemplateId, Key creatingUserId) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
@@ -57,7 +68,7 @@ public abstract class ListInstanceService {
             if (!listTemplateItems.isEmpty()){
                 List<ListInstanceItem> listInstanceItems = new ArrayList<ListInstanceItem>(listTemplateItems.size());
                 for (ListTemplateItem currItemTemplate : listTemplateItems){
-                    listInstanceItems.add(new ListInstanceItem(listInstance, currItemTemplate.getName(), currItemTemplate.getDescription(), currItemTemplate.getDefaultAmount()));
+                    listInstanceItems.add(new ListInstanceItem(listInstance, currItemTemplate.getName(), currItemTemplate.getDescription(), currItemTemplate.getDefaultAmount(), false));
                 }
                 listInstanceItemManager.create(listInstanceItems);
             }
@@ -72,4 +83,18 @@ public abstract class ListInstanceService {
         }
     }
 
+    public static void gotItem(Key listInstanceItemId) throws PersistenceException {
+        gotItem(listInstanceItemId, true);
+    }
+
+    public static void gotItem(Key listInstanceItemId, boolean gotIt) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListInstanceItemManager listInstanceItemManager = new ListInstanceItemManager();
+            listInstanceItemManager.updateFieldValueById(ListInstanceItem.DESCRIPTOR.gotItFieldDescriptor, gotIt, listInstanceItemId);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+
+    }
 }

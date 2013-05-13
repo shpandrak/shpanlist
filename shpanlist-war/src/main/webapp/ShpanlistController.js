@@ -29,7 +29,7 @@ var ShpanlistController = {
         )
             .done(
             function(responseText){
-                ShpanlistView.showListGroup(responseText);
+                ListGroupView.show(responseText);
             })
             .fail(function(jqXHR, textStatus) {
                 alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
@@ -86,6 +86,20 @@ var ShpanlistController = {
             });
     },
 
+    menuListInstance: function(listInstanceId){
+        jQuery.post(
+            "/doIt",
+            { what: "getListInstanceFull", listInstanceId: listInstanceId }
+        )
+            .done(
+            function(responseText){
+                ListInstanceView.show(responseText);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+    },
+
     addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount){
         jQuery.post(
             "/doIt",
@@ -109,6 +123,36 @@ var ShpanlistController = {
             .done(
             function(responseText){
                 ShpanlistController.menuListTemplate(listTemplateId);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
+    },
+
+    gotListInstanceItem: function(listInstanceId, listInstanceItemId){
+        jQuery.post(
+            "/doIt",
+            { what: "gotListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId}
+        )
+            .done(
+            function(responseText){
+                ShpanlistController.menuListInstance(listInstanceId);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
+    },
+
+    bringBackItem: function(listInstanceId, listInstanceItemId){
+        jQuery.post(
+            "/doIt",
+            { what: "bringBackItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId}
+        )
+            .done(
+            function(responseText){
+                ShpanlistController.menuListInstance(listInstanceId);
             })
             .fail(function(jqXHR, textStatus) {
                 alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);

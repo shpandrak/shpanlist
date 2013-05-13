@@ -30,6 +30,8 @@ public class WelcomeServlet extends HttpServlet{
                 "    <script src=\"ShpanlistView.js\"></script>\n" +
                 "    <script src=\"ShpanlistController.js\"></script>\n" +
                 "    <script src=\"listTemplateView.js\"></script>\n" +
+                "    <script src=\"listInstanceView.js\"></script>\n" +
+                "    <script src=\"listGroupView.js\"></script>\n" +
                 "    <script type=\"text/javascript\">\n" +
                 "\n" +
                 "        function onLoad() {\n");
@@ -42,6 +44,8 @@ public class WelcomeServlet extends HttpServlet{
         rw.append(
                 "            ShpanlistView.mainFrame = divMain;\n" +
                 "            ListTemplateView.mainFrame = divMain;\n" +
+                "            ListGroupView.mainFrame = divMain;\n" +
+                "            ListInstanceView.mainFrame = divMain;\n" +
                 "            ShpanlistController.loadApp();\n" +
                 "        }\n" +
                 "\n" +

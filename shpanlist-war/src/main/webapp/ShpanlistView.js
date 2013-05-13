@@ -34,33 +34,6 @@ var ShpanlistView = {
             '<table id="tabGroups"></table>';
 
         ShpanlistController.listListGroups(this.listSuccess);
-    },
-
-    showListGroup: function(listGroupXml){
-
-        //alert(jQuery(listGroupXml).first("listGroup").attr("id"));
-        var groupName = jQuery(listGroupXml).find("name").first().text();
-
-        var theHtml =
-            '<h1>' + groupName + '\'s List templates</h1>' +
-            '<table id="tabListTemplates">';
-
-
-            jQuery(listGroupXml).find("listTemplateRelationshipEntries").first().find("listTemplate").each(function () {
-                    var currEntity = jQuery(this);
-                    var currEntityId = currEntity.attr("id");
-                    theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
-                    theHtml += '<td><a HREF=\"javascript:ShpanlistController.menuListTemplate(\'' + currEntityId + '\')\">Open Template</a></td></tr>';
-                });
-
-        this.mainFrame.innerHTML = theHtml;
-
-
-
     }
-
-
-
-
 }
 

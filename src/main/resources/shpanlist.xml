@@ -166,6 +166,9 @@
                 <long-field name="amount">
                     <mandatory>false</mandatory>
                 </long-field>
+                <boolean-field name="gotIt">
+                    <mandatory>true</mandatory>
+                </boolean-field>
             </fields>
         </entity>
 

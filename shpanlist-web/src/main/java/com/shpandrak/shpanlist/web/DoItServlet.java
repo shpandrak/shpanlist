@@ -1,9 +1,7 @@
 package com.shpandrak.shpanlist.web;
 
 import com.shpandrak.persistence.PersistenceException;
-import com.shpandrak.shpanlist.model.ListGroup;
-import com.shpandrak.shpanlist.model.ListTemplate;
-import com.shpandrak.shpanlist.model.ListTemplateItem;
+import com.shpandrak.shpanlist.model.*;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 import com.shpandrak.shpanlist.services.ListGroupService;
 import com.shpandrak.shpanlist.services.ListInstanceService;
@@ -43,8 +41,14 @@ public class DoItServlet extends HttpServlet {
                 getListGroup(loggedInUser, request, response);
             }else if ("getListTemplateFull".equals(what)){
                 getListTemplateFull(loggedInUser, request, response);
+            }else if ("getListInstanceFull".equals(what)){
+                getListInstanceFull(loggedInUser, request, response);
             }else if ("addListTemplateItem".equals(what)){
                 addListTemplateItem(loggedInUser, request, response);
+            }else if ("gotListInstanceItem".equals(what)){
+                gotListInstanceItem(loggedInUser, request, response);
+            }else if ("bringBackItem".equals(what)){
+                bringBackItem(loggedInUser, request, response);
             }else if ("removeListTemplateItem".equals(what)){
                 removeListTemplateItem(loggedInUser, request, response);
             }else if ("createListFromTemplate".equals(what)){
@@ -83,6 +87,18 @@ public class DoItServlet extends HttpServlet {
         ListTemplateService.removeListTemplateItem(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
     }
 
+    private void gotListInstanceItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listInstanceId = request.getParameter("listInstanceId");
+        String listInstanceItemId = request.getParameter("listInstanceItemId");
+        ListInstanceService.gotItem(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId));
+    }
+
+    private void bringBackItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listInstanceId = request.getParameter("listInstanceId");
+        String listInstanceItemId = request.getParameter("listInstanceItemId");
+        ListInstanceService.gotItem(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId), false);
+    }
+
     private void getListGroup(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
         String listGroupId = request.getParameter("listGroupId");
         ListGroup listGroup = ListGroupService.getListGroup(ListGroup.DESCRIPTOR.idFieldDescriptor.fromString(listGroupId));
@@ -93,6 +109,12 @@ public class DoItServlet extends HttpServlet {
         String listTemplateId = request.getParameter("listTemplateId");
         ListTemplate listTemplate = ListTemplateService.getListTemplateFull(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId));
         response.getWriter().print(new EntityXMLConverter<ListTemplate>(ListTemplate.DESCRIPTOR).toXML(listTemplate));
+    }
+
+    private void getListInstanceFull(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
+        String listTemplateId = request.getParameter("listInstanceId");
+        ListInstance listInstance = ListInstanceService.getListInstanceFull(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId));
+        response.getWriter().print(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR).toXML(listInstance));
     }
 
     private void listListGroups(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
