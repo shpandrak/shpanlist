@@ -7,6 +7,7 @@ var ListInstanceView = {
         this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
         var listInstanceName = $(listInstanceXml).find("name").first().text();
         var theHtml = '<h2>' + listInstanceName + '</h2><table id="tabListInstanceItems">';
+        var listGroupId = $(listInstanceXml).find("listGroup").first().attr("id");
 
         $(listInstanceXml).find("listInstanceItemRelationshipEntries").find("listInstanceItem") .each(function() {
             var currEntity = $(this);
@@ -27,7 +28,8 @@ var ListInstanceView = {
 
         });
 
-        theHtml += '<tr><td>Item:<input type="text" id="txtNewItemName"/></td><td>description:<input type="text" id="txtNewItemDescription"/></td><td>Default Amount:<input type="number" min="1" id="txtNewItemDefaultAmount"/></td><td><a HREF="javascript:ListTemplateView.createNewItem()">Add</a></td></tr></table>';
+        theHtml += '</table><br/><a HREF="javascript:ShpanlistController.menuListGroup(\'' + listGroupId +'\')">Back to group page</a>' ;
+
 
         this.mainFrame.innerHTML = theHtml;
     },

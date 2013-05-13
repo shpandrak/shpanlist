@@ -167,7 +167,7 @@ var ShpanlistController = {
         )
             .done(
             function(responseText){
-                //ShpanlistController.menuListTemplate(listTemplateId);
+                ShpanlistController.menuListInstance($(responseText).find("listInstance").first().attr("id"));
             })
             .fail(function(jqXHR, textStatus) {
                 alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);

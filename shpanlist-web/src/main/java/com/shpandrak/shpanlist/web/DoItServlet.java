@@ -64,9 +64,10 @@ public class DoItServlet extends HttpServlet {
 
     }
 
-    private void createListFromTemplate(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+    private void createListFromTemplate(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
         String listTemplateId = request.getParameter("listTemplateId");
-        ListInstanceService.createFromTemplate(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), loggedInUser.getUserId());
+        ListInstance listInstance = ListInstanceService.createFromTemplate(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), loggedInUser.getUserId());
+        response.getWriter().print(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR).toXML(listInstance));
     }
 
     private void addListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {

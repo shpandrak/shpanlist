@@ -7,6 +7,7 @@ var ListTemplateView = {
         this.listTemplateId = $(listTemplateXml).find("listTemplate").first().attr("id");
         var listTemplateName = $(listTemplateXml).find("name").first().text();
         var theHtml = '<h2>' + listTemplateName + '</h2><table id="tabListTemplateItems">';
+        var listGroupId = $(listTemplateXml).find("listGroup").first().attr("id");
 
         $(listTemplateXml).find("listTemplateItemRelationshipEntries").find("listTemplateItem") .each(function() {
             var currEntity = $(this);
@@ -21,6 +22,8 @@ var ListTemplateView = {
         theHtml += '<tr><td>Item:<input type="text" id="txtNewItemName"/></td><td>description:<input type="text" id="txtNewItemDescription"/></td><td>Default Amount:<input type="number" min="1" id="txtNewItemDefaultAmount"/></td><td><a HREF="javascript:ListTemplateView.createNewItem()">Add</a></td></tr></table>';
 
         theHtml += '<br/><a href="javascript:ListTemplateView.createListFromTemplate()">Create list from this template</a>';
+        theHtml += '<br/><a HREF="javascript:ShpanlistController.menuListGroup(\'' + listGroupId +'\')">Back to group page</a>' ;
+
 
         this.mainFrame.innerHTML = theHtml;
     },
