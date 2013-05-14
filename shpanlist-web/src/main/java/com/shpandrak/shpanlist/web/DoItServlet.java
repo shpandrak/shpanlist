@@ -50,6 +50,10 @@ public class DoItServlet extends HttpServlet {
                 removeListTemplateItem(loggedInUser, request, response);
             }else if ("createListFromTemplate".equals(what)){
                 createListFromTemplate(loggedInUser, request, response);
+            }else if ("pushListTemplateItemDown".equals(what)){
+                pushListTemplateItemDown(loggedInUser, request, response);
+            }else if ("pushListTemplateItemUp".equals(what)){
+                pushListTemplateItemUp(loggedInUser, request, response);
             }else if ("createUser".equals(what)){
                 createUser(loggedInUser, request, response);
             }else if ("signOut".equals(what)){
@@ -104,6 +108,18 @@ public class DoItServlet extends HttpServlet {
         String listTemplateId = request.getParameter("listTemplateId");
         String listTemplateItemId = request.getParameter("listTemplateItemId");
         ListTemplateService.removeListTemplateItem(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
+    }
+
+    private void pushListTemplateItemDown(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listTemplateId = request.getParameter("listTemplateId");
+        String listTemplateItemId = request.getParameter("listTemplateItemId");
+        ListTemplateService.pushListTemplateItemDown(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
+    }
+
+    private void pushListTemplateItemUp(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listTemplateId = request.getParameter("listTemplateId");
+        String listTemplateItemId = request.getParameter("listTemplateItemId");
+        ListTemplateService.pushListTemplateItemUp(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
     }
 
     private void gotListInstanceItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {

@@ -9,13 +9,24 @@ var ListTemplateView = {
         var theHtml = '<h2>' + listTemplateName + '</h2><table id="tabListTemplateItems">';
         var listGroupId = $(listTemplateXml).find("listGroup").first().attr("id");
 
+        var firstIteration = true;
         $(listTemplateXml).find("listTemplateItemRelationshipEntries").find("listTemplateItem") .each(function() {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
             theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
             theHtml += '<td>' + currEntity.find("description").first().text() + '</td>';
             theHtml += '<td>' + currEntity.find("defaultAmount").first().text() + '</td>';
-            theHtml += '<td><a HREF=\"javascript:ListTemplateView.removeItem(\'' + currEntityId + '\')\">Remove</a></td></tr>';
+            theHtml += '<td><a HREF=\"javascript:ListTemplateView.removeItem(\'' + currEntityId + '\')\">Remove</a>';
+            theHtml += '&nbsp;<a HREF=\"javascript:ListTemplateView.pushItemDown(\'' + currEntityId + '\')\">v</a>';
+            if (firstIteration){
+                firstIteration = false;
+            }else{
+                theHtml += '&nbsp;<a HREF=\"javascript:ListTemplateView.pushItemUp(\'' + currEntityId + '\')\">^</a>';
+
+            }
+
+            theHtml += '</td></tr>';
+
 
         });
 
@@ -34,6 +45,13 @@ var ListTemplateView = {
 
     removeItem: function(listTemplateItemId){
         ShpanlistController.removeListTemplateItem(ListTemplateView.listTemplateId, listTemplateItemId);
+    },
+
+    pushItemUp: function(listTemplateItemId){
+        ShpanlistController.pushListTemplateItemUp(ListTemplateView.listTemplateId, listTemplateItemId);
+    },
+    pushItemDown: function(listTemplateItemId){
+        ShpanlistController.pushListTemplateItemDown(ListTemplateView.listTemplateId, listTemplateItemId);
     },
 
     createListFromTemplate: function(){

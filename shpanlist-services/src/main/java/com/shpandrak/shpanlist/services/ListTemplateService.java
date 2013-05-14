@@ -5,12 +5,13 @@ import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
-import com.shpandrak.persistence.query.filter.QueryFilter;
-import com.shpandrak.persistence.query.filter.RelationshipFilterCondition;
+import com.shpandrak.persistence.query.filter.*;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.ListTemplateItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -23,7 +24,7 @@ import java.util.List;
  * Time: 23:46
  */
 public abstract class ListTemplateService {
-
+    private static final Logger logger = LoggerFactory.getLogger(ListTemplateService.class);
     public static ListTemplate createListTemplate(Key userKey, Key listGroupId, String listName) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
@@ -69,6 +70,84 @@ public abstract class ListTemplateService {
         try{
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
             listTemplateItemManager.delete(listTemplateItemId);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static void pushListTemplateItemDown(Key listTemplateItemId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
+            ListTemplateItem byId = listTemplateItemManager.getById(listTemplateItemId);
+            Integer itemOrder = byId.getItemOrder();
+            // Searching if there is an item after current
+            ListTemplateItem nextItem = listTemplateItemManager.findObject(new QueryFilter(
+                    new CompoundFieldFilterCondition(
+                            FieldFilterLogicalOperatorType.AND,
+                            new RelationshipFilterCondition(ListTemplateItem.DESCRIPTOR.listTemplateRelationshipDescriptor, byId.getListTemplateId()),
+                            BasicFieldFilterCondition.build(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.EQUALS, itemOrder + 1))));
+            if (nextItem == null){
+                logger.warn("Skip pushing down last item {}", byId);
+            }else{
+                // Updating both fields
+                PersistenceLayerManager.getConnectionProvider().beginTransaction();
+                try{
+                    listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder + 1, byId.getId());
+                    listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, nextItem.getId());
+                    PersistenceLayerManager.getConnectionProvider().commitTransaction();
+                }
+                catch (PersistenceException pex){
+                    //todo:better handle tx exception
+                    PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+                    throw pex;
+                }
+                catch (Exception ex){
+                    PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+                    throw new RuntimeException(ex);
+                }
+            }
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static void pushListTemplateItemUp(Key listTemplateItemId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
+            ListTemplateItem byId = listTemplateItemManager.getById(listTemplateItemId);
+            Integer itemOrder = byId.getItemOrder();
+            if (itemOrder == 1){
+                logger.warn("Skip pushing up item on top order {}", byId);
+            }else{
+                // Searching if there is an item before current
+                ListTemplateItem previousItem = listTemplateItemManager.findObject(new QueryFilter(
+                        new CompoundFieldFilterCondition(
+                                FieldFilterLogicalOperatorType.AND,
+                                new RelationshipFilterCondition(ListTemplateItem.DESCRIPTOR.listTemplateRelationshipDescriptor, byId.getListTemplateId()),
+                                BasicFieldFilterCondition.build(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.EQUALS, itemOrder - 1))));
+                if (previousItem == null){
+                    throw new IllegalStateException("Failed pushing up item - could not find previous item " + byId);
+                }else{
+                    // Updating both fields
+                    PersistenceLayerManager.getConnectionProvider().beginTransaction();
+                    try{
+                        listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder - 1, byId.getId());
+                        listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, previousItem.getId());
+                        PersistenceLayerManager.getConnectionProvider().commitTransaction();
+                    }
+                    catch (PersistenceException pex){
+                        //todo:better handle tx exception
+                        PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+                        throw pex;
+                    }
+                    catch (Exception ex){
+                        PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

@@ -130,6 +130,36 @@ var ShpanlistController = {
 
     },
 
+    pushListTemplateItemUp: function(listTemplateId, listTemplateItemId){
+        jQuery.post(
+            "/doIt",
+            { what: "pushListTemplateItemUp", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId}
+        )
+            .done(
+            function(responseText){
+                ShpanlistController.menuListTemplate(listTemplateId);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
+    },
+
+    pushListTemplateItemDown: function(listTemplateId, listTemplateItemId){
+        jQuery.post(
+            "/doIt",
+            { what: "pushListTemplateItemDown", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId}
+        )
+            .done(
+            function(responseText){
+                ShpanlistController.menuListTemplate(listTemplateId);
+            })
+            .fail(function(jqXHR, textStatus) {
+                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+            });
+
+    },
+
     gotListInstanceItem: function(listInstanceId, listInstanceItemId){
         jQuery.post(
             "/doIt",
