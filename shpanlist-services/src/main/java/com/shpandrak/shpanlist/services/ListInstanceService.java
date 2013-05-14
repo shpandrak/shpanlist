@@ -64,7 +64,7 @@ public abstract class ListInstanceService {
 
 
             // Copying the list template items
-            Collection<ListTemplateItem> listTemplateItems = listTemplate.getListTemplateItemRelationship().getTargetEntities().values();
+            Collection<ListTemplateItem> listTemplateItems = listTemplate.getListTemplateItemRelationship().getTargetEntities();
             if (!listTemplateItems.isEmpty()){
                 List<ListInstanceItem> listInstanceItems = new ArrayList<ListInstanceItem>(listTemplateItems.size());
                 for (ListTemplateItem currItemTemplate : listTemplateItems){

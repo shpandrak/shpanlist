@@ -1,15 +1,20 @@
 package com.shpandrak.shpanlist.services;
 
+import com.shpandrak.datamodel.OrderByClauseEntry;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
+import com.shpandrak.persistence.query.filter.QueryFilter;
+import com.shpandrak.persistence.query.filter.RelationshipFilterCondition;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.ListTemplateItem;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with love
@@ -43,11 +48,17 @@ public abstract class ListTemplateService {
         }
     }
 
-    public static void addListTemplateItem(Key listTemplateId, String listTemplateItemName, String listTemplateItemDescription, Long defaultAmount) throws PersistenceException {
+    public static void addListTemplateItem(Key listTemplateId, String listTemplateItemName, String listTemplateItemDescription, Integer defaultAmount) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
+            //todo:transaciton
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
-            listTemplateItemManager.create(new ListTemplateItem(listTemplateId, listTemplateItemName, listTemplateItemDescription, defaultAmount));
+            List<ListTemplateItem> existingItems = listTemplateItemManager.list(new QueryFilter(new RelationshipFilterCondition(ListTemplateItem.DESCRIPTOR.listTemplateRelationshipDescriptor, listTemplateId), null, null, Arrays.asList(new OrderByClauseEntry(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, false))));
+            int itemOrdinal = 1;
+            if (!existingItems.isEmpty()){
+                itemOrdinal = existingItems.get(0).getItemOrder() + 1;
+            }
+            listTemplateItemManager.create(new ListTemplateItem(listTemplateId, listTemplateItemName, itemOrdinal, listTemplateItemDescription, defaultAmount));
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

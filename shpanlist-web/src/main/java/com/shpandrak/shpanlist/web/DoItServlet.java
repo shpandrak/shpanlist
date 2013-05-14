@@ -93,9 +93,9 @@ public class DoItServlet extends HttpServlet {
         String listTemplateItemName = request.getParameter("listTemplateItemName");
         String listTemplateItemDescription = request.getParameter("listTemplateItemDescription");
         String listTemplateItemDefaultAmount = request.getParameter("listTemplateItemDefaultAmount");
-        Long defaultAmount = null;
+        Integer defaultAmount = null;
         if (listTemplateItemDefaultAmount != null && !listTemplateItemDefaultAmount.isEmpty()){
-            defaultAmount = Long.valueOf(listTemplateItemDefaultAmount);
+            defaultAmount = Integer.valueOf(listTemplateItemDefaultAmount);
         }
         ListTemplateService.addListTemplateItem(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), listTemplateItemName, listTemplateItemDescription, defaultAmount);
     }

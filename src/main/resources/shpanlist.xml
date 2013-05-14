@@ -108,6 +108,17 @@
                     <mandatory>true</mandatory>
                     <related-entity>listUser</related-entity>
                 </one-to-many>
+                <many-to-one>
+                    <name>listTemplateItem</name>
+                    <mandatory>false</mandatory>
+                    <related-entity>listTemplateItem</related-entity>
+                    <relationship-sort>
+                        <sort-entry>
+                            <field>itemOrder</field>
+                            <ascending>true</ascending>
+                        </sort-entry>
+                    </relationship-sort>
+                </many-to-one>
             </relations>
         </entity>
         <entity name="listTemplateItem" owner-entity="listTemplate">
@@ -117,13 +128,17 @@
                     <mandatory>true</mandatory>
                     <key>true</key>
                 </string-field>
+                <integer-field name="itemOrder">
+                    <mandatory>true</mandatory>
+                </integer-field>
                 <string-field name="description">
                     <max-length>2000</max-length>
                     <mandatory>false</mandatory>
                 </string-field>
-                <long-field name="defaultAmount">
+                <integer-field name="defaultAmount">
                     <mandatory>false</mandatory>
-                </long-field>
+                </integer-field>
+
             </fields>
         </entity>
         <entity name="listInstance" owner-entity="listGroup">
@@ -163,9 +178,9 @@
                     <max-length>2000</max-length>
                     <mandatory>false</mandatory>
                 </string-field>
-                <long-field name="amount">
+                <integer-field name="amount">
                     <mandatory>false</mandatory>
-                </long-field>
+                </integer-field>
                 <boolean-field name="gotIt">
                     <mandatory>true</mandatory>
                 </boolean-field>
