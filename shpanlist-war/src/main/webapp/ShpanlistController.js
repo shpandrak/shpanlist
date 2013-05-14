@@ -21,189 +21,122 @@ var ShpanlistController = {
     },
 
 
-
-    menuListGroup: function(listGroupId){
+    doIt:function(data, successFunction){
         jQuery.post(
             "/doIt",
-            { what: "getListGroup", listGroupId: listGroupId}
-        )
-            .done(
-            function(responseText){
-                ListGroupView.show(responseText);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
-            });
-
-    },
-
-    listListGroups: function(successFunction){
-        jQuery.post(
-            "/doIt",
-            { what: "listListGroups"}
+            data
         )
             .done(
             function(responseText){
                 successFunction(responseText);
             })
             .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
+                alert("Failed oh no!" + jqXHR.statusText+ ": " + textStatus + ": " + jqXHR.responseText);
+            });
+    },
+
+    menuListGroup: function(listGroupId){
+        ShpanlistController.doIt(
+            { what: "getListGroup", listGroupId: listGroupId},
+            function(responseText){
+                ListGroupView.show(responseText);
+            }
+        )
+    },
+
+    listListGroups: function(successFunction){
+        ShpanlistController.doIt({ what: "listListGroups"},
+            function(responseText){
+                successFunction(responseText);
             });
 
     },
 
     signIn: function (userName, password) {
-            jQuery.post(
-                "/doIt",
-                { what: "signIn", userName: userName, password: password }
-            )
-        .done(
+        ShpanlistController.doIt(
+            { what: "signIn", userName: userName, password: password },
             function(responseText){
-                if (responseText == "Yey!\n"){
+                if ($(responseText).find("listUser").size() > 0){
                     window.location.reload();
                 }else{
                     alert("Nope... " + responseText);
                 }
-            })
-        .fail(function(jqXHR, textStatus) {
-            alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
-        });
-
-
+            });
     },
 
     menuListTemplate: function(listTemplateId){
-        jQuery.post(
-            "/doIt",
-            { what: "getListTemplateFull", listTemplateId: listTemplateId }
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "getListTemplateFull", listTemplateId: listTemplateId },
             function(responseText){
                 ListTemplateView.show(responseText);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
     },
 
     menuListInstance: function(listInstanceId){
-        jQuery.post(
-            "/doIt",
-            { what: "getListInstanceFull", listInstanceId: listInstanceId }
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "getListInstanceFull", listInstanceId: listInstanceId },
             function(responseText){
                 ListInstanceView.show(responseText);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
     },
 
     addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount){
-        jQuery.post(
-            "/doIt",
-            { what: "addListTemplateItem", listTemplateId:listTemplateId, listTemplateItemName: listTemplateItemName, listTemplateItemDescription:listTemplateItemDescription, listTemplateItemDefaultAmount:listTemplateItemDefaultAmount}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "addListTemplateItem", listTemplateId:listTemplateId, listTemplateItemName: listTemplateItemName, listTemplateItemDescription:listTemplateItemDescription, listTemplateItemDefaultAmount:listTemplateItemDefaultAmount},
             function(responseText){
                 ShpanlistController.menuListTemplate(listTemplateId);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
-
     },
 
     removeListTemplateItem: function(listTemplateId, listTemplateItemId){
-        jQuery.post(
-            "/doIt",
-            { what: "removeListTemplateItem", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "removeListTemplateItem", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
             function(responseText){
                 ShpanlistController.menuListTemplate(listTemplateId);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
 
     },
 
     pushListTemplateItemUp: function(listTemplateId, listTemplateItemId){
-        jQuery.post(
-            "/doIt",
-            { what: "pushListTemplateItemUp", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "pushListTemplateItemUp", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
             function(responseText){
                 ShpanlistController.menuListTemplate(listTemplateId);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
-
     },
 
     pushListTemplateItemDown: function(listTemplateId, listTemplateItemId){
-        jQuery.post(
-            "/doIt",
-            { what: "pushListTemplateItemDown", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "pushListTemplateItemDown", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
             function(responseText){
                 ShpanlistController.menuListTemplate(listTemplateId);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
-
     },
 
     gotListInstanceItem: function(listInstanceId, listInstanceItemId){
-        jQuery.post(
-            "/doIt",
-            { what: "gotListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "gotListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
             function(responseText){
                 ShpanlistController.menuListInstance(listInstanceId);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
 
     },
 
     bringBackItem: function(listInstanceId, listInstanceItemId){
-        jQuery.post(
-            "/doIt",
-            { what: "bringBackItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "bringBackItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
             function(responseText){
                 ShpanlistController.menuListInstance(listInstanceId);
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
 
     },
 
     createListFromTemplate:function(listTemplateId){
-        jQuery.post(
-            "/doIt",
-            { what: "createListFromTemplate", listTemplateId:listTemplateId}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "createListFromTemplate", listTemplateId:listTemplateId},
             function(responseText){
                 ShpanlistController.menuListInstance($(responseText).find("listInstance").first().attr("id"));
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
-
-
     },
 
     menuCreateUser:function(){
@@ -211,31 +144,18 @@ var ShpanlistController = {
     },
 
     createUser: function(userName, password, firstName, lastName, email){
-        jQuery.post(
-            "/doIt",
-            { what: "createUser", userName:userName, password:password, firstName:firstName, lastName:lastName, email:email}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "createUser", userName:userName, password:password, firstName:firstName, lastName:lastName, email:email},
             function(responseText){
                 window.location.replace("/");
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
     },
 
     signOut: function(){
-        jQuery.post(
-            "/doIt",
-            { what: "signOut"}
-        )
-            .done(
+        ShpanlistController.doIt(
+            { what: "signOut"},
             function(responseText){
                 window.location.replace("/");
-            })
-            .fail(function(jqXHR, textStatus) {
-                alert("Failed oh no!" + jqXHR.status+ ": " + textStatus);
             });
-
     }
 }

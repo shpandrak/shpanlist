@@ -62,6 +62,8 @@ public class DoItServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid action " + what);
             }
 
+            response.setContentType("application/xml");
+
         } catch (PersistenceException e) {
             log("Failed " + what, e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -80,7 +82,8 @@ public class DoItServlet extends HttpServlet {
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
         ListUser user = ListUserService.createUser(userName, password, firstName, lastName, email);
-        loggedInUser = ShpanlistAuthService.signIn(userName, password);
+        user = ShpanlistAuthService.signIn(userName, password);
+        loggedInUser = new LoggedInUser(user.getId(), user.getUserName());
         attachUserToSession(request, loggedInUser);
 
     }
@@ -163,12 +166,14 @@ public class DoItServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try {
-            LoggedInUser user = ShpanlistAuthService.signIn(userName, password);
-            if (user == null){
+            ListUser listUser = ShpanlistAuthService.signIn(userName, password);
+
+            if (listUser == null){
                 response.getWriter().println("Boooo!");
             }else {
+                LoggedInUser user = new LoggedInUser(listUser.getId(), listUser.getUserName());
                 attachUserToSession(request, user);
-                response.getWriter().println("Yey!");
+                response.getWriter().print(new EntityXMLConverter<ListUser>(ListUser.DESCRIPTOR).toXML(listUser));
             }
         } catch (PersistenceException e) {
             response.getWriter().println("Baahhhh" + e.getMessage());

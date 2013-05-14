@@ -4,13 +4,14 @@ import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
+import com.shpandrak.persistence.query.filter.QueryFilter;
+import com.shpandrak.persistence.query.filter.RelationshipFilterCondition;
 import com.shpandrak.shpanlist.gae.datastore.ListGroupManager;
 import com.shpandrak.shpanlist.model.ListGroup;
 import com.shpandrak.shpanlist.model.ListGroupMemberRelationshipEntry;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with love
@@ -38,7 +39,15 @@ public abstract class ListGroupService {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListGroupManager listGroupManager = new ListGroupManager();
-            return listGroupManager.listByMemberRelationship(loggedInUser.getUserId());
+            Map<Key,ListGroup> groupsUserOwns = listGroupManager.getMapById(new QueryFilter(new RelationshipFilterCondition(ListGroup.DESCRIPTOR.ownerUserRelationshipDescriptor, loggedInUser.getUserId())));
+            Map<Key,ListGroup> groupsUserIsMemberOf = new HashMap<Key, ListGroup>(
+                    listGroupManager.getMapById(new QueryFilter(new RelationshipFilterCondition(ListGroup.DESCRIPTOR.memberRelationshipDescriptor, loggedInUser.getUserId()))));
+
+            groupsUserIsMemberOf.putAll(groupsUserOwns);
+            return new ArrayList<ListGroup>(groupsUserIsMemberOf.values());
+
+
+
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

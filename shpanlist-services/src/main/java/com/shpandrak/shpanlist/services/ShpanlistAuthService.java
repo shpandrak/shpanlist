@@ -14,13 +14,13 @@ import com.shpandrak.shpanlist.model.auth.LoggedInUser;
  */
 public abstract class ShpanlistAuthService {
 
-    public static LoggedInUser signIn(String userName, String password) throws PersistenceException {
+    public static ListUser signIn(String userName, String password) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListUserManager listUserManager = new ListUserManager();
             ListUser byField = listUserManager.getByField(ListUser.DESCRIPTOR.userNameFieldDescriptor, userName);
             if (byField != null && byField.getShpanPassword().equals(password)){
-                return new LoggedInUser(byField.getId(), byField.getUserName());
+                return byField;
             }
             return null;
         }finally {

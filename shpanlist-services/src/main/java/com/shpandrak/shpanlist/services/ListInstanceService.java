@@ -1,6 +1,5 @@
 package com.shpandrak.shpanlist.services;
 
-import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
@@ -8,7 +7,10 @@ import com.shpandrak.persistence.PersistenceLayerManager;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
-import com.shpandrak.shpanlist.model.*;
+import com.shpandrak.shpanlist.model.ListInstance;
+import com.shpandrak.shpanlist.model.ListInstanceItem;
+import com.shpandrak.shpanlist.model.ListTemplate;
+import com.shpandrak.shpanlist.model.ListTemplateItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,7 +70,7 @@ public abstract class ListInstanceService {
             if (!listTemplateItems.isEmpty()){
                 List<ListInstanceItem> listInstanceItems = new ArrayList<ListInstanceItem>(listTemplateItems.size());
                 for (ListTemplateItem currItemTemplate : listTemplateItems){
-                    listInstanceItems.add(new ListInstanceItem(listInstance, currItemTemplate.getName(), currItemTemplate.getDescription(), currItemTemplate.getDefaultAmount(), false));
+                    listInstanceItems.add(new ListInstanceItem(listInstance, currItemTemplate.getName(), currItemTemplate.getItemOrder(), currItemTemplate.getDescription(), currItemTemplate.getDefaultAmount(), false));
                 }
                 listInstanceItemManager.create(listInstanceItems);
             }

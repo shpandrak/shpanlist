@@ -45,23 +45,6 @@
                 </date-field>
             </fields>
         </entity>
-        <entity name="listSession">
-            <fields>
-                <boolean-field name="enabled">
-                    <mandatory>true</mandatory>
-                </boolean-field>
-                <date-field name="loginDate">
-                    <mandatory>true</mandatory>
-                </date-field>
-            </fields>
-            <relations>
-                <one-to-many>
-                    <name>listUser</name>
-                    <mandatory>true</mandatory>
-                    <related-entity>listUser</related-entity>
-                </one-to-many>
-            </relations>
-        </entity>
         <entity name="listGroup">
             <fields>
                 <string-field name="name">
@@ -165,6 +148,18 @@
                     <mandatory>false</mandatory>
                     <related-entity>listTemplate</related-entity>
                 </one-to-many>
+                <many-to-one>
+                    <name>listInstanceItem</name>
+                    <mandatory>false</mandatory>
+                    <related-entity>listInstanceItem</related-entity>
+                    <relationship-sort>
+                        <sort-entry>
+                            <field>itemOrder</field>
+                            <ascending>true</ascending>
+                        </sort-entry>
+                    </relationship-sort>
+                </many-to-one>
+
             </relations>
         </entity>
         <entity name="listInstanceItem" owner-entity="listInstance">
@@ -174,6 +169,9 @@
                     <mandatory>true</mandatory>
                     <key>true</key>
                 </string-field>
+                <integer-field name="itemOrder">
+                    <mandatory>true</mandatory>
+                </integer-field>
                 <string-field name="description">
                     <max-length>2000</max-length>
                     <mandatory>false</mandatory>
