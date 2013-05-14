@@ -54,10 +54,10 @@ public abstract class ListTemplateService {
         try{
             //todo:transaciton
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
-            List<ListTemplateItem> existingItems = listTemplateItemManager.list(new QueryFilter(new RelationshipFilterCondition(ListTemplateItem.DESCRIPTOR.listTemplateRelationshipDescriptor, listTemplateId), null, null, Arrays.asList(new OrderByClauseEntry(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, false))));
+            List<ListTemplateItem> existingItems = listTemplateItemManager.list(new QueryFilter(new RelationshipFilterCondition(ListTemplateItem.DESCRIPTOR.listTemplateRelationshipDescriptor, listTemplateId), null, null, Arrays.asList(new OrderByClauseEntry(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, true))));
             int itemOrdinal = 1;
             if (!existingItems.isEmpty()){
-                itemOrdinal = existingItems.get(0).getItemOrder() + 1;
+                itemOrdinal = existingItems.get(existingItems.size() - 1).getItemOrder() + 1;
             }
             listTemplateItemManager.create(new ListTemplateItem(listTemplateId, listTemplateItemName, itemOrdinal, listTemplateItemDescription, defaultAmount));
         }finally {
