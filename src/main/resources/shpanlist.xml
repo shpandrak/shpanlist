@@ -50,7 +50,6 @@
                 <string-field name="name">
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
-                    <key>true</key>
                 </string-field>
                 <date-field name="creationDate">
                     <mandatory>true</mandatory>

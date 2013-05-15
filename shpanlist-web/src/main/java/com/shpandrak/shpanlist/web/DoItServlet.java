@@ -84,7 +84,6 @@ public class DoItServlet extends HttpServlet {
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
         ListUser user = ListUserService.createUser(userName, password, firstName, lastName, email);
-        user = ShpanlistAuthService.signIn(userName, password);
         loggedInUser = new LoggedInUser(user.getId(), user.getUserName());
         attachUserToSession(request, loggedInUser);
 
