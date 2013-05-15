@@ -1,12 +1,13 @@
 package com.shpandrak.shpanlist.services;
 
+import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
-import com.shpandrak.persistence.query.filter.QueryFilter;
-import com.shpandrak.persistence.query.filter.RelationshipFilterCondition;
+import com.shpandrak.persistence.query.filter.*;
 import com.shpandrak.shpanlist.gae.datastore.ListGroupManager;
+import com.shpandrak.shpanlist.gae.datastore.ListGroupMemberManager;
 import com.shpandrak.shpanlist.model.ListGroup;
 import com.shpandrak.shpanlist.model.ListGroupMemberRelationshipEntry;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
@@ -58,6 +59,34 @@ public abstract class ListGroupService {
         try{
             ListGroupManager listGroupManager = new ListGroupManager();
             return listGroupManager.getById(listGroupId, RelationshipLoadLevel.FULL);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static ListGroupMemberRelationshipEntry addMember(EntityKey listGroupId, Key memberListUserId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListGroupMemberManager listGroupMemberManager = new ListGroupMemberManager();
+
+            //todo:transaction
+            // Checking if relationship already exists
+            List<ListGroupMemberRelationshipEntry> existingRelationship = listGroupMemberManager.list(new QueryFilter(
+                    new CompoundFieldFilterCondition(FieldFilterLogicalOperatorType.AND,
+                            BasicFieldFilterCondition.build(ListGroupMemberRelationshipEntry.DESCRIPTOR.listGroupIdFieldDescriptor, FilterConditionOperatorType.EQUALS, listGroupId),
+                            BasicFieldFilterCondition.build(ListGroupMemberRelationshipEntry.DESCRIPTOR.relatedListUserIdFieldDescriptor, FilterConditionOperatorType.EQUALS, (EntityKey) memberListUserId
+                              )
+                    )));
+            if (!existingRelationship.isEmpty()){
+                throw new IllegalArgumentException("User with id " + memberListUserId + " is already a member of group with id " + listGroupId);
+            }
+
+            ListGroupMemberRelationshipEntry groupMemberRelationshipEntry = new ListGroupMemberRelationshipEntry(memberListUserId, new Date());
+            //todo:enforce this in ctor!
+            groupMemberRelationshipEntry.setSourceEntityId(listGroupId);
+            listGroupMemberManager.create(groupMemberRelationshipEntry);
+            return groupMemberRelationshipEntry;
+
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

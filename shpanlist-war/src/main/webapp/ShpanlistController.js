@@ -157,5 +157,14 @@ var ShpanlistController = {
             function(responseText){
                 window.location.replace("/");
             });
+    },
+
+    addNewGroupMember: function(listGroupId, memberUserName){
+        ShpanlistController.doIt(
+            { what: "addNewGroupMember", listGroupId: listGroupId, memberUserName:memberUserName},
+            function(responseText){
+                ShpanlistController.menuListGroup(listGroupId);
+            });
+
     }
 }

@@ -58,6 +58,8 @@ public class DoItServlet extends HttpServlet {
                 createUser(loggedInUser, request, response);
             }else if ("signOut".equals(what)){
                 signOut(loggedInUser, request, response);
+            }else if ("addNewGroupMember".equals(what)){
+                addNewGroupMember(loggedInUser, request, response);
             }else {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid action " + what);
             }
@@ -141,6 +143,16 @@ public class DoItServlet extends HttpServlet {
         String listGroupId = request.getParameter("listGroupId");
         ListGroup listGroup = ListGroupService.getListGroup(ListGroup.DESCRIPTOR.idFieldDescriptor.fromString(listGroupId));
         response.getWriter().print(new EntityXMLConverter<ListGroup>(ListGroup.DESCRIPTOR).toXML(listGroup));
+    }
+
+    private void addNewGroupMember(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
+        String listGroupId = request.getParameter("listGroupId");
+        String memberUserName = request.getParameter("memberUserName");
+        ListUser byUserName = ListUserService.findByUserName(memberUserName);
+        if (byUserName == null){
+            throw new IllegalArgumentException("Invalid userName: " + memberUserName);
+        }
+        ListGroupService.addMember(ListGroup.DESCRIPTOR.idFieldDescriptor.fromString(listGroupId), byUserName.getId());
     }
 
     private void getListTemplateFull(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {

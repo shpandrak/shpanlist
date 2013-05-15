@@ -44,4 +44,14 @@ public abstract class ListUserService {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
+
+    public static ListUser findByUserName(String userName) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListUserManager listUserManager = new ListUserManager();
+            return listUserManager.getByField(ListUser.DESCRIPTOR.userNameFieldDescriptor, userName);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
 }
