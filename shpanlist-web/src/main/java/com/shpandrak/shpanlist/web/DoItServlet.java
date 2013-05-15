@@ -29,7 +29,7 @@ public class DoItServlet extends HttpServlet {
         String what = request.getParameter("what");
         try {
 
-
+            response.setContentType("application/xml; charset=UTF-8");
             if ("signIn".equals(what)){
                 signIn(loggedInUser, request, response);
             }else if ("listListGroups".equals(what)){
@@ -64,7 +64,7 @@ public class DoItServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid action " + what);
             }
 
-            response.setContentType("application/xml");
+
 
         } catch (PersistenceException e) {
             log("Failed " + what, e);
