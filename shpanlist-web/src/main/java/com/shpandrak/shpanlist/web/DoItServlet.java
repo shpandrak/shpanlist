@@ -62,6 +62,8 @@ public class DoItServlet extends HttpServlet {
                 signOut(loggedInUser, request, response);
             }else if ("addNewGroupMember".equals(what)){
                 addNewGroupMember(loggedInUser, request, response);
+            }else if ("removeListInstance".equals(what)){
+                removeListInstance(loggedInUser, request, response);
             }else {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid action " + what);
             }
@@ -73,6 +75,11 @@ public class DoItServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
+    }
+
+    private void removeListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listInstanceId = request.getParameter("listInstanceId");
+        ListInstanceService.removeListInstance(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId));
     }
 
     private void signOut(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) {

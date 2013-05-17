@@ -14,7 +14,9 @@ var ListGroupView = {
             var currEntity = jQuery(this);
             var currEntityId = currEntity.attr("id");
             theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
-            theHtml += '<td><a HREF=\"javascript:ShpanlistController.menuListInstance(\'' + currEntityId + '\')\">Show List</a></td></tr>';
+            theHtml += '<td><a href="javascript:ShpanlistController.menuListInstance(\'' + currEntityId + '\')\">Show List</a>' +
+                '&nbsp;<a href="javascript:ListGroupView.removeListInstance(\'' + currEntityId + '\')\">Remove</a>' +
+                '</td></tr>';
         });
         theHtml += '</table><br/><br/>';
 
@@ -61,6 +63,15 @@ var ListGroupView = {
             alert("Please Type user name to add");
         }else{
             ShpanlistController.addNewGroupMember(ListGroupView.listGroupId, memberUserName);
+        }
+    },
+
+    removeListInstance: function removeListInstance(listInstanceId){
+        var conf = confirm("Are you sure you want to remove this list?");
+        if (conf){
+            ShpanlistController.removeListInstance(listInstanceId, function(){
+                ShpanlistController.menuListGroup(ListGroupView.listGroupId);
+            });
         }
     }
 

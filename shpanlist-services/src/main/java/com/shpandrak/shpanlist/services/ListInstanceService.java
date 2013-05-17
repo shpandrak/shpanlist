@@ -1,5 +1,6 @@
 package com.shpandrak.shpanlist.services;
 
+import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
@@ -110,4 +111,13 @@ public abstract class ListInstanceService {
         }
     }
 
+    public static void removeListInstance(EntityKey listInstanceId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListInstanceManager listInstanceManager = new ListInstanceManager();
+            listInstanceManager.delete(listInstanceId);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
 }

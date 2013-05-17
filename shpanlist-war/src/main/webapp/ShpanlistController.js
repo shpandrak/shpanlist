@@ -182,6 +182,13 @@ var ShpanlistController = {
             function(responseText){
                 ShpanlistController.menuListGroup(listGroupId);
             });
+    },
 
+    removeListInstance: function(listInstanceId, successCallback){
+        ShpanlistController.doIt(
+            { what: "removeListInstance", listInstanceId: listInstanceId},
+            function(responseText){
+                successCallback();
+            });
     }
 }
