@@ -31,6 +31,7 @@ public class WelcomeServlet extends HttpServlet{
                 "    <script src=\"ShpanlistController.js\"></script>\n" +
                 "    <script src=\"listTemplateView.js\"></script>\n" +
                 "    <script src=\"listInstanceView.js\"></script>\n" +
+                "    <script src=\"listInstanceEditView.js\"></script>\n" +
                 "    <script src=\"listGroupView.js\"></script>\n" +
                 "    <script type=\"text/javascript\">\n" +
                 "\n" +
@@ -46,6 +47,7 @@ public class WelcomeServlet extends HttpServlet{
                 "            ListTemplateView.mainFrame = divMain;\n" +
                 "            ListGroupView.mainFrame = divMain;\n" +
                 "            ListInstanceView.mainFrame = divMain;\n" +
+                "            ListInstanceEditView.mainFrame = divMain;\n" +
                 "            ShpanlistController.loadApp();\n" +
                 "        }\n" +
                 "\n" +

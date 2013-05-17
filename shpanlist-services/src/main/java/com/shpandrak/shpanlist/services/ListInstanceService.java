@@ -6,6 +6,7 @@ import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceManager;
+import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.model.ListInstance;
 import com.shpandrak.shpanlist.model.ListInstanceItem;
@@ -97,6 +98,16 @@ public abstract class ListInstanceService {
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
-
     }
+
+    public static void removeListInstanceItem(Key listInstanceItemId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            ListInstanceItemManager listInstanceItemManager = new ListInstanceItemManager();
+            listInstanceItemManager.delete(listInstanceItemId);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
 }

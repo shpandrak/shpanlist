@@ -48,6 +48,8 @@ public class DoItServlet extends HttpServlet {
                 bringBackItem(loggedInUser, request, response);
             }else if ("removeListTemplateItem".equals(what)){
                 removeListTemplateItem(loggedInUser, request, response);
+            }else if ("removeListInstanceItem".equals(what)){
+                removeListInstanceItem(loggedInUser, request, response);
             }else if ("createListFromTemplate".equals(what)){
                 createListFromTemplate(loggedInUser, request, response);
             }else if ("pushListTemplateItemDown".equals(what)){
@@ -112,6 +114,12 @@ public class DoItServlet extends HttpServlet {
         String listTemplateId = request.getParameter("listTemplateId");
         String listTemplateItemId = request.getParameter("listTemplateItemId");
         ListTemplateService.removeListTemplateItem(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
+    }
+
+    private void removeListInstanceItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listInstanceId = request.getParameter("listInstanceId");
+        String listInstanceItemId = request.getParameter("listInstanceItemId");
+        ListInstanceService.removeListInstanceItem(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId));
     }
 
     private void pushListTemplateItemDown(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {

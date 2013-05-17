@@ -80,6 +80,14 @@ var ShpanlistController = {
             });
     },
 
+    menuEditListInstance: function(listInstanceId){
+        ShpanlistController.doIt(
+            { what: "getListInstanceFull", listInstanceId: listInstanceId },
+            function(responseText){
+                ListInstanceEditView.show(responseText);
+            });
+    },
+
     addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount){
         ShpanlistController.doIt(
             { what: "addListTemplateItem", listTemplateId:listTemplateId, listTemplateItemName: listTemplateItemName, listTemplateItemDescription:listTemplateItemDescription, listTemplateItemDefaultAmount:listTemplateItemDefaultAmount},
@@ -93,6 +101,15 @@ var ShpanlistController = {
             { what: "removeListTemplateItem", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
             function(responseText){
                 ShpanlistController.menuListTemplate(listTemplateId);
+            });
+
+    },
+
+    removeListInstanceItem: function(listInstanceId, listInstanceItemId){
+        ShpanlistController.doIt(
+            { what: "removeListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
+            function(responseText){
+                ShpanlistController.menuEditListInstance(listInstanceId);
             });
 
     },

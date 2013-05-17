@@ -6,7 +6,9 @@ var ListInstanceView = {
     show: function(listInstanceXml){
         this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
         var listInstanceName = $(listInstanceXml).find("name").first().text();
-        var theHtml = '<h2>' + listInstanceName + '</h2><table id="tabListInstanceItems">';
+        var theHtml = '<h2>' + listInstanceName + '</h2><br/>' +
+            '<a href="javascript:ShpanlistController.menuEditListInstance(\'' + this.listInstanceId + '\')">Edit List</a><br/>' +
+            '<table id="tabListInstanceItems">';
         var listGroupId = $(listInstanceXml).find("listGroup").first().attr("id");
 
         $(listInstanceXml).find("listInstanceItemRelationshipEntries").find("listInstanceItem") .each(function() {
