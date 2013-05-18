@@ -25,15 +25,18 @@ public class WelcomeServlet extends HttpServlet{
                 "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
-                "    <title>Hi Dude</title>\n" +
-                "    <script src=\"webmanage/jquery-1.8.3.js\"></script>\n" +
-                "    <script src=\"ShpanlistView.js\"></script>\n" +
-                "    <script src=\"ShpanlistController.js\"></script>\n" +
-                "    <script src=\"listTemplateView.js\"></script>\n" +
-                "    <script src=\"listInstanceView.js\"></script>\n" +
-                "    <script src=\"listInstanceEditView.js\"></script>\n" +
-                "    <script src=\"listGroupView.js\"></script>\n" +
-                "    <script type=\"text/javascript\">\n" +
+                "\t<title>Hi Dude</title>\n" +
+                "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                "\t<link rel=\"stylesheet\" href=\"include/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css\" />\n" +
+                "\t<script src=\"include/jquery-1.9.1.min.js\"></script>\n" +
+                "\t<script src=\"include/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js\"></script>\n" +
+                "\t<script src=\"ShpanlistView.js\"></script>\n" +
+                "\t<script src=\"ShpanlistController.js\"></script>\n" +
+                "\t<script src=\"listTemplateView.js\"></script>\n" +
+                "\t<script src=\"listInstanceView.js\"></script>\n" +
+                "\t<script src=\"listInstanceEditView.js\"></script>\n" +
+                "\t<script src=\"listGroupView.js\"></script>\n" +
+                "\t<script type=\"text/javascript\">\n" +
                 "\n" +
                 "        function onLoad() {\n");
 

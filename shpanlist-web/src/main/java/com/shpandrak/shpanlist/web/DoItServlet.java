@@ -87,7 +87,7 @@ public class DoItServlet extends HttpServlet {
     }
 
     private void createUser(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String userName = request.getParameter("userName");
+        String userName = request.getParameter("userName").toLowerCase();
         String password = request.getParameter("password");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
@@ -188,7 +188,7 @@ public class DoItServlet extends HttpServlet {
 
 
     private void signIn(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userName = request.getParameter("userName");
+        String userName = request.getParameter("userName").toLowerCase();
         String password = request.getParameter("password");
 
         try {

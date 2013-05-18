@@ -17,11 +17,11 @@ var ListTemplateView = {
             theHtml += '<td>' + currEntity.find("description").first().text() + '</td>';
             theHtml += '<td>' + currEntity.find("defaultAmount").first().text() + '</td>';
             theHtml += '<td><a HREF=\"javascript:ListTemplateView.removeItem(\'' + currEntityId + '\')\">Remove</a>';
-            theHtml += '&nbsp;<a HREF=\"javascript:ListTemplateView.pushItemDown(\'' + currEntityId + '\')\">v</a>';
+            theHtml += '&nbsp;<img src="/images/down.png" onclick="javascript:ListTemplateView.pushItemDown(\'' + currEntityId + '\')"/>';
             if (firstIteration){
                 firstIteration = false;
             }else{
-                theHtml += '&nbsp;<a HREF=\"javascript:ListTemplateView.pushItemUp(\'' + currEntityId + '\')\">^</a>';
+                theHtml += '&nbsp;<img src="/images/up.png" onclick="javascript:ListTemplateView.pushItemUp(\'' + currEntityId + '\')"/>';
 
             }
 

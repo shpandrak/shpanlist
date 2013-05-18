@@ -57,7 +57,7 @@ var ShpanlistController = {
             { what: "signIn", userName: userName, password: password },
             function(responseText){
                 if ($(responseText).find("listUser").size() > 0){
-                    window.location.reload();
+                    window.location.replace("/");
                 }else{
                     alert("Nope... " + responseText);
                 }
