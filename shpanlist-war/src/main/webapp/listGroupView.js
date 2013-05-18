@@ -1,10 +1,12 @@
 var ListGroupView = {
 
-    mainFrame:undefined,
     listGroupId:null,
 
-    show: function(listGroupXml){
-        this.listGroupId = $(listGroupXml).find("listGroup").first().attr("id");
+    show: function (event, data) {
+        ShpanlistController.getListGroup(localStorage['listGroupId'], ListGroupView.load);
+    },
+
+    load:function (listGroupXml) {
         var listGroupName = $(listGroupXml).find("name").first().text();
         var theHtml = '<h1>' + listGroupName + '</h1><br/><br/>';
 
@@ -36,15 +38,16 @@ var ListGroupView = {
         $(listGroupXml).find("memberRelationshipEntries").first().find("listUser").each(function () {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
-            theHtml += '<tr><td>' + currEntity.find("firstName").first().text() + ' ' + currEntity.find("lastName").first().text() +'</td>';
+            theHtml += '<tr><td>' + currEntity.find("firstName").first().text() + ' ' + currEntity.find("lastName").first().text() + '</td>';
             theHtml += '<td><a HREF=\"javascript:ShpanlistController.removeGroupMember(\'' + currEntityId + '\')\">Remove</a></td></tr>';
         });
 
         theHtml += '</table><br/>';
         theHtml += 'UserName:<input type="text" id="txtNewMemberUserName"/><a HREF="javascript:ListGroupView.addNewMember()">Add Member</a><br/>';
 
-        this.mainFrame.innerHTML = theHtml;
+        document.getElementById('pageListGroupContentDiv').innerHTML = theHtml;
     },
+
 
     createNewItem: function(){
         ShpanlistController.addNewListTemplateItem(ListTemplateView.listTemplateId, txtNewItemName.value, txtNewItemDescription.value, txtNewItemDefaultAmount.value)

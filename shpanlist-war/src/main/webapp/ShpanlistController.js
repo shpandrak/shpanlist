@@ -1,11 +1,8 @@
 
 var ShpanlistController = {
 
-    signedInUser:null,
-
-
     loadApp: function(){
-        if (this.signedInUser == null){
+        if (localStorage["signedInUser"] == null){
             this.menuSignIn();
         }else{
             this.menuListGroups();
@@ -13,33 +10,41 @@ var ShpanlistController = {
     },
 
     menuSignIn: function () {
-        ShpanlistView.showSignIn();
+        $.mobile.changePage("#pageSignIn")
     },
 
     menuListGroups: function(){
-        ShpanlistView.showListGroups();
+        $.mobile.changePage('#pageListGroups', {transition: 'slide'});
     },
 
 
     doIt:function(data, successFunction){
+        $.mobile.loading('show');
         jQuery.post(
             "/doIt",
             data
         )
             .done(
             function(responseText){
+                $.mobile.loading('hide');
                 successFunction(responseText);
             })
             .fail(function(jqXHR, textStatus) {
+                $.mobile.loading('hide');
                 alert("Failed oh no!" + jqXHR.statusText+ ": " + textStatus + ": " + jqXHR.responseText);
             });
     },
 
     menuListGroup: function(listGroupId){
+        localStorage['listGroupId'] = listGroupId;
+        $.mobile.changePage('#pageListGroup', {transition:'slide'});
+    },
+
+    getListGroup: function(listGroupId, callback){
         ShpanlistController.doIt(
             { what: "getListGroup", listGroupId: listGroupId},
             function(responseText){
-                ListGroupView.show(responseText);
+                callback(responseText);
             }
         )
     },
@@ -57,7 +62,10 @@ var ShpanlistController = {
             { what: "signIn", userName: userName, password: password },
             function(responseText){
                 if ($(responseText).find("listUser").size() > 0){
-                    window.location.replace("/");
+                    var userName = $(responseText).find("listUser").first().find("name").first().text();
+                    ShpanlistController.signedInUser = userName;
+                    localStorage["signedInUser"] = userName;
+                    ShpanlistController.loadApp();
                 }else{
                     alert("Nope... " + responseText);
                 }
@@ -65,10 +73,15 @@ var ShpanlistController = {
     },
 
     menuListTemplate: function(listTemplateId){
+        localStorage['listTemplateId'] = listTemplateId;
+        $.mobile.changePage('#pageListTemplate', {transition:'slide'});
+    },
+
+    getListTemplateFull: function(listTemplateId, callback){
         ShpanlistController.doIt(
             { what: "getListTemplateFull", listTemplateId: listTemplateId },
             function(responseText){
-                ListTemplateView.show(responseText);
+                callback(responseText);
             });
     },
 
@@ -88,19 +101,19 @@ var ShpanlistController = {
             });
     },
 
-    addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount){
+    addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount, callback){
         ShpanlistController.doIt(
             { what: "addListTemplateItem", listTemplateId:listTemplateId, listTemplateItemName: listTemplateItemName, listTemplateItemDescription:listTemplateItemDescription, listTemplateItemDefaultAmount:listTemplateItemDefaultAmount},
             function(responseText){
-                ShpanlistController.menuListTemplate(listTemplateId);
+                callback(responseText);
             });
     },
 
-    removeListTemplateItem: function(listTemplateId, listTemplateItemId){
+    removeListTemplateItem: function(listTemplateId, listTemplateItemId, callback){
         ShpanlistController.doIt(
             { what: "removeListTemplateItem", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
             function(responseText){
-                ShpanlistController.menuListTemplate(listTemplateId);
+                callback(responseText);
             });
 
     },
@@ -114,19 +127,19 @@ var ShpanlistController = {
 
     },
 
-    pushListTemplateItemUp: function(listTemplateId, listTemplateItemId){
+    pushListTemplateItemUp: function(listTemplateId, listTemplateItemId, callback){
         ShpanlistController.doIt(
             { what: "pushListTemplateItemUp", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
             function(responseText){
-                ShpanlistController.menuListTemplate(listTemplateId);
+                callback(responseText);
             });
     },
 
-    pushListTemplateItemDown: function(listTemplateId, listTemplateItemId){
+    pushListTemplateItemDown: function(listTemplateId, listTemplateItemId, callback){
         ShpanlistController.doIt(
             { what: "pushListTemplateItemDown", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
             function(responseText){
-                ShpanlistController.menuListTemplate(listTemplateId);
+                callback(responseText);
             });
     },
 
@@ -172,7 +185,9 @@ var ShpanlistController = {
         ShpanlistController.doIt(
             { what: "signOut"},
             function(responseText){
-                window.location.replace("/");
+                ShpanlistController.signedInUser = null;
+                localStorage.removeItem("signedInUser");
+                window.location.replace("");
             });
     },
 
