@@ -26,7 +26,7 @@ var ShpanlistView = {
             //theHtml += '<li>' + ;
 
             //cell = row.insertCell(row.cells.length);
-            theHtml += '<li><a data-transition="slide" href="javascript:ShpanlistController.menuListGroup(\'' + currEntityId + '\')">' + currEntity.find("name").text() + '</a></li>';
+            theHtml += '<li><a href="javascript:ShpanlistController.menuListGroup(\'' + currEntityId + '\')">' + currEntity.find("name").text() + '</a></li>';
             //cell.innerHTML = '<a HREF=\"javascript:ShpanlistController.menuListGroup(\'' + currEntityId + '\')\">Open</a>';
         });
 
