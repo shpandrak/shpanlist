@@ -68,10 +68,14 @@
     </div>
 
     <div id="pageListGroup" data-role="page">
-        <div data-role="header">
-            My List Groups
+        <div data-role="header" id="pageListGroupHeaderDiv">
         </div>
-        <div data-role="content" id="pageListGroupContentDiv">
+        <div data-role="content">
+            <h2>Active Lists</h2>
+            <ul id="lstActiveLists" data-role="listview"></ul>
+            <br/>
+            <h2>List Templates</h2>
+            <ul id="lstListTemplates" data-role="listview"></ul>
         </div>
         <div data-role="footer">
             <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
@@ -83,6 +87,44 @@
             List Template
         </div>
         <div data-role="content" id="pageListTemplateContentDiv">
+        </div>
+        <div data-role="footer">
+            <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
+        </div>
+    </div>
+
+    <div id="pageAddListTemplateItem" data-role="page">
+        <div data-role="header">
+            Add List Template Item
+        </div>
+        <div data-role="content">
+            <table style="border-spacing:0;padding:0">
+                <tr>
+                    <td>Item:</td>
+                    <td>
+                        <input id="txtListTemplateItemName" type="text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Amount:</td>
+                    <td>
+                        <input id="txtListTemplateItemAmount" type="number"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description:</td>
+                    <td>
+                        <input id="txtListTemplateItemDescription" type="text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="button" onClick="ListTemplateView.createNewItem()"
+                               value="Add"/>
+                    </td>
+                </tr>
+            </table>
+
         </div>
         <div data-role="footer">
             <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>

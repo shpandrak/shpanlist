@@ -8,33 +8,33 @@ var ListGroupView = {
 
     load:function (listGroupXml) {
         var listGroupName = $(listGroupXml).find("name").first().text();
-        var theHtml = '<h1>' + listGroupName + '</h1><br/><br/>';
+        document.getElementById('pageListGroupHeaderDiv').innerHTML = '<h1>' + listGroupName + '</h1>';
 
 
-        theHtml += '<h2>Active Lists</h2> <table id="tabListInstances">';
+        var theHtml = '';
         $(listGroupXml).find("listInstanceRelationshipEntries").first().find("listInstance").each(function () {
             var currEntity = jQuery(this);
             var currEntityId = currEntity.attr("id");
-            theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
-            theHtml += '<td><a href="javascript:ShpanlistController.menuListInstance(\'' + currEntityId + '\')\">Show List</a>' +
-                '&nbsp;<a href="javascript:ListGroupView.removeListInstance(\'' + currEntityId + '\')\">Remove</a>' +
-                '</td></tr>';
+            theHtml += '<li>' + currEntity.find("name").first().text();
+            theHtml += '<a href="javascript:ShpanlistController.menuListInstance(\'' + currEntityId + '\')\">Show List</a>' +
+                '&nbsp;<a href="javascript:ListGroupView.removeListInstance(\'' + currEntityId + '\')\">Remove</a></li>';
         });
-        theHtml += '</table><br/><br/>';
+        document.getElementById('lstActiveLists').innerHTML = theHtml;
 
 
-        theHtml += '<h2>List Templates</h2> <table id="tabListInstances">';
-        theHtml += '<table id="tabListTemplates">';
+        theHtml = '';
         $(listGroupXml).find("listTemplateRelationshipEntries").first().find("listTemplate").each(function () {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
-            theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
-            theHtml += '<td><a HREF=\"javascript:ShpanlistController.menuListTemplate(\'' + currEntityId + '\')\">Open Template</a></td></tr>';
+            theHtml += '<li>' +
+                       '<a HREF=\"javascript:ShpanlistController.menuListTemplate(\'' + currEntityId + '\')\">' + currEntity.find("name").first().text() + '</a></li>';
         });
-        theHtml += '</table>';
+
+        document.getElementById('lstListTemplates').innerHTML = theHtml;
+
 
         // Build group members table
-        theHtml += '<h2>List Group members</h2><table id="tabGroupMembers">';
+        theHtml = '<h2>List Group members</h2><table id="tabGroupMembers">';
         $(listGroupXml).find("memberRelationshipEntries").first().find("listUser").each(function () {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
@@ -45,7 +45,9 @@ var ListGroupView = {
         theHtml += '</table><br/>';
         theHtml += 'UserName:<input type="text" id="txtNewMemberUserName"/><a HREF="javascript:ListGroupView.addNewMember()">Add Member</a><br/>';
 
-        document.getElementById('pageListGroupContentDiv').innerHTML = theHtml;
+        $("#lstActiveLists").listview('refresh');
+        $("#lstListTemplates").listview('refresh');
+        //document.getElementById('pageListGroupContentDiv').innerHTML = theHtml;
     },
 
 

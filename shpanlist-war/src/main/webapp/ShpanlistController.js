@@ -13,6 +13,10 @@ var ShpanlistController = {
         $.mobile.changePage("#pageSignIn")
     },
 
+    menuAddNewListTemplateItem: function (listTemplateId) {
+            $.mobile.changePage("#pageAddListTemplateItem", {transition:'flip'})
+    },
+
     menuListGroups: function(){
         $.mobile.changePage('#pageListGroups', {transition: 'slide'});
     },

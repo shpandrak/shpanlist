@@ -35,9 +35,10 @@ var ListTemplateView = {
 
         });
 
-        theHtml += '<tr><td>Item:<input type="text" id="txtNewItemName"/></td><td>description:<input type="text" id="txtNewItemDescription"/></td><td>Default Amount:<input type="number" min="1" id="txtNewItemDefaultAmount"/></td><td><a HREF="javascript:ListTemplateView.createNewItem()">Add</a></td></tr></table>';
+        //theHtml += '<tr><td>Item:<input type="text" id="txtNewItemName"/></td><td>description:<input type="text" id="txtNewItemDescription"/></td><td>Default Amount:<input type="number" min="1" id="txtNewItemDefaultAmount"/></td><td><a HREF="javascript:ListTemplateView.createNewItem()">Add</a></td></tr>';
 
-        theHtml += '<br/><a href="javascript:ListTemplateView.createListFromTemplate()">Create list from this template</a>';
+        theHtml += '</table><br/><input value="Add Item" type="button" onclick="ShpanlistController.menuAddNewListTemplateItem(\'' + ListTemplateView.listTemplateId + '\')" />' +
+            '<br/><a href="javascript:ListTemplateView.createListFromTemplate()">Create list from this template</a>';
         theHtml += '<br/><a HREF="javascript:ShpanlistController.menuListGroup(\'' + listGroupId +'\')">Back to group page</a>' ;
 
 
@@ -45,8 +46,12 @@ var ListTemplateView = {
     },
 
     createNewItem: function(){
-        ShpanlistController.addNewListTemplateItem(ListTemplateView.listTemplateId, txtNewItemName.value, txtNewItemDescription.value, txtNewItemDefaultAmount.value, function(){
-            ListTemplateView.show(null, null);
+        ShpanlistController.addNewListTemplateItem(
+            ListTemplateView.listTemplateId,
+            document.getElementById('txtListTemplateItemName').value,
+            document.getElementById('txtListTemplateItemDescription').value,
+            document.getElementById('txtListTemplateItemAmount').value, function(){
+                ShpanlistController.menuListTemplate(localStorage['listTemplateId']);
         });
     },
 
