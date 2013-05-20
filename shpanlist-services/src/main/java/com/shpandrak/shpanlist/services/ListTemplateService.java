@@ -76,24 +76,30 @@ public abstract class ListTemplateService {
     }
 
     public static void pushListTemplateItemDown(Key listTemplateItemId) throws PersistenceException {
+        //todo:begin tx earlier to include fetch
+        //todo:limit fetch to return 1 item
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
             ListTemplateItem byId = listTemplateItemManager.getById(listTemplateItemId);
             Integer itemOrder = byId.getItemOrder();
             // Searching if there is an item after current
-            ListTemplateItem nextItem = listTemplateItemManager.findObject(new QueryFilter(
+
+            List<ListTemplateItem> items = listTemplateItemManager.list(new QueryFilter(
                     new CompoundFieldFilterCondition(
                             FieldFilterLogicalOperatorType.AND,
                             new RelationshipFilterCondition(ListTemplateItem.DESCRIPTOR.listTemplateRelationshipDescriptor, byId.getListTemplateId()),
-                            BasicFieldFilterCondition.build(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.EQUALS, itemOrder + 1))));
-            if (nextItem == null){
+                            BasicFieldFilterCondition.build(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.GREATER_THEN, itemOrder)), null, null,
+                    Arrays.asList(new OrderByClauseEntry(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, true))));
+
+            if (items.isEmpty()){
                 logger.warn("Skip pushing down last item {}", byId);
             }else{
+                ListTemplateItem nextItem = items.get(0);
                 // Updating both fields
                 PersistenceLayerManager.getConnectionProvider().beginTransaction();
                 try{
-                    listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder + 1, byId.getId());
+                    listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, nextItem.getItemOrder(), byId.getId());
                     listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, nextItem.getId());
                     PersistenceLayerManager.getConnectionProvider().commitTransaction();
                 }
@@ -113,6 +119,8 @@ public abstract class ListTemplateService {
     }
 
     public static void pushListTemplateItemUp(Key listTemplateItemId) throws PersistenceException {
+        //todo:begin tx earlier to include fetch
+        //todo:limit fetch to return 1 item
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
@@ -122,18 +130,23 @@ public abstract class ListTemplateService {
                 logger.warn("Skip pushing up item on top order {}", byId);
             }else{
                 // Searching if there is an item before current
-                ListTemplateItem previousItem = listTemplateItemManager.findObject(new QueryFilter(
+                List<ListTemplateItem> items = listTemplateItemManager.list(new QueryFilter(
                         new CompoundFieldFilterCondition(
                                 FieldFilterLogicalOperatorType.AND,
                                 new RelationshipFilterCondition(ListTemplateItem.DESCRIPTOR.listTemplateRelationshipDescriptor, byId.getListTemplateId()),
-                                BasicFieldFilterCondition.build(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.EQUALS, itemOrder - 1))));
-                if (previousItem == null){
+                                BasicFieldFilterCondition.build(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.LESS_THEN, itemOrder)),
+                        null,
+                        null,
+                        Arrays.asList(new OrderByClauseEntry(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, false))));
+
+                if (items.isEmpty()){
                     throw new IllegalStateException("Failed pushing up item - could not find previous item " + byId);
                 }else{
+                    ListTemplateItem previousItem = items.get(0);
                     // Updating both fields
                     PersistenceLayerManager.getConnectionProvider().beginTransaction();
                     try{
-                        listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder - 1, byId.getId());
+                        listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, previousItem.getItemOrder(), byId.getId());
                         listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, previousItem.getId());
                         PersistenceLayerManager.getConnectionProvider().commitTransaction();
                     }
