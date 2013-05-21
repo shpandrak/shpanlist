@@ -5,4 +5,10 @@
     <datastore-index kind="ListInstanceItem" ancestor="true" source="auto">
         <property name="itemOrder" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="ListTemplateItem" ancestor="true" source="auto">
+        <property name="itemOrder" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="ListInstanceItem" ancestor="true" source="auto">
+        <property name="itemOrder" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>
