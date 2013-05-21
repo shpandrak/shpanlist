@@ -36,11 +36,13 @@
             <table style="border-spacing:0;padding:0">
                 <tr>
                     <td>
+                        Username<br/>
                         <input id="txtUserName" type="text"/>
                     </td>
                 </tr>
                 <tr>
                     <td>
+                        Password<br/>
                         <input id="txtPassword" type="password"/>
                     </td>
                 </tr>
@@ -87,6 +89,19 @@
             List Template
         </div>
         <div data-role="content" id="pageListTemplateContentDiv">
+            <table id="tabListTemplateItems" data-role="table" class="ui-responsive table-stroke">
+                <thead>
+                    <tr>
+                        <th>Item</th><th>Description</th><th>Amount</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <br/>
+            <input value="Add Item" type="button" onclick="ShpanlistController.menuAddNewListTemplateItem(ListTemplateView.listTemplateId)" />
+            <br/>
+            <a href="javascript:ListTemplateView.createListFromTemplate()">Create list from this template</a>
         </div>
         <div data-role="footer">
             <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>

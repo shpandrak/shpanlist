@@ -8,10 +8,10 @@ var ListTemplateView = {
     },
 
     load: function(listTemplateXml){
-        this.listTemplateId = $(listTemplateXml).find("listTemplate").first().attr("id");
+        //this.listTemplateId = $(listTemplateXml).find("listTemplate").first().attr("id");
         var listTemplateName = $(listTemplateXml).find("name").first().text();
-        document.getElementById('pageListTemplateHeaderDiv').innerHTML = '<h2>' + listTemplateName + '</h2>';
-        var theHtml = '<table id="tabListTemplateItems">';
+        document.getElementById('pageListTemplateHeaderDiv').innerHTML = listTemplateName;
+        var theHtml = '';
         var listGroupId = $(listTemplateXml).find("listGroup").first().attr("id");
 
         var firstIteration = true;
@@ -37,12 +37,8 @@ var ListTemplateView = {
 
         //theHtml += '<tr><td>Item:<input type="text" id="txtNewItemName"/></td><td>description:<input type="text" id="txtNewItemDescription"/></td><td>Default Amount:<input type="number" min="1" id="txtNewItemDefaultAmount"/></td><td><a HREF="javascript:ListTemplateView.createNewItem()">Add</a></td></tr>';
 
-        theHtml += '</table><br/><input value="Add Item" type="button" onclick="ShpanlistController.menuAddNewListTemplateItem(\'' + ListTemplateView.listTemplateId + '\')" />' +
-            '<br/><a href="javascript:ListTemplateView.createListFromTemplate()">Create list from this template</a>';
-        theHtml += '<br/><a HREF="javascript:ShpanlistController.menuListGroup(\'' + listGroupId +'\')">Back to group page</a>' ;
-
-
-        document.getElementById('pageListTemplateContentDiv').innerHTML = theHtml;
+        document.getElementById('tabListTemplateItems').tBodies[0].innerHTML = theHtml;
+        $("#tabListTemplateItems").table('refresh');
     },
 
     createNewItem: function(){

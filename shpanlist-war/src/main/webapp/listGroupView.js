@@ -8,7 +8,7 @@ var ListGroupView = {
 
     load:function (listGroupXml) {
         var listGroupName = $(listGroupXml).find("name").first().text();
-        document.getElementById('pageListGroupHeaderDiv').innerHTML = '<h1>' + listGroupName + '</h1>';
+        document.getElementById('pageListGroupHeaderDiv').innerHTML = listGroupName;
 
 
         var theHtml = '';
