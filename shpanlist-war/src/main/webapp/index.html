@@ -73,11 +73,8 @@
         <div data-role="header" id="pageListGroupHeaderDiv">
         </div>
         <div data-role="content">
-            <h2>Active Lists</h2>
-            <ul id="lstActiveLists" data-role="listview"></ul>
+            <ul id="lstLists" data-role="listview" data-split-icon="delete" data-split-theme="c"></ul>
             <br/>
-            <h2>List Templates</h2>
-            <ul id="lstListTemplates" data-role="listview"></ul>
         </div>
         <div data-role="footer">
             <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
@@ -99,7 +96,7 @@
                 </tbody>
             </table>
             <br/>
-            <input value="Add Item" type="button" onclick="ShpanlistController.menuAddNewListTemplateItem(ListTemplateView.listTemplateId)" />
+            <input value="Add Item" type="button" data-icon="plus" onclick="ShpanlistController.menuAddNewListTemplateItem(ListTemplateView.listTemplateId)" />
             <br/>
             <a href="javascript:ListTemplateView.createListFromTemplate()">Create list from this template</a>
         </div>

@@ -11,18 +11,16 @@ var ListGroupView = {
         document.getElementById('pageListGroupHeaderDiv').innerHTML = listGroupName;
 
 
-        var theHtml = '';
+        var theHtml = '<li data-role="list-divider">Active Lists</li>';
         $(listGroupXml).find("listInstanceRelationshipEntries").first().find("listInstance").each(function () {
             var currEntity = jQuery(this);
             var currEntityId = currEntity.attr("id");
-            theHtml += '<li>' + currEntity.find("name").first().text();
-            theHtml += '<a href="javascript:ShpanlistController.menuListInstance(\'' + currEntityId + '\')\">Show List</a>' +
-                '&nbsp;<a href="javascript:ListGroupView.removeListInstance(\'' + currEntityId + '\')\">Remove</a></li>';
+            theHtml += '<li><a href="javascript:ShpanlistController.menuListInstance(\'' + currEntityId + '\')\">' + currEntity.find("name").first().text() + '</a>' +
+                '<a href="javascript:ListGroupView.removeListInstance(\'' + currEntityId + '\')\">Remove</a></li>';
         });
-        document.getElementById('lstActiveLists').innerHTML = theHtml;
 
 
-        theHtml = '';
+        theHtml += '<li data-role="list-divider">List Templates</li>';
         $(listGroupXml).find("listTemplateRelationshipEntries").first().find("listTemplate").each(function () {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
@@ -30,7 +28,7 @@ var ListGroupView = {
                        '<a HREF=\"javascript:ShpanlistController.menuListTemplate(\'' + currEntityId + '\')\">' + currEntity.find("name").first().text() + '</a></li>';
         });
 
-        document.getElementById('lstListTemplates').innerHTML = theHtml;
+        document.getElementById('lstLists').innerHTML = theHtml;
 
 
         // Build group members table
@@ -45,8 +43,7 @@ var ListGroupView = {
         theHtml += '</table><br/>';
         theHtml += 'UserName:<input type="text" id="txtNewMemberUserName"/><a HREF="javascript:ListGroupView.addNewMember()">Add Member</a><br/>';
 
-        $("#lstActiveLists").listview('refresh');
-        $("#lstListTemplates").listview('refresh');
+        $("#lstLists").listview('refresh');
         //document.getElementById('pageListGroupContentDiv').innerHTML = theHtml;
     },
 
