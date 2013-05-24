@@ -4,6 +4,11 @@ var ListTemplateView = {
     listTemplateId:null,
 
 
+    refresh: function(){
+        this.data = null;
+        this.show();
+    },
+
     show: function(){
         var listTemplateXml = this.data;
 
@@ -63,18 +68,18 @@ var ListTemplateView = {
 
     removeItem: function(listTemplateItemId){
         ShpanlistController.removeListTemplateItem(ListTemplateView.listTemplateId, listTemplateItemId, function(){
-            ListTemplateView.show(null, null);
+            ListTemplateView.refresh();
         });
     },
 
     pushItemUp: function(listTemplateItemId){
         ShpanlistController.pushListTemplateItemUp(ListTemplateView.listTemplateId, listTemplateItemId, function(){
-            ListTemplateView.show(null, null);
+            ListTemplateView.refresh();
         });
     },
     pushItemDown: function(listTemplateItemId){
         ShpanlistController.pushListTemplateItemDown(ListTemplateView.listTemplateId, listTemplateItemId, function(){
-            ListTemplateView.show(null, null);
+            ListTemplateView.refresh();
         });
     },
 

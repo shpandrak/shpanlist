@@ -17,7 +17,11 @@ var ShpanlistController = {
     },
 
     menuListGroups: function(){
-        $.mobile.changePage('listGroups.html', {transition: 'slide'});
+        ShpanlistController.listListGroups(function(responseXml){
+            ListGroupsView.data = responseXml;
+            $.mobile.changePage('listGroups.html', {transition: 'slide'});
+
+        });
     },
 
 
