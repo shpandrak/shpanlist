@@ -1,13 +1,13 @@
-$( document ).on( 'pagebeforeshow', '#pageListGroups', function(event, data){
-    ListGroupsView.show(event, data);
+$( document ).on( 'pageinit', '#pageListGroups', function(event, data){
+    ListGroupsView.show();
 });
 
-$( document ).on( 'pagebeforeshow', '#pageListGroup', function(event, data){
-    ListGroupView.show(event, data);
+$( document ).on( 'pageinit', '#pageListGroup', function(event, data){
+    ListGroupView.show();
 });
 
-$( document ).on( 'pagebeforeshow', '#pageListTemplate', function(event, data){
-    ListTemplateView.show(event, data);
+$( document ).on( 'pageinit', '#pageListTemplate', function(event, data){
+    ListTemplateView.show();
 });
 
 $( document ).on( 'pagebeforeshow', '#pageMain', function(event, data){

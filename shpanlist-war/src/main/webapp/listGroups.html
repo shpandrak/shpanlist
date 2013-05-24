@@ -16,34 +16,21 @@
     <script src="listInstanceEditView.js"></script>
     <script type="text/javascript">
         function loadMe(){
-/*
-            var user = localStorage["signedInUser"];
-            if (user == undefined){
-                user = null;
-            }
-            ShpanlistController.signedInUser = user;
-            var listGroupId = localStorage['listGroupId'];
-            if (listGroupId == undefined){
-                window.location.replace('/');
-            }else{
-                ShpanlistController.menuListGroup(listGroupId)
-            }
-*/
         }
     </script>
 </head>
 <body>
-    <div id="pageListGroup" data-role="page">
-        <div data-role="header" id="pageListGroupHeaderDiv">
-        </div>
-        <div data-role="content">
-            <ul id="lstLists" data-role="listview" data-split-icon="delete" data-split-theme="c"></ul>
-            <br/>
-        </div>
-        <div data-role="footer">
-            <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
-        </div>
+<div id="pageListGroups" data-role="page">
+    <div data-role="header">
+        My List Groups
     </div>
+    <div data-role="content">
+        <ul id="lstGroups" data-role="listview"></ul>
+    </div>
+    <div data-role="footer">
+        <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
+    </div>
+</div>
 
 
 </body>

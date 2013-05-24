@@ -1,12 +1,23 @@
 var ListGroupView = {
-
+    data:null,
     listGroupId:null,
 
-    show: function (event, data) {
-        ShpanlistController.getListGroup(localStorage['listGroupId'], ListGroupView.load);
+    show:function() {
+
+        var listGroupXml = this.data;
+
+        if (listGroupXml == null){
+            ShpanlistController.getListGroup(localStorage['listGroupId'], function(responseXml){
+                ListGroupView.load(responseXml)
+            });
+
+        }else{
+            ListGroupView.load(listGroupXml);
+        }
     },
 
-    load:function (listGroupXml) {
+    load:function(listGroupXml) {
+
         var listGroupName = $(listGroupXml).find("name").first().text();
         document.getElementById('pageListGroupHeaderDiv').innerHTML = listGroupName;
 
@@ -28,6 +39,7 @@ var ListGroupView = {
                        '<a HREF=\"javascript:ShpanlistController.menuListTemplate(\'' + currEntityId + '\')\">' + currEntity.find("name").first().text() + '</a></li>';
         });
 
+        //$('#lstLists').html(theHtml);
         document.getElementById('lstLists').innerHTML = theHtml;
 
 

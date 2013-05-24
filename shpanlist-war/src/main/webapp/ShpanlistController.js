@@ -1,6 +1,5 @@
 
 var ShpanlistController = {
-
     loadApp: function(){
         if (localStorage["signedInUser"] == null){
             this.menuSignIn();
@@ -14,11 +13,11 @@ var ShpanlistController = {
     },
 
     menuAddNewListTemplateItem: function (listTemplateId) {
-            $.mobile.changePage("#pageAddListTemplateItem", {transition:'flip'})
+            $.mobile.changePage("listTemplateItem.html", {transition:'flip'})
     },
 
     menuListGroups: function(){
-        $.mobile.changePage('#pageListGroups', {transition: 'slide'});
+        $.mobile.changePage('listGroups.html', {transition: 'slide'});
     },
 
 
@@ -41,7 +40,11 @@ var ShpanlistController = {
 
     menuListGroup: function(listGroupId){
         localStorage['listGroupId'] = listGroupId;
-        $.mobile.changePage('#pageListGroup', {transition:'slide'});
+        ShpanlistController.getListGroup(listGroupId, function(responseXml){
+            ListGroupView.data = responseXml;
+            ListGroupView.listGroupId = listGroupId;
+            $.mobile.changePage('listGroup.html', {transition:'slide'});
+        });
     },
 
     getListGroup: function(listGroupId, callback){
@@ -78,7 +81,11 @@ var ShpanlistController = {
 
     menuListTemplate: function(listTemplateId){
         localStorage['listTemplateId'] = listTemplateId;
-        $.mobile.changePage('#pageListTemplate', {transition:'slide'});
+        ShpanlistController.getListTemplateFull(listTemplateId, function(responseXml){
+            ListTemplateView.data = responseXml;
+            ListTemplateView.listTemplateId = listTemplateId;
+            $.mobile.changePage('listTemplate.html', {transition:'slide'});
+        });
     },
 
     getListTemplateFull: function(listTemplateId, callback){

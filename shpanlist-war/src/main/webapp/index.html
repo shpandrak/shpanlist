@@ -27,6 +27,7 @@
 <body onload="loadMe()">
     <div data-role="page" id="pageMain">
     </div>
+
     <div data-role="page" id="pageSignIn">
 
         <div data-role="header">
@@ -57,19 +58,9 @@
         </div>
     </div>
 
-    <div id="pageListGroups" data-role="page">
-        <div data-role="header">
-            My List Groups
-        </div>
-        <div data-role="content">
-            <ul id="lstGroups" data-role="listview"></ul>
-        </div>
-        <div data-role="footer">
-            <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
-        </div>
-    </div>
 
-    <div id="pageListGroup" data-role="page">
+<!--
+    <div id="pageListGroupOld" data-role="page">
         <div data-role="header" id="pageListGroupHeaderDiv">
         </div>
         <div data-role="content">
@@ -80,68 +71,9 @@
             <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
         </div>
     </div>
+-->
 
-    <div id="pageListTemplate" data-role="page">
-        <div data-role="header" id="pageListTemplateHeaderDiv">
-            List Template
-        </div>
-        <div data-role="content" id="pageListTemplateContentDiv">
-            <table id="tabListTemplateItems" data-role="table" class="ui-responsive table-stroke">
-                <thead>
-                    <tr>
-                        <th>Item</th><th>Description</th><th>Amount</th><th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <br/>
-            <input value="Add Item" type="button" data-icon="plus" onclick="ShpanlistController.menuAddNewListTemplateItem(ListTemplateView.listTemplateId)" />
-            <br/>
-            <a href="javascript:ListTemplateView.createListFromTemplate()">Create list from this template</a>
-        </div>
-        <div data-role="footer">
-            <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
-        </div>
-    </div>
 
-    <div id="pageAddListTemplateItem" data-role="page">
-        <div data-role="header">
-            Add List Template Item
-        </div>
-        <div data-role="content">
-            <table style="border-spacing:0;padding:0">
-                <tr>
-                    <td>Item:</td>
-                    <td>
-                        <input id="txtListTemplateItemName" type="text"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Amount:</td>
-                    <td>
-                        <input id="txtListTemplateItemAmount" type="number"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Description:</td>
-                    <td>
-                        <input id="txtListTemplateItemDescription" type="text"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <input type="button" onClick="ListTemplateView.createNewItem()"
-                               value="Add"/>
-                    </td>
-                </tr>
-            </table>
-
-        </div>
-        <div data-role="footer">
-            <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
-        </div>
-    </div>
 
 </body>
 </html>

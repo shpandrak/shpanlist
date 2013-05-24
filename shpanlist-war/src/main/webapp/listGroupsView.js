@@ -1,7 +1,17 @@
 var ListGroupsView = {
+    data:null,
 
-    show: function (event, data) {
-        ShpanlistController.listListGroups(ListGroupsView.load);
+    show: function () {
+        var listGroupsXml = this.data;
+
+        if (listGroupsXml == null){
+            ShpanlistController.listListGroups(function(responseXml){
+                ListGroupsView.load(responseXml)
+            });
+
+        }else{
+            ListGroupsView.load(listGroupsXml);
+        }
     },
 
     load: function (listGroupsXml) {

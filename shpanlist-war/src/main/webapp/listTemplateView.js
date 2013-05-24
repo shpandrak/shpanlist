@@ -1,10 +1,20 @@
 var ListTemplateView = {
 
+    data:null,
     listTemplateId:null,
 
-    show: function(event, data){
-        this.listTemplateId = localStorage['listTemplateId'];
-        ShpanlistController.getListTemplateFull(this.listTemplateId, ListTemplateView.load);
+
+    show: function(){
+        var listTemplateXml = this.data;
+
+        if (listTemplateXml == null){
+            ShpanlistController.getListTemplateFull(localStorage['listTemplateId'], function(responseXml){
+                ListTemplateView.load(responseXml)
+            });
+
+        }else{
+            ListTemplateView.load(listTemplateXml);
+        }
     },
 
     load: function(listTemplateXml){
