@@ -2,6 +2,11 @@ var ListGroupView = {
     data:null,
     listGroupId:null,
 
+    refresh: function(){
+        this.data = null;
+        this.show();
+    },
+
     show:function() {
 
         var listGroupXml = this.data;
@@ -72,7 +77,7 @@ var ListGroupView = {
         ShpanlistController.createListFromTemplate(ListTemplateView.listTemplateId);
     },
     addNewMember: function(){
-        var memberUserName = txtNewMemberUserName.value;
+        var memberUserName = $('txtNewMemberUserName').value;
         if (memberUserName == ""){
             alert("Please Type user name to add");
         }else{
@@ -84,7 +89,7 @@ var ListGroupView = {
         var conf = confirm("Are you sure you want to remove this list?");
         if (conf){
             ShpanlistController.removeListInstance(listInstanceId, function(){
-                ShpanlistController.menuListGroup(ListGroupView.listGroupId);
+                ListGroupView.refresh();
             });
         }
     }
