@@ -100,20 +100,27 @@ var ShpanlistController = {
             });
     },
 
-    menuListInstance: function(listInstanceId){
+    getListInstanceFull: function (listInstanceId, callback) {
         ShpanlistController.doIt(
             { what: "getListInstanceFull", listInstanceId: listInstanceId },
-            function(responseText){
-                ListInstanceView.show(responseText);
+            function (responseText) {
+                callback(responseText)
             });
     },
 
+    menuListInstance: function(listInstanceId){
+        localStorage['listInstanceId'] = listInstanceId;
+        this.getListInstanceFull(listInstanceId, function(responseText){
+
+            ListInstanceView.data = responseText;
+            ListInstanceView.listInstanceId = listInstanceId;
+            $.mobile.changePage('listInstance.html', 'slide');
+        });
+    },
+
     menuEditListInstance: function(listInstanceId){
-        ShpanlistController.doIt(
-            { what: "getListInstanceFull", listInstanceId: listInstanceId },
-            function(responseText){
-                ListInstanceEditView.show(responseText);
-            });
+        alert('todo');
+
     },
 
     addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount, callback){
@@ -158,20 +165,20 @@ var ShpanlistController = {
             });
     },
 
-    gotListInstanceItem: function(listInstanceId, listInstanceItemId){
+    gotListInstanceItem: function(listInstanceId, listInstanceItemId, callback){
         ShpanlistController.doIt(
             { what: "gotListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
             function(responseText){
-                ShpanlistController.menuListInstance(listInstanceId);
+                callback(responseText);
             });
 
     },
 
-    bringBackItem: function(listInstanceId, listInstanceItemId){
+    bringBackItem: function(listInstanceId, listInstanceItemId, callback){
         ShpanlistController.doIt(
             { what: "bringBackItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
             function(responseText){
-                ShpanlistController.menuListInstance(listInstanceId);
+                callback(responseText);
             });
 
     },

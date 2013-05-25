@@ -1,39 +1,66 @@
 var ListInstanceView = {
 
-    mainFrame:undefined,
+    data:null,
     listInstanceId:null,
 
-    show: function(listInstanceXml){
-        this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
+    refresh: function(){
+        this.data = null;
+        this.show();
+    },
+
+    show: function(){
+        var listInstanceXml = this.data;
+
+        if (listInstanceXml == null){
+            ShpanlistController.getListInstanceFull(localStorage['listInstanceId'], function(responseXml){
+                ListInstanceView.load(responseXml)
+            });
+
+        }else{
+            ListInstanceView.load(listInstanceXml);
+        }
+    },
+
+    load: function(listInstanceXml){
+        //this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
+
         var listInstanceName = $(listInstanceXml).find("name").first().text();
-        var theHtml = '<h2>' + listInstanceName + '</h2><br/>' +
-            '<a href="javascript:ShpanlistController.menuEditListInstance(\'' + this.listInstanceId + '\')">Edit List</a><br/>' +
-            '<table id="tabListInstanceItems">';
+        $('#pageListInstanceHeaderDiv').html(listInstanceName +
+            '&nbsp;<a href="javascript:ShpanlistController.menuEditListInstance(\'' + this.listInstanceId + '\')">Edit</a>');
+
         var listGroupId = $(listInstanceXml).find("listGroup").first().attr("id");
 
+        var theHtml = '';
         $(listInstanceXml).find("listInstanceItemRelationshipEntries").find("listInstanceItem") .each(function() {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
-            var currRowHtml = '';
-            currRowHtml += '<td>' + currEntity.find("name").first().text() + '</td>';
-            currRowHtml += '<td>' + currEntity.find("description").first().text() + '</td>';
-            currRowHtml += '<td>' + currEntity.find("amount").first().text() + '</td>';
-            if (currEntity.find("gotIt").first().text() == 'true'){
-                currRowHtml += '<td><a HREF=\"javascript:ListInstanceView.bringBackItem(\'' + currEntityId + '\')\">Oops</a></td></tr>';
-                theHtml += '<tr style="text-decoration: line-through">' + currRowHtml + '</del></tr>';
-            }else{
-                currRowHtml += '<td><a HREF=\"javascript:ListInstanceView.gotItem(\'' + currEntityId + '\')\">Got It!</a></td></tr>';
-                theHtml += '<tr>' + currRowHtml + '</tr>';
+            var currRowHtml = currEntity.find("name").first().text();
+            var desc = currEntity.find("description").first().text();
+            if (desc != null && desc.length > 0){
+                currRowHtml += '- ' + desc;
+            }
+            var amount = currEntity.find("amount").first().text();
+            if (amount != null && amount.length > 0){
+                currRowHtml += '(' + amount + ')';
             }
 
+            if (currEntity.find("gotIt").first().text() == 'true'){
 
-
+                theHtml += '<li style="text-decoration: line-through">' +
+                    '<a HREF=\"javascript:ListInstanceView.bringBackItem(\'' + currEntityId + '\')\">' +
+                    currRowHtml +
+                    '</a></del></li>';
+            }else{
+                theHtml += '<li><a HREF=\"javascript:ListInstanceView.gotItem(\'' + currEntityId + '\')\">' +
+                    currRowHtml +
+                    '</a></li>';
+            }
         });
 
-        theHtml += '</table><br/><a HREF="javascript:ShpanlistController.menuListGroup(\'' + listGroupId +'\')">Back to group page</a>' ;
+        var lstItems = $("#lstItems");
 
-
-        this.mainFrame.innerHTML = theHtml;
+        lstItems.html(theHtml);
+        lstItems.listview('refresh');
     },
 
     createNewItem: function(){
@@ -41,11 +68,15 @@ var ListInstanceView = {
     },
 
     gotItem: function(listInstanceItemId){
-        ShpanlistController.gotListInstanceItem(ListInstanceView.listInstanceId, listInstanceItemId);
+        ShpanlistController.gotListInstanceItem(ListInstanceView.listInstanceId, listInstanceItemId, function(responseXml){
+            ListInstanceView.refresh();
+        });
     },
 
     bringBackItem: function(listInstanceItemId){
-        ShpanlistController.bringBackItem(ListInstanceView.listInstanceId, listInstanceItemId);
+        ShpanlistController.bringBackItem(ListInstanceView.listInstanceId, listInstanceItemId, function(responseXml){
+            ListInstanceView.refresh();
+        });
     }
 
 

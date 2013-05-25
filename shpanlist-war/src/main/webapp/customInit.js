@@ -2,6 +2,10 @@ $( document ).on( 'pageinit', '#pageListGroups', function(event, data){
     ListGroupsView.show();
 });
 
+$( document ).on( 'pageinit', '#pageListInstance', function(event, data){
+    ListInstanceView.show();
+});
+
 $( document ).on( 'pageinit', '#pageListGroup', function(event, data){
     ListGroupView.show();
 });
