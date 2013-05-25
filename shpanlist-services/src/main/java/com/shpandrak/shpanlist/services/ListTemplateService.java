@@ -102,8 +102,8 @@ public abstract class ListTemplateService {
                 // Updating both fields
                 listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, nextItem.getItemOrder(), byId.getId());
                 listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, nextItem.getId());
-                PersistenceLayerManager.getConnectionProvider().commitTransaction();
             }
+            PersistenceLayerManager.getConnectionProvider().commitTransaction();
         } catch (PersistenceException pex) {
             //todo:better handle tx exception
             PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
@@ -147,8 +147,8 @@ public abstract class ListTemplateService {
 
                     listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, previousItem.getItemOrder(), byId.getId());
                     listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, previousItem.getId());
-                    PersistenceLayerManager.getConnectionProvider().commitTransaction();
                 }
+                PersistenceLayerManager.getConnectionProvider().commitTransaction();
             }
         } catch (PersistenceException pex) {
             //todo:better handle tx exception
