@@ -25,14 +25,15 @@ import java.util.List;
  */
 public abstract class ListTemplateService {
     private static final Logger logger = LoggerFactory.getLogger(ListTemplateService.class);
+
     public static ListTemplate createListTemplate(Key userKey, Key listGroupId, String listName) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
-        try{
+        try {
             ListTemplateManager listTemplateManager = new ListTemplateManager();
             ListTemplate listTemplate = new ListTemplate(listGroupId, listName, new Date(), userKey);
             listTemplateManager.create(listTemplate);
             return listTemplate;
-        }finally {
+        } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
 
@@ -41,46 +42,48 @@ public abstract class ListTemplateService {
 
     public static ListTemplate getListTemplateFull(Key listTemplateId) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
-        try{
+        try {
             ListTemplateManager listTemplateManager = new ListTemplateManager();
             return listTemplateManager.getById(listTemplateId, RelationshipLoadLevel.FULL);
-        }finally {
+        } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
 
     public static void addListTemplateItem(Key listTemplateId, String listTemplateItemName, String listTemplateItemDescription, Integer defaultAmount) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
-        try{
+        try {
             //todo:transaciton
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
             List<ListTemplateItem> existingItems = listTemplateItemManager.list(new QueryFilter(new RelationshipFilterCondition(ListTemplateItem.DESCRIPTOR.listTemplateRelationshipDescriptor, listTemplateId), null, null, Arrays.asList(new OrderByClauseEntry(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, true))));
             int itemOrdinal = 1;
-            if (!existingItems.isEmpty()){
+            if (!existingItems.isEmpty()) {
                 itemOrdinal = existingItems.get(existingItems.size() - 1).getItemOrder() + 1;
             }
             listTemplateItemManager.create(new ListTemplateItem(listTemplateId, listTemplateItemName, itemOrdinal, listTemplateItemDescription, defaultAmount));
-        }finally {
+        } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
 
     public static void removeListTemplateItem(Key listTemplateItemId) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
-        try{
+        try {
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
             listTemplateItemManager.delete(listTemplateItemId);
-        }finally {
+        } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
 
     public static void pushListTemplateItemDown(Key listTemplateItemId) throws PersistenceException {
-        //todo:begin tx earlier to include fetch
         //todo:limit fetch to return 1 item
+        //todo:tx error handling
         PersistenceLayerManager.beginOrJoinConnectionSession();
-        try{
+        try {
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
+            PersistenceLayerManager.getConnectionProvider().beginTransaction();
+
             ListTemplateItem byId = listTemplateItemManager.getById(listTemplateItemId);
             Integer itemOrder = byId.getItemOrder();
             // Searching if there is an item after current
@@ -92,43 +95,40 @@ public abstract class ListTemplateService {
                             BasicFieldFilterCondition.build(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.GREATER_THEN, itemOrder)), null, null,
                     Arrays.asList(new OrderByClauseEntry(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, true))));
 
-            if (items.isEmpty()){
+            if (items.isEmpty()) {
                 logger.warn("Skip pushing down last item {}", byId);
-            }else{
+            } else {
                 ListTemplateItem nextItem = items.get(0);
                 // Updating both fields
-                PersistenceLayerManager.getConnectionProvider().beginTransaction();
-                try{
-                    listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, nextItem.getItemOrder(), byId.getId());
-                    listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, nextItem.getId());
-                    PersistenceLayerManager.getConnectionProvider().commitTransaction();
-                }
-                catch (PersistenceException pex){
-                    //todo:better handle tx exception
-                    PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
-                    throw pex;
-                }
-                catch (Exception ex){
-                    PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
-                    throw new RuntimeException(ex);
-                }
+                listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, nextItem.getItemOrder(), byId.getId());
+                listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, nextItem.getId());
+                PersistenceLayerManager.getConnectionProvider().commitTransaction();
             }
-        }finally {
+        } catch (PersistenceException pex) {
+            //todo:better handle tx exception
+            PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+            throw pex;
+        } catch (Exception ex) {
+            PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+            throw new RuntimeException(
+            );
+        } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
 
     public static void pushListTemplateItemUp(Key listTemplateItemId) throws PersistenceException {
-        //todo:begin tx earlier to include fetch
+        //todo:tx error andling
         //todo:limit fetch to return 1 item
         PersistenceLayerManager.beginOrJoinConnectionSession();
-        try{
+        try {
+            PersistenceLayerManager.getConnectionProvider().beginTransaction();
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
             ListTemplateItem byId = listTemplateItemManager.getById(listTemplateItemId);
             Integer itemOrder = byId.getItemOrder();
-            if (itemOrder == 1){
+            if (itemOrder == 1) {
                 logger.warn("Skip pushing up item on top order {}", byId);
-            }else{
+            } else {
                 // Searching if there is an item before current
                 List<ListTemplateItem> items = listTemplateItemManager.list(new QueryFilter(
                         new CompoundFieldFilterCondition(
@@ -139,29 +139,25 @@ public abstract class ListTemplateService {
                         null,
                         Arrays.asList(new OrderByClauseEntry(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, false))));
 
-                if (items.isEmpty()){
+                if (items.isEmpty()) {
                     throw new IllegalStateException("Failed pushing up item - could not find previous item " + byId);
-                }else{
+                } else {
                     ListTemplateItem previousItem = items.get(0);
                     // Updating both fields
-                    PersistenceLayerManager.getConnectionProvider().beginTransaction();
-                    try{
-                        listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, previousItem.getItemOrder(), byId.getId());
-                        listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, previousItem.getId());
-                        PersistenceLayerManager.getConnectionProvider().commitTransaction();
-                    }
-                    catch (PersistenceException pex){
-                        //todo:better handle tx exception
-                        PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
-                        throw pex;
-                    }
-                    catch (Exception ex){
-                        PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
-                        throw new RuntimeException(ex);
-                    }
+
+                    listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, previousItem.getItemOrder(), byId.getId());
+                    listTemplateItemManager.updateFieldValueById(ListTemplateItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, previousItem.getId());
+                    PersistenceLayerManager.getConnectionProvider().commitTransaction();
                 }
             }
-        }finally {
+        } catch (PersistenceException pex) {
+            //todo:better handle tx exception
+            PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+            throw pex;
+        } catch (Exception ex) {
+            PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+            throw new RuntimeException(ex);
+        } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
