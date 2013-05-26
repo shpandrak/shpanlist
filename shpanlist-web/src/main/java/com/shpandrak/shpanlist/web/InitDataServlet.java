@@ -2,12 +2,13 @@ package com.shpandrak.shpanlist.web;
 
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
-import com.shpandrak.persistence.query.filter.*;
-import com.shpandrak.shpanlist.gae.datastore.ListGroupManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.gae.datastore.ListUserManager;
-import com.shpandrak.shpanlist.model.*;
+import com.shpandrak.shpanlist.model.Gender;
+import com.shpandrak.shpanlist.model.ListTemplate;
+import com.shpandrak.shpanlist.model.ListTemplateItem;
+import com.shpandrak.shpanlist.model.ListUser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,7 +40,6 @@ public class InitDataServlet extends HttpServlet {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListUserManager listUserManager = new ListUserManager();
-            ListGroupManager listGroupManager = new ListGroupManager();
             ListTemplateManager listTemplateManager = new ListTemplateManager();
             ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
 
@@ -50,22 +50,11 @@ public class InitDataServlet extends HttpServlet {
                 listUserManager.create(shpandrakUser);
             }
 
-//            List<ListGroup> shpandrakListGroups = listGroupManager.listByOwnerUserRelationship(shpandrakUser.getId());
-            ListGroup listGroup = listGroupManager.getByField(ListGroup.DESCRIPTOR.nameFieldDescriptor, "My List Group");
-            if (listGroup == null){
-                // Creating default list group
-                listGroup = new ListGroup("My List Group", new Date(), shpandrakUser);
-                listGroup.getMemberRelationship().addNewRelation(new ListGroupMemberRelationshipEntry(shpandrakUser, listGroup.getCreationDate()));
-                listGroupManager.create(listGroup);
-            }
             ListTemplate listTemplate;
-            List<ListTemplate> listTemplates = listTemplateManager.list(new QueryFilter(
-                    new CompoundFieldFilterCondition(FieldFilterLogicalOperatorType.AND,
-                    new RelationshipFilterCondition(ListTemplate.DESCRIPTOR.listGroupRelationshipDescriptor, listGroup.getId()),
-                            BasicFieldFilterCondition.build(ListTemplate.DESCRIPTOR.nameFieldDescriptor, FilterConditionOperatorType.EQUALS, "My first list")
-                            )));
+            List<ListTemplate> listTemplates = listTemplateManager.listByField(
+                    ListTemplate.DESCRIPTOR.nameFieldDescriptor, "My first list");
             if (listTemplates.isEmpty()){
-                listTemplate = new ListTemplate(listGroup, "My first list", new Date(), shpandrakUser);
+                listTemplate = new ListTemplate("My first list", new Date(), shpandrakUser);
                 listTemplateManager.create(listTemplate);
             }else {
                 listTemplate = listTemplates.get(0);

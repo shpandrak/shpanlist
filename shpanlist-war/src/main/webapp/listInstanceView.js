@@ -27,8 +27,6 @@ var ListInstanceView = {
         var listInstanceName = $(listInstanceXml).find("name").first().text();
         $('#pageListInstanceHeaderDiv').html(listInstanceName);
 
-        var listGroupId = $(listInstanceXml).find("listGroup").first().attr("id");
-
         var theHtml = '';
         $(listInstanceXml).find("listInstanceItemRelationshipEntries").find("listInstanceItem") .each(function() {
             var currEntity = $(this);

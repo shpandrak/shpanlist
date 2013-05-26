@@ -45,35 +45,7 @@
                 </date-field>
             </fields>
         </entity>
-        <entity name="listGroup">
-            <fields>
-                <string-field name="name">
-                    <max-length>255</max-length>
-                    <mandatory>true</mandatory>
-                </string-field>
-                <date-field name="creationDate">
-                    <mandatory>true</mandatory>
-                </date-field>
-            </fields>
-            <relations>
-                <one-to-many>
-                    <name>ownerUser</name>
-                    <mandatory>true</mandatory>
-                    <related-entity>listUser</related-entity>
-                </one-to-many>
-                <many-to-many>
-                    <name>member</name>
-                    <mandatory>true</mandatory>
-                    <related-entity>listUser</related-entity>
-                    <fields>
-                        <date-field name="joinDate">
-                            <mandatory>true</mandatory>
-                        </date-field>
-                    </fields>
-                </many-to-many>
-            </relations>
-        </entity>
-        <entity name="listTemplate" owner-entity="listGroup">
+        <entity name="listTemplate">
             <fields>
                 <string-field name="name">
                     <max-length>255</max-length>
@@ -123,7 +95,7 @@
 
             </fields>
         </entity>
-        <entity name="listInstance" owner-entity="listGroup">
+        <entity name="listInstance">
             <fields>
                 <string-field name="name">
                     <max-length>255</max-length>

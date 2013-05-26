@@ -32,10 +32,8 @@ public class DoItServlet extends HttpServlet {
             response.setContentType("application/xml; charset=UTF-8");
             if ("signIn".equals(what)){
                 signIn(loggedInUser, request, response);
-            }else if ("listListGroups".equals(what)){
-                listListGroups(loggedInUser, request, response);
-            }else if ("getListGroup".equals(what)){
-                getListGroup(loggedInUser, request, response);
+            }else if ("listUserData".equals(what)){
+                listUserData(loggedInUser, request, response);
             }else if ("getListTemplateFull".equals(what)){
                 getListTemplateFull(loggedInUser, request, response);
             }else if ("getListInstanceFull".equals(what)){
@@ -66,8 +64,6 @@ public class DoItServlet extends HttpServlet {
                 createUser(loggedInUser, request, response);
             }else if ("signOut".equals(what)){
                 signOut(loggedInUser, request, response);
-            }else if ("addNewGroupMember".equals(what)){
-                addNewGroupMember(loggedInUser, request, response);
             }else if ("removeListInstance".equals(what)){
                 removeListInstance(loggedInUser, request, response);
             }else {
@@ -81,6 +77,16 @@ public class DoItServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
+    }
+
+    private void listUserData(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
+        List<ListTemplate> userListTemplates = ListTemplateService.getUserLists(loggedInUser.getUserId());
+        List<ListInstance> userListInstances = ListInstanceService.getUserLists(loggedInUser.getUserId());
+        response.getWriter().print("<userData>");
+        response.getWriter().print(new EntityXMLConverter<ListTemplate>(ListTemplate.DESCRIPTOR).toXML(userListTemplates));
+        response.getWriter().print(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR).toXML(userListInstances));
+        response.getWriter().print("</userData>");
+        
     }
 
     private void removeListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
@@ -97,6 +103,12 @@ public class DoItServlet extends HttpServlet {
         String password = request.getParameter("password");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
+
+        if (userName == null || userName.isEmpty()) throw new IllegalArgumentException("userName cannot be empty");
+        if (firstName== null || firstName.isEmpty()) throw new IllegalArgumentException("firstName cannot be empty");
+        if (lastName == null || lastName.isEmpty()) throw new IllegalArgumentException("lastName cannot be empty");
+        if (password == null || password.isEmpty()) throw new IllegalArgumentException("password cannot be empty");
+
         String email = request.getParameter("email");
         ListUser user = ListUserService.createUser(userName, password, firstName, lastName, email);
         loggedInUser = new LoggedInUser(user.getId(), user.getUserName());
@@ -183,22 +195,6 @@ public class DoItServlet extends HttpServlet {
         ListInstanceService.gotItem(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId), false);
     }
 
-    private void getListGroup(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
-        String listGroupId = request.getParameter("listGroupId");
-        ListGroup listGroup = ListGroupService.getListGroup(ListGroup.DESCRIPTOR.idFieldDescriptor.fromString(listGroupId));
-        response.getWriter().print(new EntityXMLConverter<ListGroup>(ListGroup.DESCRIPTOR).toXML(listGroup));
-    }
-
-    private void addNewGroupMember(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
-        String listGroupId = request.getParameter("listGroupId");
-        String memberUserName = request.getParameter("memberUserName");
-        ListUser byUserName = ListUserService.findByUserName(memberUserName);
-        if (byUserName == null){
-            throw new IllegalArgumentException("Invalid userName: " + memberUserName);
-        }
-        ListGroupService.addMember(ListGroup.DESCRIPTOR.idFieldDescriptor.fromString(listGroupId), byUserName.getId());
-    }
-
     private void getListTemplateFull(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
         String listTemplateId = request.getParameter("listTemplateId");
         ListTemplate listTemplate = ListTemplateService.getListTemplateFull(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId));
@@ -210,12 +206,6 @@ public class DoItServlet extends HttpServlet {
         ListInstance listInstance = ListInstanceService.getListInstanceFull(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId));
         response.getWriter().print(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR).toXML(listInstance));
     }
-
-    private void listListGroups(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
-        List<ListGroup> listGroups = ListGroupService.getListGroups(loggedInUser);
-        response.getWriter().print(new EntityXMLConverter<ListGroup>(ListGroup.DESCRIPTOR).toXML(listGroups));
-    }
-
 
     private void signIn(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userName = request.getParameter("userName").toLowerCase();

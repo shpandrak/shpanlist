@@ -54,7 +54,6 @@ public abstract class ListInstanceService {
 
             // Creating the list object
             ListInstance listInstance = new ListInstance(
-                    listTemplate.getListGroupId(),
                     listName,
                     listExpirationDate,
                     new Date(),
@@ -220,6 +219,16 @@ public abstract class ListInstanceService {
                 itemOrdinal = existingItems.get(existingItems.size() - 1).getItemOrder() + 1;
             }
             listInstanceItemManager.create(new ListInstanceItem(listInstanceId, listInstanceItemName, itemOrdinal, listInstanceItemDescription, amount, false));
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static List<ListInstance> getUserLists(Key userId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            ListInstanceManager listInstanceManager = new ListInstanceManager();
+            return listInstanceManager.listByCreatedByUserRelationship(userId);
         } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

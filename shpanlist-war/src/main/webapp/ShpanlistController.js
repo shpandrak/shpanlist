@@ -4,7 +4,7 @@ var ShpanlistController = {
         if (localStorage["signedInUser"] == null){
             this.menuSignIn();
         }else{
-            this.menuListGroups();
+            this.menuHome();
         }
     },
 
@@ -20,10 +20,10 @@ var ShpanlistController = {
             $.mobile.changePage("listInstanceItem.html", {transition:'flip'})
     },
 
-    menuListGroups: function(){
-        ShpanlistController.listListGroups(function(responseXml){
-            ListGroupsView.data = responseXml;
-            $.mobile.changePage('listGroups.html', {transition: 'slide'});
+    menuHome: function(){
+        ShpanlistController.listUserData(function(responseXml){
+            HomeView.data = responseXml;
+            $.mobile.changePage('home.html');
 
         });
     },
@@ -46,28 +46,10 @@ var ShpanlistController = {
             });
     },
 
-    menuListGroup: function(listGroupId){
-        localStorage['listGroupId'] = listGroupId;
-        ShpanlistController.getListGroup(listGroupId, function(responseXml){
-            ListGroupView.data = responseXml;
-            ListGroupView.listGroupId = listGroupId;
-            $.mobile.changePage('listGroup.html', {transition:'slide'});
-        });
-    },
-
-    getListGroup: function(listGroupId, callback){
-        ShpanlistController.doIt(
-            { what: "getListGroup", listGroupId: listGroupId},
+    listUserData: function(callback){
+        ShpanlistController.doIt({ what: "listUserData"},
             function(responseText){
                 callback(responseText);
-            }
-        )
-    },
-
-    listListGroups: function(successFunction){
-        ShpanlistController.doIt({ what: "listListGroups"},
-            function(responseText){
-                successFunction(responseText);
             });
 
     },
@@ -233,7 +215,7 @@ var ShpanlistController = {
         ShpanlistController.doIt(
             { what: "createUser", userName:userName, password:password, firstName:firstName, lastName:lastName, email:email},
             function(responseText){
-                window.location.replace("/");
+                ShpanlistController.menuHome();
             });
     },
 
@@ -244,14 +226,6 @@ var ShpanlistController = {
                 ShpanlistController.signedInUser = null;
                 localStorage.removeItem("signedInUser");
                 window.location.replace("/");
-            });
-    },
-
-    addNewGroupMember: function(listGroupId, memberUserName){
-        ShpanlistController.doIt(
-            { what: "addNewGroupMember", listGroupId: listGroupId, memberUserName:memberUserName},
-            function(responseText){
-                ShpanlistController.menuListGroup(listGroupId);
             });
     },
 

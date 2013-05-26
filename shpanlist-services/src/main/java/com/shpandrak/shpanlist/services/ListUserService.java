@@ -31,8 +31,7 @@ public abstract class ListUserService {
             ListUser newUser = new ListUser(userName, email, firstName, lastName, null, password, null, null, new Date());
 
             listUserManager.create(newUser);
-            ListGroup listGroup = ListGroupService.createListGroup(newUser.getId(), newUser.getUserName() + "'s Default List Group");
-            ListTemplate listTemplate = ListTemplateService.createListTemplate(newUser.getId(), listGroup.getId(), newUser.getUserName() + "'s Default List Template");
+            ListTemplate listTemplate = ListTemplateService.createListTemplate(newUser.getId(), newUser.getUserName() + "'s Default List Group");
             listTemplateItemManager.create(new ListTemplateItem(listTemplate, "Milk", 1, "Creamy 3% fat milk", 1));
 
 

@@ -26,18 +26,26 @@ import java.util.List;
 public abstract class ListTemplateService {
     private static final Logger logger = LoggerFactory.getLogger(ListTemplateService.class);
 
-    public static ListTemplate createListTemplate(Key userKey, Key listGroupId, String listName) throws PersistenceException {
+    public static ListTemplate createListTemplate(Key userKey, String listName) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try {
             ListTemplateManager listTemplateManager = new ListTemplateManager();
-            ListTemplate listTemplate = new ListTemplate(listGroupId, listName, new Date(), userKey);
+            ListTemplate listTemplate = new ListTemplate(listName, new Date(), userKey);
             listTemplateManager.create(listTemplate);
             return listTemplate;
         } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
+    }
 
-
+    public static List<ListTemplate> getUserLists(Key userId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            ListTemplateManager listTemplateManager = new ListTemplateManager();
+            return listTemplateManager.listByCreatedByUserRelationship(userId);
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
     }
 
     public static ListTemplate getListTemplateFull(Key listTemplateId) throws PersistenceException {
