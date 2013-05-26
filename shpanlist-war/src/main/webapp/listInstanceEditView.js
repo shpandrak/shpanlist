@@ -1,38 +1,92 @@
 var ListInstanceEditView = {
 
-    mainFrame:undefined,
+    data:null,
     listInstanceId:null,
 
-    show: function(listInstanceXml){
-        this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
-        var listInstanceName = $(listInstanceXml).find("name").first().text();
-        var theHtml = '<h2> Edit ' + listInstanceName + '</h2><table id="tabListInstanceItems">';
-        var listGroupId = $(listInstanceXml).find("listGroup").first().attr("id");
 
-        $(listInstanceXml).find("listInstanceItemRelationshipEntries").find("listInstanceItem") .each(function() {
+    refresh: function(){
+        this.data = null;
+        this.show();
+    },
+
+    show: function(){
+        var listInstanceXml = this.data;
+
+        if (listInstanceXml == null){
+            ShpanlistController.getListInstanceFull(localStorage['listInstanceId'], function(responseXml){
+                ListInstanceEditView.load(responseXml)
+            });
+
+        }else{
+            ListInstanceEditView.load(listInstanceXml);
+        }
+    },
+
+    load: function(listInstanceXml){
+        this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
+        document.getElementById('pageEditListInstanceHeaderDiv').innerHTML = $(listInstanceXml).find("name").first().text();
+        var theHtml = '';
+
+        var listInstanceItems = $(listInstanceXml).find("listInstanceItemRelationshipEntries").find("listInstanceItem");
+        var lastListElement = listInstanceItems.size() - 1;
+        var i = 0;
+        listInstanceItems .each(function() {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
-            var currRowHtml = '';
-            currRowHtml += '<td>' + currEntity.find("name").first().text() + '</td>';
-            currRowHtml += '<td>' + currEntity.find("description").first().text() + '</td>';
-            currRowHtml += '<td>' + currEntity.find("amount").first().text() + '</td>';
-            currRowHtml += '<td><a HREF=\"javascript:ListInstanceEditView.removeItem(\'' + currEntityId + '\')\">Remove</a>';
+            theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
+            theHtml += '<td>' + currEntity.find("description").first().text() + '</td>';
+            theHtml += '<td>' + currEntity.find("defaultAmount").first().text() + '</td>';
+            theHtml += '<td><a HREF=\"javascript:ListInstanceEditView.removeItem(\'' + currEntityId + '\')\">Remove</a>';
 
-            theHtml += '<tr>' + currRowHtml + '</tr>';
+            if (i != lastListElement){
+                theHtml += '&nbsp;<img src="/images/down.png" onclick="ListInstanceEditView.pushItemDown(\'' + currEntityId + '\')"/>';
+            }
+
+            if (i != 0){
+                theHtml += '&nbsp;<img src="/images/up.png" onclick="ListInstanceEditView.pushItemUp(\'' + currEntityId + '\')"/>';
+            }
+
+            theHtml += '</td></tr>';
+            ++i;
+
 
         });
 
-        theHtml += '</table><br/><a HREF="javascript:ShpanlistController.menuListGroup(\'' + listGroupId +'\')">Back to group page</a>' ;
+        //theHtml += '<tr><td>Item:<input type="text" id="txtNewItemName"/></td><td>description:<input type="text" id="txtNewItemDescription"/></td><td>Default Amount:<input type="number" min="1" id="txtNewItemDefaultAmount"/></td><td><a HREF="javascript:ListInstanceEditView.createNewItem()">Add</a></td></tr>';
 
-
-        this.mainFrame.innerHTML = theHtml;
+        document.getElementById('tabListInstanceItems').tBodies[0].innerHTML = theHtml;
+        $("#tabListInstanceItems").table('refresh');
     },
 
     createNewItem: function(){
-        //ShpanlistController.addNewListInstanceItem(ListInstanceEditView.listInstanceId, txtNewItemName.value, txtNewItemDescription.value, txtNewItemDefaultAmount.value)
+        ShpanlistController.addNewListInstanceItem(
+            ListInstanceEditView.listInstanceId,
+            document.getElementById('txtListInstanceItemName').value,
+            document.getElementById('txtListInstanceItemDescription').value,
+            document.getElementById('txtListInstanceItemAmount').value, function(){
+                ShpanlistController.menuListInstance(localStorage['listInstanceId']);
+            });
     },
 
     removeItem: function(listInstanceItemId){
-        ShpanlistController.removeListInstanceItem(ListInstanceEditView.listInstanceId, listInstanceItemId)
+        ShpanlistController.removeListInstanceItem(ListInstanceEditView.listInstanceId, listInstanceItemId, function(){
+            ListInstanceEditView.refresh();
+        });
+    },
+
+    pushItemUp: function(listInstanceItemId){
+        ShpanlistController.pushListInstanceItemUp(ListInstanceEditView.listInstanceId, listInstanceItemId, function(){
+            ListInstanceEditView.refresh();
+        });
+    },
+    pushItemDown: function(listInstanceItemId){
+        ShpanlistController.pushListInstanceItemDown(ListInstanceEditView.listInstanceId, listInstanceItemId, function(){
+            ListInstanceEditView.refresh();
+        });
+    },
+
+    createListFromInstance: function(){
+        ShpanlistController.createListFromInstance(ListInstanceEditView.listInstanceId);
     }
-}
+
+};

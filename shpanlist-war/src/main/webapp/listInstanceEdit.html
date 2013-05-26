@@ -20,18 +20,21 @@
     </script>
 </head>
 <body>
-<div id="pageListInstance" data-role="page">
-    <div data-role="header">
-        <span id="pageListInstanceHeaderDiv"></span>
-
+<div id="pageEditListInstance" data-role="page">
+    <div data-role="header" id="pageEditListInstanceHeaderDiv">
     </div>
     <div data-role="content">
-        <ul id="lstItems" data-role="listview">
-        </ul>
+        <table id="tabListInstanceItems" data-role="table" class="ui-responsive table-stroke">
+            <thead>
+            <tr>
+                <th>Item</th><th>Description</th><th>Amount</th><th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
         <br/>
-        <input value="Edit" type="button" data-icon="edit" onclick="ShpanlistController.menuEditListInstance(ListInstanceView.listInstanceId)"/>
-        <br/>
-
+        <input value="Add Item" type="button" data-icon="plus" onclick="alert('no')" />
     </div>
     <div data-role="footer">
         <a href="javascript:ShpanlistController.menuListGroup(localStorage['listGroupId'])">Back to group</a>

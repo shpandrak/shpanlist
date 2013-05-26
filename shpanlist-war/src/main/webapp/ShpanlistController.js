@@ -119,7 +119,13 @@ var ShpanlistController = {
     },
 
     menuEditListInstance: function(listInstanceId){
-        alert('todo');
+        localStorage['listInstanceId'] = listInstanceId;
+        this.getListInstanceFull(listInstanceId, function(responseText){
+
+            ListInstanceEditView.data = responseText;
+            ListInstanceEditView.listInstanceId = listInstanceId;
+            $.mobile.changePage('listInstanceEdit.html', 'slide');
+        });
 
     },
 
@@ -140,11 +146,11 @@ var ShpanlistController = {
 
     },
 
-    removeListInstanceItem: function(listInstanceId, listInstanceItemId){
+    removeListInstanceItem: function(listInstanceId, listInstanceItemId, callback){
         ShpanlistController.doIt(
             { what: "removeListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
             function(responseText){
-                ShpanlistController.menuEditListInstance(listInstanceId);
+                callback(listInstanceId);
             });
 
     },
@@ -160,6 +166,22 @@ var ShpanlistController = {
     pushListTemplateItemDown: function(listTemplateId, listTemplateItemId, callback){
         ShpanlistController.doIt(
             { what: "pushListTemplateItemDown", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
+            function(responseText){
+                callback(responseText);
+            });
+    },
+
+    pushListInstanceItemUp: function(listInstanceId, listInstanceItemId, callback){
+        ShpanlistController.doIt(
+            { what: "pushListInstanceItemUp", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
+            function(responseText){
+                callback(responseText);
+            });
+    },
+
+    pushListInstanceItemDown: function(listInstanceId, listInstanceItemId, callback){
+        ShpanlistController.doIt(
+            { what: "pushListInstanceItemDown", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
             function(responseText){
                 callback(responseText);
             });

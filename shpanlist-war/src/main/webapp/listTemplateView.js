@@ -23,29 +23,30 @@ var ListTemplateView = {
     },
 
     load: function(listTemplateXml){
-        //this.listTemplateId = $(listTemplateXml).find("listTemplate").first().attr("id");
-        var listTemplateName = $(listTemplateXml).find("name").first().text();
-        document.getElementById('pageListTemplateHeaderDiv').innerHTML = listTemplateName;
+        this.listTemplateId = $(listTemplateXml).find("listTemplate").first().attr("id");
+        document.getElementById('pageListTemplateHeaderDiv').innerHTML = $(listTemplateXml).find("name").first().text();
         var theHtml = '';
-        var listGroupId = $(listTemplateXml).find("listGroup").first().attr("id");
 
-        var firstIteration = true;
-        $(listTemplateXml).find("listTemplateItemRelationshipEntries").find("listTemplateItem") .each(function() {
+
+        var listTemplateItems = $(listTemplateXml).find("listTemplateItemRelationshipEntries").find("listTemplateItem");
+        var lastListElement = listTemplateItems.size() - 1;
+        var i = 0;
+        listTemplateItems .each(function() {
             var currEntity = $(this);
             var currEntityId = currEntity.attr("id");
             theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
             theHtml += '<td>' + currEntity.find("description").first().text() + '</td>';
             theHtml += '<td>' + currEntity.find("defaultAmount").first().text() + '</td>';
             theHtml += '<td><a HREF=\"javascript:ListTemplateView.removeItem(\'' + currEntityId + '\')\">Remove</a>';
-            theHtml += '&nbsp;<img src="/images/down.png" onclick="ListTemplateView.pushItemDown(\'' + currEntityId + '\')"/>';
-            if (firstIteration){
-                firstIteration = false;
-            }else{
+            if (i != lastListElement){
+                theHtml += '&nbsp;<img src="/images/down.png" onclick="ListTemplateView.pushItemDown(\'' + currEntityId + '\')"/>';
+            }
+            if (i != 0){
                 theHtml += '&nbsp;<img src="/images/up.png" onclick="ListTemplateView.pushItemUp(\'' + currEntityId + '\')"/>';
-
             }
 
             theHtml += '</td></tr>';
+            ++i;
 
 
         });

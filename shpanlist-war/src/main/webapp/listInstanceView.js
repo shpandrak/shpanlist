@@ -22,11 +22,10 @@ var ListInstanceView = {
     },
 
     load: function(listInstanceXml){
-        //this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
+        this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
 
         var listInstanceName = $(listInstanceXml).find("name").first().text();
-        $('#pageListInstanceHeaderDiv').html(listInstanceName +
-            '&nbsp;<a href="javascript:ShpanlistController.menuEditListInstance(\'' + this.listInstanceId + '\')">Edit</a>');
+        $('#pageListInstanceHeaderDiv').html(listInstanceName);
 
         var listGroupId = $(listInstanceXml).find("listGroup").first().attr("id");
 

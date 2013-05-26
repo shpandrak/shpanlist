@@ -1,24 +1,24 @@
 package com.shpandrak.shpanlist.services;
 
+import com.shpandrak.datamodel.OrderByClauseEntry;
 import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
+import com.shpandrak.persistence.query.filter.*;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceManager;
-import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.model.ListInstance;
 import com.shpandrak.shpanlist.model.ListInstanceItem;
 import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.ListTemplateItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with love
@@ -27,6 +27,7 @@ import java.util.List;
  * Time: 16:29
  */
 public abstract class ListInstanceService {
+    private static final Logger logger = LoggerFactory.getLogger(ListInstanceService.class);
     private static final SimpleDateFormat shortDayDate = new SimpleDateFormat("MMM-dd");
 
     public static ListInstance getListInstanceFull(Key listTemplateId) throws PersistenceException {
@@ -120,4 +121,91 @@ public abstract class ListInstanceService {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
+
+    public static void pushListInstanceItemDown(Key listInstanceItemId) throws PersistenceException {
+        //todo:limit fetch to return 1 item
+        //todo:tx error handling
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            ListInstanceItemManager listInstanceItemManager = new ListInstanceItemManager();
+            PersistenceLayerManager.getConnectionProvider().beginTransaction();
+
+            ListInstanceItem byId = listInstanceItemManager.getById(listInstanceItemId);
+            Integer itemOrder = byId.getItemOrder();
+            // Searching if there is an item after current
+
+            List<ListInstanceItem> items = listInstanceItemManager.list(new QueryFilter(
+                    new CompoundFieldFilterCondition(
+                            FieldFilterLogicalOperatorType.AND,
+                            new RelationshipFilterCondition(ListInstanceItem.DESCRIPTOR.listInstanceRelationshipDescriptor, byId.getListInstanceId()),
+                            BasicFieldFilterCondition.build(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.GREATER_THEN, itemOrder)), null, null,
+                    Arrays.asList(new OrderByClauseEntry(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, true))));
+
+            if (items.isEmpty()) {
+                logger.warn("Skip pushing down last item {}", byId);
+            } else {
+                ListInstanceItem nextItem = items.get(0);
+                // Updating both fields
+                listInstanceItemManager.updateFieldValueById(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, nextItem.getItemOrder(), byId.getId());
+                listInstanceItemManager.updateFieldValueById(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, nextItem.getId());
+            }
+            PersistenceLayerManager.getConnectionProvider().commitTransaction();
+        } catch (PersistenceException pex) {
+            //todo:better handle tx exception
+            PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+            throw pex;
+        } catch (Exception ex) {
+            PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+            throw new RuntimeException(
+            );
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static void pushListInstanceItemUp(Key listInstanceItemId) throws PersistenceException {
+        //todo:tx error andling
+        //todo:limit fetch to return 1 item
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            PersistenceLayerManager.getConnectionProvider().beginTransaction();
+            ListInstanceItemManager listInstanceItemManager = new ListInstanceItemManager();
+            ListInstanceItem byId = listInstanceItemManager.getById(listInstanceItemId);
+            Integer itemOrder = byId.getItemOrder();
+            if (itemOrder == 1) {
+                logger.warn("Skip pushing up item on top order {}", byId);
+            } else {
+                // Searching if there is an item before current
+                List<ListInstanceItem> items = listInstanceItemManager.list(new QueryFilter(
+                        new CompoundFieldFilterCondition(
+                                FieldFilterLogicalOperatorType.AND,
+                                new RelationshipFilterCondition(ListInstanceItem.DESCRIPTOR.listInstanceRelationshipDescriptor, byId.getListInstanceId()),
+                                BasicFieldFilterCondition.build(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, FilterConditionOperatorType.LESS_THEN, itemOrder)),
+                        null,
+                        null,
+                        Arrays.asList(new OrderByClauseEntry(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, false))));
+
+                if (items.isEmpty()) {
+                    throw new IllegalStateException("Failed pushing up item - could not find previous item " + byId);
+                } else {
+                    ListInstanceItem previousItem = items.get(0);
+                    // Updating both fields
+
+                    listInstanceItemManager.updateFieldValueById(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, previousItem.getItemOrder(), byId.getId());
+                    listInstanceItemManager.updateFieldValueById(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, previousItem.getId());
+                }
+                PersistenceLayerManager.getConnectionProvider().commitTransaction();
+            }
+        } catch (PersistenceException pex) {
+            //todo:better handle tx exception
+            PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+            throw pex;
+        } catch (Exception ex) {
+            PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
+            throw new RuntimeException(ex);
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+    
 }
