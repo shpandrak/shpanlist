@@ -20,27 +20,45 @@
     </script>
 </head>
 <body>
-<div id="pageEditListInstance" data-role="page">
-    <div data-role="header" id="pageEditListInstanceHeaderDiv">
+<div id="pageAddListInstanceItem" data-role="page">
+    <div data-role="header">
+        Add List Item
     </div>
     <div data-role="content">
-        <table id="tabListInstanceItems" data-role="table" class="ui-responsive table-stroke">
-            <thead>
+        <table style="border-spacing:0;padding:0">
             <tr>
-                <th>Item</th><th>Description</th><th>Amount</th><th>Actions</th>
+                <td>Item:</td>
+                <td>
+                    <input id="txtListInstanceItemName" type="text"/>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            </tbody>
+            <tr>
+                <td>Amount:</td>
+                <td>
+                    <input id="txtListInstanceItemAmount" type="number"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td>
+                    <input id="txtListInstanceItemDescription" type="text"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" onClick="ListInstanceEditView.createNewItem(txtListInstanceItemName.value, txtListInstanceItemDescription.value, txtListInstanceItemAmount.value)"
+                           value="Add"/>
+                </td>
+            </tr>
         </table>
-        <br/>
-        <input value="Add Item" type="button" data-icon="plus" onclick="ShpanlistController.menuAddNewListInstanceItem(ListInstanceEditView.listInstanceId)" />
+
     </div>
     <div data-role="footer">
-        <a href="javascript:ShpanlistController.menuListGroup(localStorage['listGroupId'])">Back to group</a>
         <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
     </div>
 </div>
+
+
 </body>
 </html>
 

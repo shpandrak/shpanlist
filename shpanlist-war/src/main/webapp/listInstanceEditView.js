@@ -58,13 +58,11 @@ var ListInstanceEditView = {
         $("#tabListInstanceItems").table('refresh');
     },
 
-    createNewItem: function(){
+    createNewItem: function(itemName, itemDescription, itemAmount){
         ShpanlistController.addNewListInstanceItem(
             ListInstanceEditView.listInstanceId,
-            document.getElementById('txtListInstanceItemName').value,
-            document.getElementById('txtListInstanceItemDescription').value,
-            document.getElementById('txtListInstanceItemAmount').value, function(){
-                ShpanlistController.menuListInstance(localStorage['listInstanceId']);
+            itemName, itemDescription, itemAmount, function(responseXml){
+                ShpanlistController.menuListInstance(ListInstanceEditView.listInstanceId);
             });
     },
 

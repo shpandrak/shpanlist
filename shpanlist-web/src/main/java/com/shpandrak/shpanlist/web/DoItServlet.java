@@ -42,6 +42,8 @@ public class DoItServlet extends HttpServlet {
                 getListInstanceFull(loggedInUser, request, response);
             }else if ("addListTemplateItem".equals(what)){
                 addListTemplateItem(loggedInUser, request, response);
+            }else if ("addListInstanceItem".equals(what)){
+                addListInstanceItem(loggedInUser, request, response);
             }else if ("gotListInstanceItem".equals(what)){
                 gotListInstanceItem(loggedInUser, request, response);
             }else if ("bringBackItem".equals(what)){
@@ -119,6 +121,18 @@ public class DoItServlet extends HttpServlet {
             defaultAmount = Integer.valueOf(listTemplateItemDefaultAmount);
         }
         ListTemplateService.addListTemplateItem(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), listTemplateItemName, listTemplateItemDescription, defaultAmount);
+    }
+
+    private void addListInstanceItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listInstanceId = request.getParameter("listInstanceId");
+        String listInstanceItemName = request.getParameter("listInstanceItemName");
+        String listInstanceItemDescription = request.getParameter("listInstanceItemDescription");
+        String listInstanceItemDefaultAmount = request.getParameter("listInstanceItemAmount");
+        Integer amount = null;
+        if (listInstanceItemDefaultAmount != null && !listInstanceItemDefaultAmount.isEmpty()){
+            amount = Integer.valueOf(listInstanceItemDefaultAmount);
+        }
+        ListInstanceService.addListInstanceItem(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId), listInstanceItemName, listInstanceItemDescription, amount);
     }
 
     private void removeListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {

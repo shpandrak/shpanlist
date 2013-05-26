@@ -16,6 +16,10 @@ var ShpanlistController = {
             $.mobile.changePage("listTemplateItem.html", {transition:'flip'})
     },
 
+    menuAddNewListInstanceItem: function (listInstanceId) {
+            $.mobile.changePage("listInstanceItem.html", {transition:'flip'})
+    },
+
     menuListGroups: function(){
         ShpanlistController.listListGroups(function(responseXml){
             ListGroupsView.data = responseXml;
@@ -137,6 +141,14 @@ var ShpanlistController = {
             });
     },
 
+    addNewListInstanceItem: function(listInstanceId, listInstanceItemName, listInstanceItemDescription, listInstanceItemAmount, callback){
+        ShpanlistController.doIt(
+            { what: "addListInstanceItem", listInstanceId:listInstanceId, listInstanceItemName: listInstanceItemName, listInstanceItemDescription:listInstanceItemDescription, listInstanceItemAmount:listInstanceItemAmount},
+            function(responseText){
+                callback(responseText);
+            });
+    },
+
     removeListTemplateItem: function(listTemplateId, listTemplateItemId, callback){
         ShpanlistController.doIt(
             { what: "removeListTemplateItem", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
@@ -231,7 +243,7 @@ var ShpanlistController = {
             function(responseText){
                 ShpanlistController.signedInUser = null;
                 localStorage.removeItem("signedInUser");
-                window.location.replace("");
+                window.location.replace("/");
             });
     },
 

@@ -9,6 +9,7 @@ import com.shpandrak.persistence.PersistenceLayerManager;
 import com.shpandrak.persistence.query.filter.*;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceManager;
+import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.model.ListInstance;
 import com.shpandrak.shpanlist.model.ListInstanceItem;
@@ -207,5 +208,22 @@ public abstract class ListInstanceService {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
+
+    public static void addListInstanceItem(Key listInstanceId, String listInstanceItemName, String listInstanceItemDescription, Integer amount) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            //todo:transaciton
+            ListInstanceItemManager listInstanceItemManager = new ListInstanceItemManager();
+            List<ListInstanceItem> existingItems = listInstanceItemManager.list(new QueryFilter(new RelationshipFilterCondition(ListInstanceItem.DESCRIPTOR.listInstanceRelationshipDescriptor, listInstanceId), null, null, Arrays.asList(new OrderByClauseEntry(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, true))));
+            int itemOrdinal = 1;
+            if (!existingItems.isEmpty()) {
+                itemOrdinal = existingItems.get(existingItems.size() - 1).getItemOrder() + 1;
+            }
+            listInstanceItemManager.create(new ListInstanceItem(listInstanceId, listInstanceItemName, itemOrdinal, listInstanceItemDescription, amount, false));
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+    
     
 }
