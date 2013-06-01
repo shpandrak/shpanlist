@@ -38,11 +38,27 @@ var ShpanlistController = {
             .done(
             function(responseText){
                 $.mobile.loading('hide');
-                successFunction(responseText);
+                var status = $(responseText).find("shpanlistResponse").first().attr("status");
+
+                switch (status){
+                    case "0":
+                        successFunction($(responseText).find("shpanlistResponse").first().children());
+                        break;
+                    case "1":
+                        ShpanlistController.menuSignIn();
+                        break;
+                    case "2":
+                        var message = $(responseText).find("shpanlistResponse").first().attr("message");
+                        alert("Oops, sorry about that.. " + message);
+                        break;
+
+                }
+
+
             })
             .fail(function(jqXHR, textStatus) {
                 $.mobile.loading('hide');
-                alert("Failed oh no!" + jqXHR.statusText+ ": " + textStatus + ": " + jqXHR.responseText);
+                alert("Failed oh no no!" + jqXHR.statusText+ ": " + textStatus + ": " + jqXHR.responseText);
             });
     },
 
@@ -58,7 +74,7 @@ var ShpanlistController = {
         ShpanlistController.doIt(
             { what: "signIn", userName: userName, password: password },
             function(responseText){
-                if ($(responseText).find("listUser").size() > 0){
+                if ($(responseText)[0].nodeName == "listUser"){
                     var userName = $(responseText).find("listUser").first().find("name").first().text();
                     ShpanlistController.signedInUser = userName;
                     localStorage["signedInUser"] = userName;
@@ -203,7 +219,7 @@ var ShpanlistController = {
         ShpanlistController.doIt(
             { what: "createListFromTemplate", listTemplateId:listTemplateId},
             function(responseText){
-                ShpanlistController.menuListInstance($(responseText).find("listInstance").first().attr("id"));
+                ShpanlistController.menuListInstance($(responseText).attr("id"));
             });
     },
 

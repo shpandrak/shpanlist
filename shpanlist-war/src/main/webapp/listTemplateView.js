@@ -13,9 +13,14 @@ var ListTemplateView = {
         var listTemplateXml = this.data;
 
         if (listTemplateXml == null){
-            ShpanlistController.getListTemplateFull(localStorage['listTemplateId'], function(responseXml){
-                ListTemplateView.load(responseXml)
-            });
+            var listTemplateId = localStorage['listTemplateId'];
+            if (listTemplateId){
+                ShpanlistController.getListTemplateFull(listTemplateId, function(responseXml){
+                    ListTemplateView.load(responseXml)
+                });
+            }else{
+                ShpanlistController.signOut();
+            }
 
         }else{
             ListTemplateView.load(listTemplateXml);
@@ -23,7 +28,7 @@ var ListTemplateView = {
     },
 
     load: function(listTemplateXml){
-        this.listTemplateId = $(listTemplateXml).find("listTemplate").first().attr("id");
+        this.listTemplateId = $(listTemplateXml).attr("id");
         document.getElementById('pageListTemplateHeaderDiv').innerHTML = $(listTemplateXml).find("name").first().text();
         var theHtml = '';
 
@@ -63,7 +68,7 @@ var ListTemplateView = {
             document.getElementById('txtListTemplateItemName').value,
             document.getElementById('txtListTemplateItemDescription').value,
             document.getElementById('txtListTemplateItemAmount').value, function(){
-                ShpanlistController.menuListTemplate(localStorage['listTemplateId']);
+                ShpanlistController.menuListTemplate(ListTemplateView.listTemplateId);
         });
     },
 

@@ -31,11 +31,11 @@ public abstract class ListUserService {
             ListUser newUser = new ListUser(userName, email, firstName, lastName, null, password, null, null, new Date());
 
             listUserManager.create(newUser);
-            ListTemplate listTemplate = ListTemplateService.createListTemplate(newUser.getId(), newUser.getUserName() + "'s Default List Group");
+
+            // Creating default list Template
+            ListTemplate listTemplate = ListTemplateService.createListTemplate(newUser.getId(), newUser.getUserName() + "'s Default List Template");
             listTemplateItemManager.create(new ListTemplateItem(listTemplate, "Milk", 1, "Creamy 3% fat milk", 1));
 
-
-            // Creating default list group
             return newUser;
 
 

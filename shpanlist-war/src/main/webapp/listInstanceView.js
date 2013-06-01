@@ -12,9 +12,14 @@ var ListInstanceView = {
         var listInstanceXml = this.data;
 
         if (listInstanceXml == null){
-            ShpanlistController.getListInstanceFull(localStorage['listInstanceId'], function(responseXml){
-                ListInstanceView.load(responseXml)
-            });
+            var listInstanceId = localStorage['listInstanceId'];
+            if (listInstanceId){
+                ShpanlistController.getListInstanceFull(listInstanceId, function(responseXml){
+                    ListInstanceView.load(responseXml)
+                });
+            }else{
+                ShpanlistController.signOut();
+            }
 
         }else{
             ListInstanceView.load(listInstanceXml);
@@ -22,7 +27,7 @@ var ListInstanceView = {
     },
 
     load: function(listInstanceXml){
-        this.listInstanceId = $(listInstanceXml).find("listInstance").first().attr("id");
+        this.listInstanceId = $(listInstanceXml).attr("id");
 
         var listInstanceName = $(listInstanceXml).find("name").first().text();
         $('#pageListInstanceHeaderDiv').html(listInstanceName);
