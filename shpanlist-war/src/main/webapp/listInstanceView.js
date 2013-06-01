@@ -43,7 +43,7 @@ var ListInstanceView = {
             }
             var amount = currEntity.find("amount").first().text();
             if (amount != null && amount.length > 0){
-                currRowHtml += '(' + amount + ')';
+                currRowHtml += '-' + amount;
             }
 
             if (currEntity.find("gotIt").first().text() == 'true'){

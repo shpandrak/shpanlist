@@ -50,7 +50,7 @@ public abstract class ListInstanceService {
             ListTemplate listTemplate = listTemplateManager.getById(listTemplateId, RelationshipLoadLevel.FULL);
 
             Date listExpirationDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7);
-            String listName = listTemplate.getName() + "_" + shortDayDate.format(listExpirationDate);
+            String listName = listTemplate.getName() + " " + shortDayDate.format(listExpirationDate);
 
             // Creating the list object
             ListInstance listInstance = new ListInstance(
@@ -233,6 +233,30 @@ public abstract class ListInstanceService {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
-    
-    
+
+
+    public static void updateListInstanceName(Key listInstanceId, String listInstanceName) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            ListInstanceManager listInstanceManager = new ListInstanceManager();
+            listInstanceManager.updateFieldValueById(ListInstance.DESCRIPTOR.nameFieldDescriptor, listInstanceName, listInstanceId);
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+
+    }
+
+    public static ListInstance createNewListInstance(Key userId) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            ListInstanceManager listInstanceManager = new ListInstanceManager();
+            Date nowDate = new Date();
+            ListInstance newListInstance = new ListInstance("New List " + shortDayDate.format(nowDate), new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 14), nowDate, userId);
+            listInstanceManager.create(newListInstance);
+            return newListInstance;
+
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
 }

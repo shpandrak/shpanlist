@@ -92,12 +92,29 @@ public class DoItServlet extends HttpServlet {
                 return pushListInstanceItemDown(loggedInUser, request, response);
             }else if ("pushListInstanceItemUp".equals(what)){
                 return pushListInstanceItemUp(loggedInUser, request, response);
+            }else if ("createNewListInstance".equals(what)){
+                return createNewListInstance(loggedInUser, request, response);
             }else if ("removeListInstance".equals(what)){
                 return removeListInstance(loggedInUser, request, response);
+            }else if ("updateListInstanceName".equals(what)){
+                return updateListInstanceName(loggedInUser, request, response);
             }else {
                 throw new IllegalArgumentException("Invalid action " + what);
             }
         }
+    }
+
+    private ResponsePrinter createNewListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        ListInstance newListInstance = ListInstanceService.createNewListInstance(loggedInUser.getUserId());
+        return new DefaultResponsePrinter<ListInstance>(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR), newListInstance);
+    }
+
+    private ResponsePrinter updateListInstanceName(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listInstanceId = request.getParameter("listInstanceId");
+        String listInstanceName = request.getParameter("listInstanceName");
+
+        ListInstanceService.updateListInstanceName(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId), listInstanceName);
+        return new EmptyResponsePrinter();
     }
 
     private ResponsePrinter listUserData(LoggedInUser loggedInUser, HttpServletRequest request) throws PersistenceException, IOException {

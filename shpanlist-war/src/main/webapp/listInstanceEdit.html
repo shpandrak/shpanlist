@@ -22,6 +22,9 @@
     <div data-role="header" id="pageEditListInstanceHeaderDiv">
     </div>
     <div data-role="content">
+        List Name:<input id='txtListName' type="text"/>
+        <input type="button" value="Update List Name" onclick="ListInstanceEditView.updateName(txtListName.value)" />
+
         <table id="tabListInstanceItems" data-role="table" class="ui-responsive table-stroke">
             <thead>
             <tr>
@@ -35,6 +38,8 @@
         <input value="Add Item" type="button" data-icon="plus" onclick="ShpanlistController.menuAddNewListInstanceItem(ListInstanceEditView.listInstanceId)" />
     </div>
     <div data-role="footer">
+        <a data-icon="arrow-l" href="javascript:$.mobile.back();"> Back</a>
+        <a href='javascript:ShpanlistController.menuHome()' data-icon="home">Home</a>
         <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>
     </div>
 </div>

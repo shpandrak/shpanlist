@@ -251,5 +251,26 @@ var ShpanlistController = {
             function(responseText){
                 successCallback();
             });
+    },
+
+    updateListInstanceName: function(listInstanceId, listInstanceName, callback){
+        ShpanlistController.doIt(
+            { what: "updateListInstanceName", listInstanceId: listInstanceId, listInstanceName:listInstanceName},
+            function(responseXml){
+                callback(responseXml);
+            });
+    },
+
+    menuNewListInstance: function(){
+        ShpanlistController.doIt(
+            { what: "createNewListInstance"},
+            function(responseXml){
+                var listInstanceId = $(responseXml).attr('id');
+                ListInstanceEditView.data = responseXml;
+                ListInstanceEditView.listInstanceId = listInstanceId;
+                localStorage['listInstanceId'] = listInstanceId;
+                $.mobile.changePage('listInstanceEdit.html', 'slide');
+            });
     }
-}
+
+};

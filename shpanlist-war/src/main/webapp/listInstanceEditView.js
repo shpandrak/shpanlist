@@ -29,7 +29,11 @@ var ListInstanceEditView = {
 
     load: function(listInstanceXml){
         this.listInstanceId = $(listInstanceXml).attr("id");
-        document.getElementById('pageEditListInstanceHeaderDiv').innerHTML = $(listInstanceXml).find("name").first().text();
+
+
+        var listName = $(listInstanceXml).find("name").first().text();
+        $('#pageEditListInstanceHeaderDiv').html(listName);
+        $('#txtListName')[0].value = listName;
         var theHtml = '';
 
         var listInstanceItems = $(listInstanceXml).find("listInstanceItemRelationshipEntries").find("listInstanceItem");
@@ -61,13 +65,14 @@ var ListInstanceEditView = {
 
         document.getElementById('tabListInstanceItems').tBodies[0].innerHTML = theHtml;
         $("#tabListInstanceItems").table('refresh');
+        //$("#txtListName").text('refresh');
     },
 
     createNewItem: function(itemName, itemDescription, itemAmount){
         ShpanlistController.addNewListInstanceItem(
             ListInstanceEditView.listInstanceId,
             itemName, itemDescription, itemAmount, function(responseXml){
-                ShpanlistController.menuListInstance(ListInstanceEditView.listInstanceId);
+                $.mobile.back();
             });
     },
 
@@ -88,8 +93,16 @@ var ListInstanceEditView = {
         });
     },
 
-    createListFromInstance: function(){
-        ShpanlistController.createListFromInstance(ListInstanceEditView.listInstanceId);
+    updateName: function(listName){
+        if (listName == null || listName.length == 0){
+            alert('list Name must not be empty');
+        }else{
+            ShpanlistController.updateListInstanceName(ListInstanceEditView.listInstanceId, listName, function(responseXml){
+                ListInstanceEditView.refresh();
+            });
+        }
+
     }
+
 
 };
