@@ -126,7 +126,7 @@ var ShpanlistController = {
 
             ListInstanceEditView.data = responseText;
             ListInstanceEditView.listInstanceId = listInstanceId;
-            $.mobile.changePage('listInstanceEdit.html', 'slide');
+            $.mobile.changePage('listInstanceEdit.html', {transition: 'slide'});
         });
 
     },

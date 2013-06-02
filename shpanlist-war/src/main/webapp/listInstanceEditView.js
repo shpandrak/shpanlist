@@ -44,7 +44,7 @@ var ListInstanceEditView = {
             var currEntityId = currEntity.attr("id");
             theHtml += '<tr><td>' + currEntity.find("name").first().text() + '</td>';
             theHtml += '<td>' + currEntity.find("description").first().text() + '</td>';
-            theHtml += '<td>' + currEntity.find("defaultAmount").first().text() + '</td>';
+            theHtml += '<td>' + currEntity.find("amount").first().text() + '</td>';
             theHtml += '<td><a HREF=\"javascript:ListInstanceEditView.removeItem(\'' + currEntityId + '\')\">Remove</a>';
 
             if (i != lastListElement){
@@ -72,7 +72,7 @@ var ListInstanceEditView = {
         ShpanlistController.addNewListInstanceItem(
             ListInstanceEditView.listInstanceId,
             itemName, itemDescription, itemAmount, function(responseXml){
-                $.mobile.back();
+                ShpanlistController.menuEditListInstance(ListInstanceEditView.listInstanceId);
             });
     },
 
