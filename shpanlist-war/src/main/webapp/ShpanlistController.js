@@ -8,6 +8,37 @@ var ShpanlistController = {
         }
     },
 
+    doInstructions: function (instructions) {
+        var htmlBindings = instructions.bindings;
+        if (htmlBindings != undefined && htmlBindings != null) {
+            for (var i = 0; i < htmlBindings.length; i++) {
+
+                var currHtmlBinding = htmlBindings[i];
+                if (currHtmlBinding.hasOwnProperty('outer')) {
+                    jQuery(currHtmlBinding.id).replaceWith(currHtmlBinding.html);
+                } else {
+                    jQuery(currHtmlBinding.id).html(currHtmlBinding.html);
+                }
+            }
+        }
+
+        var refreshResponses = instructions.refreshResponses;
+        if (refreshResponses != undefined && refreshResponses != null) {
+            for (var j = 0; j < htmlBindings.length; j++) {
+
+                var currRefreshResponse = refreshResponses[j];
+                switch (currRefreshResponse.type) {
+                    case "listview":
+                        jQuery(currRefreshResponse.id).listview('refresh');
+                        break;
+                }
+            }
+
+        }
+
+    },
+
+
     menuSignIn: function () {
         $.mobile.changePage("#pageSignIn")
     },
@@ -23,7 +54,7 @@ var ShpanlistController = {
     menuHome: function(){
         ShpanlistController.listUserData(function(responseXml){
             HomeView.data = responseXml;
-            $.mobile.changePage('home.html');
+            $.mobile.changePage('/home.html');
 
         });
     },
@@ -49,6 +80,39 @@ var ShpanlistController = {
                         break;
                     case "2":
                         var message = $(responseText).find("shpanlistResponse").first().attr("message");
+                        alert("Oops, sorry about that.. " + message);
+                        break;
+
+                }
+
+
+            })
+            .fail(function(jqXHR, textStatus) {
+                $.mobile.loading('hide');
+                alert("Failed oh no no!" + jqXHR.statusText+ ": " + textStatus + ": " + jqXHR.responseText);
+            });
+    },
+
+    doItPage:function(page, data, successFunction){
+        $.mobile.loading('show');
+        jQuery.post(
+            page,
+            data
+        )
+            .done(
+            function(responseJson){
+                $.mobile.loading('hide');
+                var status = responseJson.status;
+
+                switch (status){
+                    case 0:
+                        successFunction(responseJson);
+                        break;
+                    case 1:
+                        ShpanlistController.menuSignIn();
+                        break;
+                    default :
+                        var message = responseJson.message;
                         alert("Oops, sorry about that.. " + message);
                         break;
 
@@ -90,7 +154,7 @@ var ShpanlistController = {
         ShpanlistController.getListTemplateFull(listTemplateId, function(responseXml){
             ListTemplateView.data = responseXml;
             ListTemplateView.listTemplateId = listTemplateId;
-            $.mobile.changePage('listTemplate.html', {transition:'slide'});
+            $.mobile.changePage('/listTemplate.html', {transition:'slide'});
         });
     },
 
@@ -114,9 +178,9 @@ var ShpanlistController = {
         localStorage['listInstanceId'] = listInstanceId;
         this.getListInstanceFull(listInstanceId, function(responseText){
 
-            ListInstanceView.data = responseText;
-            ListInstanceView.listInstanceId = listInstanceId;
-            $.mobile.changePage('listInstance.html', 'slide');
+            ListInstancePageView.data = responseText;
+            ListInstancePageView.listInstanceId = listInstanceId;
+            $.mobile.changePage('/listInstance/' + listInstanceId, {transition:'slide', reloadPage:true});
         });
     },
 
@@ -126,7 +190,7 @@ var ShpanlistController = {
 
             ListInstanceEditView.data = responseText;
             ListInstanceEditView.listInstanceId = listInstanceId;
-            $.mobile.changePage('listInstanceEdit.html', {transition: 'slide'});
+            $.mobile.changePage('/listInstanceEdit.html', {transition: 'slide'});
         });
 
     },
@@ -206,11 +270,20 @@ var ShpanlistController = {
 
     },
 
+    gotListInstanceItemNew: function(listInstanceId, listInstanceItemId, callback){
+        ShpanlistController.doItPage("/listInstance",
+            { what: "gotListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
+            function(responseJson){
+                callback(responseJson);
+            });
+
+    },
+
     bringBackItem: function(listInstanceId, listInstanceItemId, callback){
-        ShpanlistController.doIt(
+        ShpanlistController.doItPage('/listInstance',
             { what: "bringBackItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
-            function(responseText){
-                callback(responseText);
+            function(response){
+                callback(response);
             });
 
     },
@@ -269,7 +342,7 @@ var ShpanlistController = {
                 ListInstanceEditView.data = responseXml;
                 ListInstanceEditView.listInstanceId = listInstanceId;
                 localStorage['listInstanceId'] = listInstanceId;
-                $.mobile.changePage('listInstanceEdit.html', 'slide');
+                $.mobile.changePage('/listInstanceEdit.html', 'slide');
             });
     }
 

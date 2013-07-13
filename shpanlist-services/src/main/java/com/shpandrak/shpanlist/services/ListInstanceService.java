@@ -259,4 +259,15 @@ public abstract class ListInstanceService {
             PersistenceLayerManager.endJointConnectionSession();
         }
     }
+
+    public static ListInstanceItem getListInstanceItem(EntityKey listInstanceItemKey) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            ListInstanceItemManager listInstanceItemManager = new ListInstanceItemManager();
+            return listInstanceItemManager.getById(listInstanceItemKey);
+
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
 }

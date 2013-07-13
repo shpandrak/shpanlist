@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="ShpanlistModelGWT">
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.shpandrak.ShpandrakModelGWT'/>
+
+    <source path='model'/>
+    <entry-point class='com.shpandrak.shpanlist.model.ShpanlistModelGWTEntryPoint'/>
+</module>

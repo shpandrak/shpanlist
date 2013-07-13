@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>shpanlist-parent</artifactId>
+        <groupId>com.shpandrak.shpanlist</groupId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>shpanlist-gwt</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.shpandrak.shpanlist</groupId>
+            <artifactId>shpanlist-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.shpandrak.shpanlist</groupId>
+            <artifactId>shpanlist-services</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- GWT Maven Plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
+                <!-- Plugin configuration. There are many available options, see
+                gwt-maven-plugin documentation at codehaus.org -->
+                <configuration>
+                    <logLevel>INFO</logLevel>
+                    <extraJvmArgs>-Xmx512m -Xss1024k</extraJvmArgs>
+
+                    <!--FIXME Remember to edit the value of <runTarget> element-->
+                    <runTarget>GwtSample.html</runTarget>
+                    <!--<hostedWebapp>${webappDirectory}</hostedWebapp>-->
+                    <style>DETAILED</style>
+                    <!--FIXME Remember to edit the value of the i18n bundle class name-->
+                    <!--<i18nMessagesBundle>com.cherrot.gwtsample.client.Messages</i18nMessagesBundle>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!--<goal>compile</goal>-->
+                            <!--<goal>test</goal>-->
+                            <!--<goal>i18n</goal>-->
+                            <goal>generateAsync</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>

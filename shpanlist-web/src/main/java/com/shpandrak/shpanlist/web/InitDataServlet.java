@@ -31,8 +31,10 @@ public class InitDataServlet extends HttpServlet {
     protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         try {
             createInitData();
+            httpServletResponse.sendRedirect("/");
         } catch (PersistenceException e) {
             e.printStackTrace(httpServletResponse.getWriter());
+            throw new ServletException("Oops", e);
         }
     }
 
@@ -66,6 +68,7 @@ public class InitDataServlet extends HttpServlet {
                 ListTemplateItem milk = new ListTemplateItem(listTemplate, "Milk", 2, "3% fat milk", null);
                 listTemplateItemManager.create(Arrays.asList(eggs, milk));
             }
+
 
 
         }finally {
