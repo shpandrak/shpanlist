@@ -1,6 +1,7 @@
 package com.shpandrak.shpanlist.web;
 
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
+import com.shpandrak.shpanlist.web.pages.BasePageServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +27,7 @@ public class WelcomeServlet extends HttpServlet{
                 "<html>\n" +
                 "<head>\n" +
                 "\t<title>Hi Dude</title>\n").append(
-                getHeaderConstants()).append(
+                BasePageServlet.getHeaderConstants()).append(
                 "\t<script type=\"text/javascript\">\n" +
                 "\n" +
                 "        function onLoad() {\n");
@@ -56,16 +57,4 @@ public class WelcomeServlet extends HttpServlet{
                 "</html>");
     }
 
-    public static String getHeaderConstants() {
-        return "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
-                "\t<link rel=\"stylesheet\" href=\"/include/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css\" />\n" +
-                "\t<script src=\"/include/jquery-1.9.1.min.js\"></script>\n" +
-                "\t<script src=\"/customInit.js\"></script>\n" +
-                "\t<script src=\"/include/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js\"></script>\n" +
-                "\t<script src=\"/ShpanlistController.js\"></script>\n" +
-                "\t<script src=\"/homeView.js\"></script>\n" +
-                "\t<script src=\"/listTemplateView.js\"></script>\n" +
-                "\t<script src=\"/listInstancePageView.js\"></script>\n" +
-                "\t<script src=\"/listInstanceEditView.js\"></script>\n";
-    }
 }
