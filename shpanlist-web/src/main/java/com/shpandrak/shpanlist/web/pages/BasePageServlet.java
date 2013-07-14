@@ -27,7 +27,7 @@ public abstract class BasePageServlet extends HttpServlet{
                 "\t<script src=\"/customInit.js\"></script>\n" +
                 "\t<script src=\"/include/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js\"></script>\n" +
                 "\t<script src=\"/ShpanlistController.js\"></script>\n" +
-                "\t<script src=\"/homeView.js\"></script>\n" +
+                "\t<script src=\"/homePageView.js\"></script>\n" +
                 "\t<script src=\"/listTemplateView.js\"></script>\n" +
                 "\t<script src=\"/listInstancePageView.js\"></script>\n" +
                 "\t<script src=\"/listInstanceEditView.js\"></script>\n";
@@ -56,7 +56,10 @@ public abstract class BasePageServlet extends HttpServlet{
             appendPagePrefix(sb);
 
             // Draw the page
-            drawPage(request, response, sb, loggedInUser);
+            boolean shouldContinue = drawPage(request, response, sb, loggedInUser);
+            if (!shouldContinue){
+                return;
+            }
 
             // Append Page Suffix
             appendPageSuffix(sb);

@@ -1,4 +1,4 @@
-var HomeView = {
+var HomePageView = {
     data:null,
 
     refresh: function(){
@@ -12,11 +12,11 @@ var HomeView = {
 
         if (userDataXml == null){
             ShpanlistController.listUserData(function(responseXml){
-                HomeView.load(responseXml)
+                HomePageView.load(responseXml)
             });
 
         }else{
-            HomeView.load(userDataXml);
+            HomePageView.load(userDataXml);
         }
     },
 
@@ -28,7 +28,7 @@ var HomeView = {
             var currEntity = jQuery(this);
             var currEntityId = currEntity.attr("id");
             theHtml += '<li><a href="javascript:ShpanlistController.menuListInstance(\'' + currEntityId + '\')\">' + currEntity.find("name").first().text() + '</a>' +
-                '<a href="javascript:HomeView.removeListInstance(\'' + currEntityId + '\')\">Remove</a></li>';
+                '<a href="javascript:HomePageView.removeListInstance(\'' + currEntityId + '\')\">Remove</a></li>';
         });
 
 
@@ -54,15 +54,11 @@ var HomeView = {
         });
 
         theHtml += '</table><br/>';
-        theHtml += 'UserName:<input type="text" id="txtNewMemberUserName"/><a HREF="javascript:HomeView.addNewMember()">Add Member</a><br/>';
+        theHtml += 'UserName:<input type="text" id="txtNewMemberUserName"/><a HREF="javascript:HomePageView.addNewMember()">Add Member</a><br/>';
 
         $("#lstLists").listview('refresh');
     },
 
-
-    createNewItem: function(){
-        ShpanlistController.addNewListTemplateItem(ListTemplateView.listTemplateId, txtNewItemName.value, txtNewItemDescription.value, txtNewItemDefaultAmount.value)
-    },
 
     removeItem: function(listTemplateItemId){
         ShpanlistController.removeListTemplateItem(ListTemplateView.listTemplateId, listTemplateItemId);
@@ -76,7 +72,7 @@ var HomeView = {
         var conf = confirm("Are you sure you want to remove this list?");
         if (conf){
             ShpanlistController.removeListInstance(listInstanceId, function(){
-                HomeView.refresh();
+                HomePageView.refresh();
             });
         }
     }

@@ -18,6 +18,10 @@
         <servlet-class>com.shpandrak.shpanlist.web.pages.ListInstancePageServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>HomePageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.pages.HomePageServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>InitDataServlet</servlet-name>
         <servlet-class>com.shpandrak.shpanlist.web.InitDataServlet</servlet-class>
     </servlet>
@@ -62,6 +66,10 @@
     <servlet-mapping>
         <servlet-name>ListInstancePageServlet</servlet-name>
         <url-pattern>/listInstance/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomePageServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>InitDataServlet</servlet-name>

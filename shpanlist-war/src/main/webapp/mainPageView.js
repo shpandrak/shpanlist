@@ -28,7 +28,7 @@ var homeView = {
             var currEntity = jQuery(this);
             var currEntityId = currEntity.attr("id");
             theHtml += '<li><a href="javascript:ShpanlistController.menuListInstance(\'' + currEntityId + '\')\">' + currEntity.find("name").first().text() + '</a>' +
-                '<a href="javascript:HomeView.removeListInstance(\'' + currEntityId + '\')\">Remove</a></li>';
+                '<a href="javascript:HomePageView.removeListInstance(\'' + currEntityId + '\')\">Remove</a></li>';
         });
 
 
@@ -54,7 +54,7 @@ var homeView = {
         });
 
         theHtml += '</table><br/>';
-        theHtml += 'UserName:<input type="text" id="txtNewMemberUserName"/><a HREF="javascript:HomeView.addNewMember()">Add Member</a><br/>';
+        theHtml += 'UserName:<input type="text" id="txtNewMemberUserName"/><a HREF="javascript:HomePageView.addNewMember()">Add Member</a><br/>';
 
         $("#lstLists").listview('refresh');
     },

@@ -44,19 +44,15 @@ var ShpanlistController = {
     },
 
     menuAddNewListTemplateItem: function (listTemplateId) {
-            $.mobile.changePage("listTemplateItem.html", {transition:'flip'})
+            $.mobile.changePage("/listTemplateItem.html", {transition:'flip', role:'dialog'})
     },
 
     menuAddNewListInstanceItem: function (listInstanceId) {
-            $.mobile.changePage("listInstanceItem.html", {transition:'flip'})
+            $.mobile.changePage("/listInstanceItem.html", {transition:'flip', role:'dialog'})
     },
 
     menuHome: function(){
-        ShpanlistController.listUserData(function(responseXml){
-            HomeView.data = responseXml;
-            $.mobile.changePage('/home.html');
-
-        });
+        $.mobile.changePage('/home', {transition:'slide', reloadPage:true});
     },
 
 
@@ -175,13 +171,7 @@ var ShpanlistController = {
     },
 
     menuListInstance: function(listInstanceId){
-        localStorage['listInstanceId'] = listInstanceId;
-        this.getListInstanceFull(listInstanceId, function(responseText){
-
-            ListInstancePageView.data = responseText;
-            ListInstancePageView.listInstanceId = listInstanceId;
-            $.mobile.changePage('/listInstance/' + listInstanceId, {transition:'slide', reloadPage:true});
-        });
+        $.mobile.changePage('/listInstance/' + listInstanceId, {transition:'slide', reloadPage:true});
     },
 
     menuEditListInstance: function(listInstanceId){

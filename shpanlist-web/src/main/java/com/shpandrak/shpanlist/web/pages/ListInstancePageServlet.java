@@ -51,12 +51,13 @@ public class ListInstancePageServlet extends BasePageServlet {
                 "\tfunction onLoad() {\n" +
                 "\tListInstancePageView.listInstanceId = '").append(listInstanceIdString).append("';\n" +
                 "\t}\n" +
-                "\t</script>\n");
+                "\t</script>\n" +
+                "</head>");
 
 
         sb.append(
                 "<body onload=\"onLoad()\">\n" +
-                        "<div id=\"pageListInstance2\" data-role=\"page\">\n" +
+                        "<div id=\"pageListInstance\" data-role=\"page\">\n" +
                         "    <div id=\"listInstanceHeader\" data-role=\"header\">\n<h2>").append(
                 listInstanceFull.getName()).append("</h2>\n" +
                 "    </div>\n" +
@@ -81,8 +82,7 @@ public class ListInstancePageServlet extends BasePageServlet {
                         "        <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>\n" +
                         "    </div>\n" +
                         "</div>\n" +
-                        "</body>\n" +
-                        "</html>");
+                        "</body>");
         return true;
     }
 
