@@ -31,11 +31,11 @@ public abstract class ListInstanceService {
     private static final Logger logger = LoggerFactory.getLogger(ListInstanceService.class);
     private static final SimpleDateFormat shortDayDate = new SimpleDateFormat("MMM-dd");
 
-    public static ListInstance getListInstanceFull(Key listTemplateId) throws PersistenceException {
+    public static ListInstance getListInstanceFull(Key listInstanceId) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListInstanceManager listInstanceManager = new ListInstanceManager();
-            return listInstanceManager.getById(listTemplateId, RelationshipLoadLevel.FULL);
+            return listInstanceManager.getById(listInstanceId, RelationshipLoadLevel.FULL);
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
@@ -163,8 +163,15 @@ public abstract class ListInstanceService {
         }
     }
 
-    public static void pushListInstanceItemUp(Key listInstanceItemId) throws PersistenceException {
-        //todo:tx error andling
+    /**
+     * moves list item up by one and replace with previous item on list
+     *
+     * @param listInstanceItemId item id to push up
+     * @return list instance item id switched with current item position, or null if there was no switch
+     * @throws PersistenceException
+     */
+    public static Key pushListInstanceItemUp(Key listInstanceItemId) throws PersistenceException {
+        //todo:tx error handling
         //todo:limit fetch to return 1 item
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try {
@@ -174,6 +181,7 @@ public abstract class ListInstanceService {
             Integer itemOrder = byId.getItemOrder();
             if (itemOrder == 1) {
                 logger.warn("Skip pushing up item on top order {}", byId);
+                return null;
             } else {
                 // Searching if there is an item before current
                 List<ListInstanceItem> items = listInstanceItemManager.list(new QueryFilter(
@@ -193,8 +201,9 @@ public abstract class ListInstanceService {
 
                     listInstanceItemManager.updateFieldValueById(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, previousItem.getItemOrder(), byId.getId());
                     listInstanceItemManager.updateFieldValueById(ListInstanceItem.DESCRIPTOR.itemOrderFieldDescriptor, itemOrder, previousItem.getId());
+                    PersistenceLayerManager.getConnectionProvider().commitTransaction();
+                    return previousItem.getId();
                 }
-                PersistenceLayerManager.getConnectionProvider().commitTransaction();
             }
         } catch (PersistenceException pex) {
             //todo:better handle tx exception

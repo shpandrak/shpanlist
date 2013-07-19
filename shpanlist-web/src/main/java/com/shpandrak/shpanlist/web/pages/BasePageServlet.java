@@ -20,6 +20,10 @@ import java.io.PrintWriter;
  */
 public abstract class BasePageServlet extends HttpServlet{
 
+    public boolean requiresLogin(){
+        return true;
+    }
+
     public static String getHeaderConstants() {
         return "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
                 "\t<link rel=\"stylesheet\" href=\"/include/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css\" />\n" +
@@ -30,7 +34,7 @@ public abstract class BasePageServlet extends HttpServlet{
                 "\t<script src=\"/homePageView.js\"></script>\n" +
                 "\t<script src=\"/listTemplateView.js\"></script>\n" +
                 "\t<script src=\"/listInstancePageView.js\"></script>\n" +
-                "\t<script src=\"/listInstanceEditView.js\"></script>\n";
+                "\t<script src=\"/listInstanceEditPageView.js\"></script>\n";
     }
 
     public abstract HtmlResponsePrinter doItPlease(HttpServletRequest request, HttpServletResponse response, LoggedInUser loggedInUser, String what) throws IOException, PersistenceException, UserMustSignInException;
@@ -47,8 +51,8 @@ public abstract class BasePageServlet extends HttpServlet{
         StringBuilder sb = new StringBuilder() ;
         try{
             LoggedInUser loggedInUser = (LoggedInUser)request.getSession().getAttribute("user");
-            if (loggedInUser == null){
-                response.sendRedirect("/");
+            if (loggedInUser == null && requiresLogin()){
+                response.sendRedirect("/signIn");
                 return;
             }
 
@@ -116,4 +120,10 @@ public abstract class BasePageServlet extends HttpServlet{
             log("Failed " + what, e);
         }
     }
+
+    protected String encodeHtmlForJSONTransport(StringBuilder sb) {
+        return sb.toString().replaceAll("\\\"", "\\\\\"").replaceAll("\n", "");
+    }
+
+
 }

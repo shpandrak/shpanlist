@@ -14,15 +14,11 @@ var ListInstancePageView = {
 
 
     gotItem: function (listInstanceItemId) {
-        ShpanlistController.gotListInstanceItemNew(ListInstancePageView.listInstanceId, listInstanceItemId, function (response) {
-            ShpanlistController.doInstructions(response);
-        });
+        ShpanlistController.gotListInstanceItemNew(ListInstancePageView.listInstanceId, listInstanceItemId);
     },
 
     bringBackItem: function (listInstanceItemId) {
-        ShpanlistController.bringBackItem(ListInstancePageView.listInstanceId, listInstanceItemId, function (response) {
-            ShpanlistController.doInstructions(response)
-        });
+        ShpanlistController.bringBackItem(ListInstancePageView.listInstanceId, listInstanceItemId);
     }
 
 

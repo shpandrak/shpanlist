@@ -18,8 +18,16 @@
         <servlet-class>com.shpandrak.shpanlist.web.pages.ListInstancePageServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ListInstanceEditPageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.pages.ListInstanceEditPageServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>HomePageServlet</servlet-name>
         <servlet-class>com.shpandrak.shpanlist.web.pages.HomePageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignInPageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.pages.SignInPageServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InitDataServlet</servlet-name>
@@ -68,15 +76,22 @@
         <url-pattern>/listInstance/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ListInstanceEditPageServlet</servlet-name>
+        <url-pattern>/listInstanceEdit/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>HomePageServlet</servlet-name>
         <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignInPageServlet</servlet-name>
+        <url-pattern>/signIn</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>InitDataServlet</servlet-name>
         <url-pattern>/initData</url-pattern>
     </servlet-mapping>
-
         <welcome-file-list>
-            <welcome-file>index.html</welcome-file>
+            <welcome-file>home</welcome-file>
         </welcome-file-list>
 </web-app>

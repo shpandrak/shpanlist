@@ -66,22 +66,14 @@ public class DoItServlet extends HttpServlet {
                 throw new UserMustSignInException();
             }else if ("getListTemplateFull".equals(what)){
                 return getListTemplateFull(loggedInUser, request);
-            }else if ("listUserData".equals(what)){
-                return listUserData(loggedInUser, request);
             }else if ("getListInstanceFull".equals(what)){
                 return getListInstanceFull(loggedInUser, request);
             }else if ("addListTemplateItem".equals(what)){
                 return addListTemplateItem(loggedInUser, request, response);
             }else if ("addListInstanceItem".equals(what)){
                 return addListInstanceItem(loggedInUser, request, response);
-            }else if ("gotListInstanceItem".equals(what)){
-                return gotListInstanceItem(loggedInUser, request, response);
-            }else if ("bringBackItem".equals(what)){
-                return bringBackItem(loggedInUser, request, response);
             }else if ("removeListTemplateItem".equals(what)){
                 return removeListTemplateItem(loggedInUser, request, response);
-            }else if ("removeListInstanceItem".equals(what)){
-                return removeListInstanceItem(loggedInUser, request, response);
             }else if ("createListFromTemplate".equals(what)){
                 return createListFromTemplate(loggedInUser, request, response);
             }else if ("pushListTemplateItemDown".equals(what)){
@@ -90,14 +82,8 @@ public class DoItServlet extends HttpServlet {
                 return pushListTemplateItemUp(loggedInUser, request, response);
             }else if ("pushListInstanceItemDown".equals(what)){
                 return pushListInstanceItemDown(loggedInUser, request, response);
-            }else if ("pushListInstanceItemUp".equals(what)){
-                return pushListInstanceItemUp(loggedInUser, request, response);
             }else if ("createNewListInstance".equals(what)){
                 return createNewListInstance(loggedInUser, request, response);
-            }else if ("removeListInstance".equals(what)){
-                return removeListInstance(loggedInUser, request, response);
-            }else if ("updateListInstanceName".equals(what)){
-                return updateListInstanceName(loggedInUser, request, response);
             }else {
                 throw new IllegalArgumentException("Invalid action " + what);
             }
@@ -125,12 +111,6 @@ public class DoItServlet extends HttpServlet {
                 new DefaultResponsePrinter<ListInstance>(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR), userListInstances) 
         ));
         
-    }
-
-    private ResponsePrinter removeListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        ListInstanceService.removeListInstance(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId));
-        return new EmptyResponsePrinter();
     }
 
     private ResponsePrinter signOut(LoggedInUser loggedInUser, HttpServletRequest request) {

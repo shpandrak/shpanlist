@@ -31,6 +31,9 @@ var ShpanlistController = {
                     case "listview":
                         jQuery(currRefreshResponse.id).listview('refresh');
                         break;
+                    case "table":
+                        jQuery(currRefreshResponse.id).table('refresh');
+                        break;
                 }
             }
 
@@ -40,15 +43,15 @@ var ShpanlistController = {
 
 
     menuSignIn: function () {
-        $.mobile.changePage("#pageSignIn")
+        $.mobile.changePage("/signIn")
     },
 
     menuAddNewListTemplateItem: function (listTemplateId) {
-            $.mobile.changePage("/listTemplateItem.html", {transition:'flip', role:'dialog'})
+            $.mobile.changePage("/listTemplateItem.html", {role:'dialog'})
     },
 
     menuAddNewListInstanceItem: function (listInstanceId) {
-            $.mobile.changePage("/listInstanceItem.html", {transition:'flip', role:'dialog'})
+            $.mobile.changePage("/listInstanceItem.html", {role:'dialog'})
     },
 
     menuHome: function(){
@@ -175,14 +178,8 @@ var ShpanlistController = {
     },
 
     menuEditListInstance: function(listInstanceId){
-        localStorage['listInstanceId'] = listInstanceId;
-        this.getListInstanceFull(listInstanceId, function(responseText){
-
-            ListInstanceEditView.data = responseText;
-            ListInstanceEditView.listInstanceId = listInstanceId;
-            $.mobile.changePage('/listInstanceEdit.html', {transition: 'slide'});
-        });
-
+        ListInstanceEditPageView.listInstanceId = listInstanceId;
+        $.mobile.changePage('/listInstanceEdit/' + listInstanceId, {transition:'slide', reloadPage:true});
     },
 
     addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount, callback){
@@ -210,11 +207,11 @@ var ShpanlistController = {
 
     },
 
-    removeListInstanceItem: function(listInstanceId, listInstanceItemId, callback){
-        ShpanlistController.doIt(
+    removeListInstanceItem: function(listInstanceId, listInstanceItemId){
+        ShpanlistController.doItPage('/listInstanceEdit',
             { what: "removeListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
-            function(responseText){
-                callback(listInstanceId);
+            function(response){
+                ShpanlistController.doInstructions(response);
             });
 
     },
@@ -235,19 +232,19 @@ var ShpanlistController = {
             });
     },
 
-    pushListInstanceItemUp: function(listInstanceId, listInstanceItemId, callback){
-        ShpanlistController.doIt(
+    pushListInstanceItemUp: function(listInstanceId, listInstanceItemId){
+        ShpanlistController.doItPage('/listInstanceEdit',
             { what: "pushListInstanceItemUp", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
-            function(responseText){
-                callback(responseText);
+            function(response){
+                ShpanlistController.doInstructions(response);
             });
     },
 
-    pushListInstanceItemDown: function(listInstanceId, listInstanceItemId, callback){
-        ShpanlistController.doIt(
+    pushListInstanceItemDown: function(listInstanceId, listInstanceItemId){
+        ShpanlistController.doItPage('/listInstanceEdit',
             { what: "pushListInstanceItemDown", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
-            function(responseText){
-                callback(responseText);
+            function(response){
+                ShpanlistController.doInstructions(response);
             });
     },
 
@@ -260,20 +257,20 @@ var ShpanlistController = {
 
     },
 
-    gotListInstanceItemNew: function(listInstanceId, listInstanceItemId, callback){
+    gotListInstanceItemNew: function(listInstanceId, listInstanceItemId){
         ShpanlistController.doItPage("/listInstance",
             { what: "gotListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
-            function(responseJson){
-                callback(responseJson);
+            function(response){
+                ShpanlistController.doInstructions(response)
             });
 
     },
 
-    bringBackItem: function(listInstanceId, listInstanceItemId, callback){
+    bringBackItem: function(listInstanceId, listInstanceItemId){
         ShpanlistController.doItPage('/listInstance',
             { what: "bringBackItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
             function(response){
-                callback(response);
+                ShpanlistController.doInstructions(response);
             });
 
     },
@@ -309,18 +306,18 @@ var ShpanlistController = {
     },
 
     removeListInstance: function(listInstanceId, successCallback){
-        ShpanlistController.doIt(
+        ShpanlistController.doItPage('/home',
             { what: "removeListInstance", listInstanceId: listInstanceId},
-            function(responseText){
-                successCallback();
+            function(response){
+                ShpanlistController.doInstructions(response);
             });
     },
 
-    updateListInstanceName: function(listInstanceId, listInstanceName, callback){
-        ShpanlistController.doIt(
+    updateListInstanceName: function(listInstanceId, listInstanceName){
+        ShpanlistController.doItPage("/listInstanceEdit",
             { what: "updateListInstanceName", listInstanceId: listInstanceId, listInstanceName:listInstanceName},
-            function(responseXml){
-                callback(responseXml);
+            function(response){
+                ShpanlistController.doInstructions (response);
             });
     },
 
@@ -329,10 +326,7 @@ var ShpanlistController = {
             { what: "createNewListInstance"},
             function(responseXml){
                 var listInstanceId = $(responseXml).attr('id');
-                ListInstanceEditView.data = responseXml;
-                ListInstanceEditView.listInstanceId = listInstanceId;
-                localStorage['listInstanceId'] = listInstanceId;
-                $.mobile.changePage('/listInstanceEdit.html', 'slide');
+                ShpanlistController.menuEditListInstance(listInstanceId);
             });
     }
 

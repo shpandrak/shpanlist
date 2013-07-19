@@ -73,7 +73,7 @@ public class ListInstancePageServlet extends BasePageServlet {
         sb.append(
                 "        </ul>\n" +
                         "        <br/>\n" +
-                        "        <input value=\"Edit\" type=\"button\" data-icon=\"edit\" onclick=\"ShpanlistController.menuEditListInstance(ListInstancePageView.listInstanceId)\"/>\n" +
+                        "        <input value=\"Edit\" type=\"button\" data-icon=\"edit\" onclick=\"ShpanlistController.menuEditListInstance('").append(listInstanceIdString).append("')\"/>\n" +
                         "        <br/>\n" +
                         "\n" +
                         "    </div>\n" +
@@ -144,9 +144,7 @@ public class ListInstancePageServlet extends BasePageServlet {
         StringBuilder sb = new StringBuilder();
         appendListInstanceItemListElement(sb, item);
 
-        //todo:proper encoding
-
-        return sb.toString().replaceAll("\\\"", "\\\\\"");
+        return encodeHtmlForJSONTransport(sb);
     }
 
 
