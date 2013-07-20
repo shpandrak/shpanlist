@@ -1,12 +1,5 @@
 
 var ShpanlistController = {
-    loadApp: function(){
-        if (localStorage["signedInUser"] == null){
-            this.menuSignIn();
-        }else{
-            this.menuHome();
-        }
-    },
 
     doInstructions: function (instructions) {
         var htmlBindings = instructions.bindings;
@@ -47,11 +40,11 @@ var ShpanlistController = {
     },
 
     menuAddNewListTemplateItem: function (listTemplateId) {
-            $.mobile.changePage("/listTemplateItem.html", {role:'dialog'})
+            $.mobile.changePage("/addListTemplateItem/" + listTemplateId, {reloadPage:true, role:'dialog'})
     },
 
     menuAddNewListInstanceItem: function (listInstanceId) {
-            $.mobile.changePage("/listInstanceItem.html", {role:'dialog'})
+            $.mobile.changePage("/addListInstanceItem/" + listInstanceId, {reloadPage:true, role:'dialog'})
     },
 
     menuHome: function(){
@@ -141,7 +134,7 @@ var ShpanlistController = {
                     var userName = $(responseText).find("listUser").first().find("name").first().text();
                     ShpanlistController.signedInUser = userName;
                     localStorage["signedInUser"] = userName;
-                    ShpanlistController.loadApp();
+                    ShpanlistController.menuHome();
                 }else{
                     alert("Nope... " + responseText);
                 }
@@ -149,12 +142,8 @@ var ShpanlistController = {
     },
 
     menuListTemplate: function(listTemplateId){
-        localStorage['listTemplateId'] = listTemplateId;
-        ShpanlistController.getListTemplateFull(listTemplateId, function(responseXml){
-            ListTemplateView.data = responseXml;
-            ListTemplateView.listTemplateId = listTemplateId;
-            $.mobile.changePage('/listTemplate.html', {transition:'slide'});
-        });
+        ListTemplatePageView.listTemplateId = listTemplateId;
+        $.mobile.changePage('/listTemplate/' + listTemplateId, {reloadPage:true, transition:'slide'});
     },
 
     getListTemplateFull: function(listTemplateId, callback){
@@ -198,11 +187,11 @@ var ShpanlistController = {
             });
     },
 
-    removeListTemplateItem: function(listTemplateId, listTemplateItemId, callback){
-        ShpanlistController.doIt(
+    removeListTemplateItem: function(listTemplateId, listTemplateItemId){
+        ShpanlistController.doItPage('/listTemplate',
             { what: "removeListTemplateItem", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
-            function(responseText){
-                callback(responseText);
+            function(resplonse){
+                ShpanlistController.doInstructions(resplonse);
             });
 
     },
@@ -216,19 +205,19 @@ var ShpanlistController = {
 
     },
 
-    pushListTemplateItemUp: function(listTemplateId, listTemplateItemId, callback){
-        ShpanlistController.doIt(
+    pushListTemplateItemUp: function(listTemplateId, listTemplateItemId){
+        ShpanlistController.doItPage('/listTemplate',
             { what: "pushListTemplateItemUp", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
-            function(responseText){
-                callback(responseText);
+            function(response){
+                ShpanlistController.doInstructions(response);
             });
     },
 
-    pushListTemplateItemDown: function(listTemplateId, listTemplateItemId, callback){
-        ShpanlistController.doIt(
+    pushListTemplateItemDown: function(listTemplateId, listTemplateItemId){
+        ShpanlistController.doItPage('/listTemplate',
             { what: "pushListTemplateItemDown", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
-            function(responseText){
-                callback(responseText);
+            function(response){
+                ShpanlistController.doInstructions(response);
             });
     },
 
@@ -284,7 +273,7 @@ var ShpanlistController = {
     },
 
     menuCreateUser:function(){
-        window.location.replace("/createUser.html");
+        $.mobile.changePage("/createUser", {transition:'slide'})
     },
 
     createUser: function(userName, password, firstName, lastName, email){
@@ -316,6 +305,14 @@ var ShpanlistController = {
     updateListInstanceName: function(listInstanceId, listInstanceName){
         ShpanlistController.doItPage("/listInstanceEdit",
             { what: "updateListInstanceName", listInstanceId: listInstanceId, listInstanceName:listInstanceName},
+            function(response){
+                ShpanlistController.doInstructions (response);
+            });
+    },
+
+    updateListTemplateName: function(listTemplateId, listTemplateName){
+        ShpanlistController.doItPage("/listTemplate",
+            { what: "updateListTemplateName", listTemplateId: listTemplateId, listTemplateName:listTemplateName},
             function(response){
                 ShpanlistController.doInstructions (response);
             });

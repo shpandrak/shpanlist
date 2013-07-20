@@ -28,11 +28,10 @@ public abstract class BasePageServlet extends HttpServlet{
         return "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
                 "\t<link rel=\"stylesheet\" href=\"/include/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css\" />\n" +
                 "\t<script src=\"/include/jquery-1.9.1.min.js\"></script>\n" +
-                "\t<script src=\"/customInit.js\"></script>\n" +
                 "\t<script src=\"/include/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js\"></script>\n" +
                 "\t<script src=\"/ShpanlistController.js\"></script>\n" +
                 "\t<script src=\"/homePageView.js\"></script>\n" +
-                "\t<script src=\"/listTemplateView.js\"></script>\n" +
+                "\t<script src=\"/listTemplatePageView.js\"></script>\n" +
                 "\t<script src=\"/listInstancePageView.js\"></script>\n" +
                 "\t<script src=\"/listInstanceEditPageView.js\"></script>\n";
     }

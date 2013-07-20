@@ -61,15 +61,15 @@ var homeView = {
 
 
     createNewItem: function(){
-        ShpanlistController.addNewListTemplateItem(ListTemplateView.listTemplateId, txtNewItemName.value, txtNewItemDescription.value, txtNewItemDefaultAmount.value)
+        ShpanlistController.addNewListTemplateItem(ListTemplatePageView.listTemplateId, txtNewItemName.value, txtNewItemDescription.value, txtNewItemDefaultAmount.value)
     },
 
     removeItem: function(listTemplateItemId){
-        ShpanlistController.removeListTemplateItem(ListTemplateView.listTemplateId, listTemplateItemId);
+        ShpanlistController.removeListTemplateItem(ListTemplatePageView.listTemplateId, listTemplateItemId);
     },
 
     createListFromTemplate: function(){
-        ShpanlistController.createListFromTemplate(ListTemplateView.listTemplateId);
+        ShpanlistController.createListFromTemplate(ListTemplatePageView.listTemplateId);
     },
 
     removeListInstance: function removeListInstance(listInstanceId){

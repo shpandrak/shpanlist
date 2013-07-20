@@ -1,18 +1,13 @@
 package com.shpandrak.shpanlist.web.pages;
 
 import com.shpandrak.persistence.PersistenceException;
-import com.shpandrak.shpanlist.model.ListInstance;
-import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
-import com.shpandrak.shpanlist.services.ListInstanceService;
-import com.shpandrak.shpanlist.services.ListTemplateService;
 import com.shpandrak.shpanlist.web.HtmlResponsePrinter;
 import com.shpandrak.shpanlist.web.UserMustSignInException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created with love
@@ -73,7 +68,7 @@ public class SignInPageServlet extends BasePageServlet {
                 "                </tr>\n" +
                 "                <tr>\n" +
                 "                    <td>\n" +
-                "                        <a href=\"createUser.html\" data-transition=\"slide\">Sign Up</a>\n" +
+                "                        <a href=\"javascript:ShpanlistController.menuCreateUser()\" data-transition=\"slide\">Sign Up</a>\n" +
                 "                    </td>\n" +
                 "                </tr>\n" +
                 "            </table>\n" +

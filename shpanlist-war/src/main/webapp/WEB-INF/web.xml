@@ -18,6 +18,18 @@
         <servlet-class>com.shpandrak.shpanlist.web.pages.ListInstancePageServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AddListInstanceItemPageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.pages.AddListInstanceItemPageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddListTemplateItemPageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.pages.AddListTemplateItemPageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListTemplatePageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.pages.ListTemplatePageServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ListInstanceEditPageServlet</servlet-name>
         <servlet-class>com.shpandrak.shpanlist.web.pages.ListInstanceEditPageServlet</servlet-class>
     </servlet>
@@ -28,6 +40,10 @@
     <servlet>
         <servlet-name>SignInPageServlet</servlet-name>
         <servlet-class>com.shpandrak.shpanlist.web.pages.SignInPageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateUserPageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.pages.CreateUserPageServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InitDataServlet</servlet-name>
@@ -76,8 +92,20 @@
         <url-pattern>/listInstance/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ListTemplatePageServlet</servlet-name>
+        <url-pattern>/listTemplate/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ListInstanceEditPageServlet</servlet-name>
         <url-pattern>/listInstanceEdit/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddListInstanceItemPageServlet</servlet-name>
+        <url-pattern>/addListInstanceItem/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddListTemplateItemPageServlet</servlet-name>
+        <url-pattern>/addListTemplateItem/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HomePageServlet</servlet-name>
@@ -86,6 +114,10 @@
     <servlet-mapping>
         <servlet-name>SignInPageServlet</servlet-name>
         <url-pattern>/signIn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateUserPageServlet</servlet-name>
+        <url-pattern>/createUser</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>InitDataServlet</servlet-name>

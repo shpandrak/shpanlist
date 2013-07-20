@@ -61,11 +61,11 @@ var HomePageView = {
 
 
     removeItem: function(listTemplateItemId){
-        ShpanlistController.removeListTemplateItem(ListTemplateView.listTemplateId, listTemplateItemId);
+        ShpanlistController.removeListTemplateItem(ListTemplatePageView.listTemplateId, listTemplateItemId);
     },
 
     createListFromTemplate: function(){
-        ShpanlistController.createListFromTemplate(ListTemplateView.listTemplateId);
+        ShpanlistController.createListFromTemplate(ListTemplatePageView.listTemplateId);
     },
 
     removeListInstance: function removeListInstance(listInstanceId){

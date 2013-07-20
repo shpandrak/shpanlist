@@ -1,6 +1,7 @@
 package com.shpandrak.shpanlist.services;
 
 import com.shpandrak.datamodel.OrderByClauseEntry;
+import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.datamodel.relationship.RelationshipLoadLevel;
 import com.shpandrak.persistence.PersistenceException;
@@ -165,6 +166,16 @@ public abstract class ListTemplateService {
         } catch (Exception ex) {
             PersistenceLayerManager.getConnectionProvider().rollbackTransaction();
             throw new RuntimeException(ex);
+        } finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
+    }
+
+    public static void updateListTemplateName(EntityKey listTemplateId, String listTemplateName) throws PersistenceException {
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try {
+            ListTemplateManager listTemplateManager = new ListTemplateManager();
+            listTemplateManager.updateFieldValueById(ListTemplate.DESCRIPTOR.nameFieldDescriptor, listTemplateName, listTemplateId);
         } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
