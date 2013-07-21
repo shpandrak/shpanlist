@@ -1,5 +1,4 @@
 var HomePageView = {
-    data:null,
 
     refresh: function(){
         this.data = null;
@@ -75,4 +74,4 @@ var HomePageView = {
         }
     }
 
-}
+};

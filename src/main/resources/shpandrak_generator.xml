@@ -17,6 +17,10 @@
                     <name>persistence-layer-generator</name>
                     <value>com.shpandrak.codegen.GoogleDatastoreLayerGenerator</value>
                 </property>
+                <property>
+                    <name>alternate-xml-converter-listUser</name>
+                    <value>com.shpandrak.shpanlist.xml.ListUserXMLConverter</value>
+                </property>
             </properties>
         </generator>
         <generator>

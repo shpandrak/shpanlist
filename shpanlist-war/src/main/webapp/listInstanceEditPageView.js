@@ -60,7 +60,10 @@ var ListInstanceEditPageView = {
     },
 
     removeItem: function(listInstanceItemId){
-        ShpanlistController.removeListInstanceItem(ListInstanceEditPageView.listInstanceId, listInstanceItemId);
+        var conf = confirm("Are you sure you want to remove this item?");
+        if (conf){
+            ShpanlistController.removeListInstanceItem(ListInstanceEditPageView.listInstanceId, listInstanceItemId);
+        }
     },
 
     pushItemUp: function(listInstanceItemId){

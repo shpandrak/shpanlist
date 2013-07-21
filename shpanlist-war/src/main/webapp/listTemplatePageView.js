@@ -21,7 +21,10 @@ var ListTemplatePageView = {
     },
 
     removeItem: function(listTemplateItemId){
-        ShpanlistController.removeListTemplateItem(ListTemplatePageView.listTemplateId, listTemplateItemId);
+        var conf = confirm("Are you sure you want to remove this item?");
+        if (conf){
+            ShpanlistController.removeListTemplateItem(ListTemplatePageView.listTemplateId, listTemplateItemId);
+        }
     },
 
     pushItemUp: function(listTemplateItemId){
