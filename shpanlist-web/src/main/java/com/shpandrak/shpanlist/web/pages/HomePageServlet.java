@@ -1,5 +1,7 @@
 package com.shpandrak.shpanlist.web.pages;
 
+import com.shpandrak.datamodel.field.EntityKey;
+import com.shpandrak.datamodel.field.Key;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
 import com.shpandrak.shpanlist.model.ListInstance;
@@ -40,8 +42,9 @@ public class HomePageServlet extends BasePageServlet {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             String listInstanceId = request.getParameter("listInstanceId");
-            ListInstanceService.removeListInstance(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId));
-            return refreshListsResponsePrinter(loggedInUser);
+            EntityKey id = ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId);
+            ListInstanceService.removeListInstance(id);
+            return refreshListsResponsePrinter(loggedInUser, id);
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
@@ -52,9 +55,9 @@ public class HomePageServlet extends BasePageServlet {
         return HtmlResponsePrinter.redirectResponse("/listInstanceEdit/" + newListInstance.getId().toString());
     }
 
-    private HtmlResponsePrinter refreshListsResponsePrinter(LoggedInUser loggedInUser) throws PersistenceException {
+    private HtmlResponsePrinter refreshListsResponsePrinter(LoggedInUser loggedInUser, Key uglyFilterDontAsk) throws PersistenceException {
         StringBuilder sb = new StringBuilder();
-        buildListsHmtl(sb, loggedInUser);
+        buildListsHmtl(sb, loggedInUser, uglyFilterDontAsk);
         return new HtmlResponsePrinter(
                 Arrays.asList(new HtmlBindingResponse("#lstLists", encodeHtmlForJSONTransport(sb))),
                 Arrays.asList(new HtmlRefreshResponse("#lstLists", "listview")));
@@ -95,8 +98,27 @@ public class HomePageServlet extends BasePageServlet {
     }
 
     private void buildListsHmtl(StringBuilder sb, LoggedInUser loggedInUser) throws PersistenceException {
-        List<ListInstance> userListInstances = ListInstanceService.getUserLists(loggedInUser.getUserId());
+        buildListsHmtl(sb, loggedInUser, null);
+    }
+    private void buildListsHmtl(StringBuilder sb, LoggedInUser loggedInUser, Key uglyEntityFilterId) throws PersistenceException {
         List<ListTemplate> userListTemplates = ListTemplateService.getUserLists(loggedInUser.getUserId());
+        List<ListInstance> userListInstances = ListInstanceService.getUserLists(loggedInUser.getUserId());
+
+        if (uglyEntityFilterId != null){
+
+            int toRemove = -1;
+            int idx = -1;
+            for (ListInstance currList : userListInstances){
+                idx++;
+                if (uglyEntityFilterId.equals(currList.getId())){
+                    toRemove = idx;
+                    break;
+                }
+            }
+            if (toRemove > -1){
+                userListInstances.remove(toRemove);
+            }
+        }
 
         // List instances divider
         sb.append("<li data-role=\"list-divider\">Active Lists</li>");
