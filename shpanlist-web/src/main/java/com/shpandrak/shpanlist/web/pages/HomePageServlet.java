@@ -1,6 +1,7 @@
 package com.shpandrak.shpanlist.web.pages;
 
 import com.shpandrak.persistence.PersistenceException;
+import com.shpandrak.persistence.PersistenceLayerManager;
 import com.shpandrak.shpanlist.model.ListInstance;
 import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
@@ -36,9 +37,14 @@ public class HomePageServlet extends BasePageServlet {
 
 
     private HtmlResponsePrinter removeListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        ListInstanceService.removeListInstance(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId));
-        return refreshListsResponsePrinter(loggedInUser);
+        PersistenceLayerManager.beginOrJoinConnectionSession();
+        try{
+            String listInstanceId = request.getParameter("listInstanceId");
+            ListInstanceService.removeListInstance(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId));
+            return refreshListsResponsePrinter(loggedInUser);
+        }finally {
+            PersistenceLayerManager.endJointConnectionSession();
+        }
     }
 
     private HtmlResponsePrinter createNewListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
@@ -58,7 +64,7 @@ public class HomePageServlet extends BasePageServlet {
     public boolean drawPage(HttpServletRequest request, HttpServletResponse response, StringBuilder
             sb, LoggedInUser loggedInUser) throws IOException, PersistenceException {
         sb.append("<head>\n" +
-                "\t<title>").append("Hi Dude").append("</title>\n").append(
+                "\t<title>").append("Shpanlist").append("</title>\n").append(
                 getHeaderConstants());
 
         sb.append("</head>\n" +

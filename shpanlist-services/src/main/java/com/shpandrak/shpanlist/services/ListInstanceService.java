@@ -49,14 +49,14 @@ public abstract class ListInstanceService {
             ListInstanceItemManager listInstanceItemManager = new ListInstanceItemManager();
             ListTemplate listTemplate = listTemplateManager.getById(listTemplateId, RelationshipLoadLevel.FULL);
 
-            Date listExpirationDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7);
-            String listName = listTemplate.getName() + " " + shortDayDate.format(listExpirationDate);
+            Date creationDate = new Date();
+            String listName = listTemplate.getName() + " " + shortDayDate.format(creationDate);
 
             // Creating the list object
             ListInstance listInstance = new ListInstance(
                     listName,
-                    listExpirationDate,
-                    new Date(),
+                    creationDate,
+                    null,
                     creatingUserId);
 
             // Relating it to the template
@@ -116,7 +116,7 @@ public abstract class ListInstanceService {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListInstanceManager listInstanceManager = new ListInstanceManager();
-            listInstanceManager.delete(listInstanceId);
+            listInstanceManager.updateFieldValueById(ListInstance.DESCRIPTOR.deletionDateFieldDescriptor, new Date(), listInstanceId);
         }finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
@@ -237,7 +237,13 @@ public abstract class ListInstanceService {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try {
             ListInstanceManager listInstanceManager = new ListInstanceManager();
-            return listInstanceManager.listByCreatedByUserRelationship(userId);
+            return listInstanceManager.list(
+                    new QueryFilter(
+                            FieldFilterCondition.concatenate(
+                                    FieldFilterLogicalOperatorType.AND,
+                                    new RelationshipFilterCondition(ListInstance.DESCRIPTOR.createdByUserRelationshipDescriptor, userId),
+                                    new BasicFieldFilterCondition<Date>(ListInstance.DESCRIPTOR.deletionDateFieldDescriptor, FilterConditionOperatorType.EQUALS, null)),
+                                    null, null, Arrays.asList(new OrderByClauseEntry(ListInstance.DESCRIPTOR.creationDateFieldDescriptor, false))));
         } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }
@@ -260,7 +266,7 @@ public abstract class ListInstanceService {
         try {
             ListInstanceManager listInstanceManager = new ListInstanceManager();
             Date nowDate = new Date();
-            ListInstance newListInstance = new ListInstance("New List " + shortDayDate.format(nowDate), new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 14), nowDate, userId);
+            ListInstance newListInstance = new ListInstance("New List " + shortDayDate.format(nowDate), nowDate, null, userId);
             listInstanceManager.create(newListInstance);
             return newListInstance;
 

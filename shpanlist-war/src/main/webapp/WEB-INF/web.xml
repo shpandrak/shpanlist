@@ -10,10 +10,6 @@
         <servlet-class>com.shpandrak.shpanlist.web.DoItServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>WelcomeServlet</servlet-name>
-        <servlet-class>com.shpandrak.shpanlist.web.WelcomeServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ListInstancePageServlet</servlet-name>
         <servlet-class>com.shpandrak.shpanlist.web.pages.ListInstancePageServlet</servlet-class>
     </servlet>
@@ -82,10 +78,6 @@
     <servlet-mapping>
         <servlet-name>DoItServlet</servlet-name>
         <url-pattern>/doIt</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>WelcomeServlet</servlet-name>
-        <url-pattern>/welcome</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ListInstancePageServlet</servlet-name>

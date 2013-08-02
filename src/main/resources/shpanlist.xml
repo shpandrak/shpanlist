@@ -101,12 +101,13 @@
                     <max-length>255</max-length>
                     <mandatory>true</mandatory>
                 </string-field>
-                <date-field name="expirationDate">
-                    <mandatory>true</mandatory>
-                </date-field>
                 <date-field name="creationDate">
                     <mandatory>true</mandatory>
                 </date-field>
+                <date-field name="deletionDate">
+                    <mandatory>false</mandatory>
+                </date-field>
+
             </fields>
             <relations>
                 <one-to-many>
