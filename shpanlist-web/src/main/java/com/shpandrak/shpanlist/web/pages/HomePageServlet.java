@@ -1,9 +1,7 @@
 package com.shpandrak.shpanlist.web.pages;
 
-import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.shpanlist.model.ListInstance;
-import com.shpandrak.shpanlist.model.ListInstanceItem;
 import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 import com.shpandrak.shpanlist.services.ListInstanceService;
@@ -28,15 +26,24 @@ public class HomePageServlet extends BasePageServlet {
     public HtmlResponsePrinter doItPlease(HttpServletRequest request, HttpServletResponse response, LoggedInUser loggedInUser, String what) throws IOException, PersistenceException, UserMustSignInException {
         if ("removeListInstance".equals(what)) {
             return removeListInstance(loggedInUser, request, response);
+        }else if ("createNewListInstance".equals(what)) {
+            return createNewListInstance(loggedInUser, request, response);
         } else {
             throw new IllegalArgumentException("Invalid action " + what);
         }
     }
 
+
+
     private HtmlResponsePrinter removeListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
         String listInstanceId = request.getParameter("listInstanceId");
         ListInstanceService.removeListInstance(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId));
         return refreshListsResponsePrinter(loggedInUser);
+    }
+
+    private HtmlResponsePrinter createNewListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        ListInstance newListInstance = ListInstanceService.createNewListInstance(loggedInUser.getUserId());
+        return HtmlResponsePrinter.redirectResponse("/listInstanceEdit/" + newListInstance.getId().toString());
     }
 
     private HtmlResponsePrinter refreshListsResponsePrinter(LoggedInUser loggedInUser) throws PersistenceException {
@@ -71,7 +78,7 @@ public class HomePageServlet extends BasePageServlet {
                         "        <br/>\n" +
                         "    </div>\n" +
                         "    <div data-role=\"footer\">\n" +
-                        "        <a data-icon=\"plus\" href='javascript:ShpanlistController.menuNewListInstance()'>New List</a>\n" +
+                        "        <a data-icon=\"plus\" href='javascript:ShpanlistController.createNewListInstance()'>New List</a>\n" +
                         "        <a href='javascript:ShpanlistController.signOut()'>Sign Out</a>\n" +
                         "    </div>\n" +
                         "</div>\n" +

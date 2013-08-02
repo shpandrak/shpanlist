@@ -1,6 +1,7 @@
 package com.shpandrak.shpanlist.web;
 
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -10,12 +11,24 @@ import java.util.List;
  * Time: 11:11
  */
 public class HtmlResponsePrinter {
-    private List<HtmlBindingResponse> bindings;
-    private List<HtmlRefreshResponse> refreshResponses;
+    private final List<HtmlBindingResponse> bindings;
+    private final List<HtmlRefreshResponse> refreshResponses;
+    private final HtmlRedirectResponse redirectResponse;
+
+    public static HtmlResponsePrinter redirectResponse(String targetPage){
+        return new HtmlResponsePrinter(Collections.<HtmlBindingResponse>emptyList(), Collections.<HtmlRefreshResponse>emptyList(), new HtmlRedirectResponse(targetPage));
+    }
+    public static HtmlResponsePrinter emptyResponse(){
+        return new HtmlResponsePrinter(Collections.<HtmlBindingResponse>emptyList(), Collections.<HtmlRefreshResponse>emptyList(), null);
+    }
 
     public HtmlResponsePrinter(List<HtmlBindingResponse> bindings, List<HtmlRefreshResponse> refreshResponses) {
+        this(bindings, refreshResponses, null);
+    }
+    public HtmlResponsePrinter(List<HtmlBindingResponse> bindings, List<HtmlRefreshResponse> refreshResponses, HtmlRedirectResponse redirectResponse) {
         this.bindings = bindings;
         this.refreshResponses = refreshResponses;
+        this.redirectResponse = redirectResponse;
     }
 
     public List<HtmlBindingResponse> getBindings() {
@@ -24,6 +37,10 @@ public class HtmlResponsePrinter {
 
     public List<HtmlRefreshResponse> getRefreshResponses() {
         return refreshResponses;
+    }
+
+    public HtmlRedirectResponse getRedirectResponse() {
+        return redirectResponse;
     }
 
     public void printResponse(PrintWriter writer) {
@@ -44,6 +61,7 @@ public class HtmlResponsePrinter {
             }
             writer.println("]");
         }
+
         if (refreshResponses != null && !refreshResponses.isEmpty()){
             writer.println(",\"refreshResponses\":[");
             boolean first = true;
@@ -57,6 +75,10 @@ public class HtmlResponsePrinter {
             }
             writer.println("]");
 
+        }
+
+        if (redirectResponse != null){
+            writer.append(",\"redirectResponse\":{\"target\":\"").append(redirectResponse.getTargetPage()).append("\"}");
         }
 
     }

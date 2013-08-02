@@ -1,8 +1,12 @@
 package com.shpandrak.shpanlist.web.pages;
 
 import com.shpandrak.persistence.PersistenceException;
+import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
+import com.shpandrak.shpanlist.services.ListTemplateService;
+import com.shpandrak.shpanlist.web.EmptyResponsePrinter;
 import com.shpandrak.shpanlist.web.HtmlResponsePrinter;
+import com.shpandrak.shpanlist.web.ResponsePrinter;
 import com.shpandrak.shpanlist.web.UserMustSignInException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +23,25 @@ public class AddListTemplateItemPageServlet extends BasePageServlet {
 
     @Override
     public HtmlResponsePrinter doItPlease(HttpServletRequest request, HttpServletResponse response, LoggedInUser loggedInUser, String what) throws IOException, PersistenceException, UserMustSignInException {
-        throw new IllegalArgumentException("Unsupported operation by page: " + what);
+
+        if ("addListTemplateItem".equals(what)) {
+            return addListTemplateItem(loggedInUser, request, response);
+        }else{
+            throw new IllegalArgumentException("Unsupported operation by page: " + what);
+        }
+    }
+
+    private HtmlResponsePrinter addListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listTemplateId = request.getParameter("listTemplateId");
+        String listTemplateItemName = request.getParameter("listTemplateItemName");
+        String listTemplateItemDescription = request.getParameter("listTemplateItemDescription");
+        String listTemplateItemDefaultAmount = request.getParameter("listTemplateItemDefaultAmount");
+        Integer defaultAmount = null;
+        if (listTemplateItemDefaultAmount != null && !listTemplateItemDefaultAmount.isEmpty()){
+            defaultAmount = Integer.valueOf(listTemplateItemDefaultAmount);
+        }
+        ListTemplateService.addListTemplateItem(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), listTemplateItemName, listTemplateItemDescription, defaultAmount);
+        return HtmlResponsePrinter.emptyResponse();
     }
 
     @Override

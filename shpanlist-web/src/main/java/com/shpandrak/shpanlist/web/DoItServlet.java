@@ -64,53 +64,12 @@ public class DoItServlet extends HttpServlet {
 
             if (loggedInUser == null){
                 throw new UserMustSignInException();
-            }else if ("getListTemplateFull".equals(what)){
-                return getListTemplateFull(loggedInUser, request);
-            }else if ("getListInstanceFull".equals(what)){
-                return getListInstanceFull(loggedInUser, request);
-            }else if ("addListTemplateItem".equals(what)){
-                return addListTemplateItem(loggedInUser, request, response);
-            }else if ("addListInstanceItem".equals(what)){
-                return addListInstanceItem(loggedInUser, request, response);
-            }else if ("removeListTemplateItem".equals(what)){
-                return removeListTemplateItem(loggedInUser, request, response);
             }else if ("createListFromTemplate".equals(what)){
                 return createListFromTemplate(loggedInUser, request, response);
-            }else if ("pushListTemplateItemDown".equals(what)){
-                return pushListTemplateItemDown(loggedInUser, request, response);
-            }else if ("pushListTemplateItemUp".equals(what)){
-                return pushListTemplateItemUp(loggedInUser, request, response);
-            }else if ("pushListInstanceItemDown".equals(what)){
-                return pushListInstanceItemDown(loggedInUser, request, response);
-            }else if ("createNewListInstance".equals(what)){
-                return createNewListInstance(loggedInUser, request, response);
             }else {
                 throw new IllegalArgumentException("Invalid action " + what);
             }
         }
-    }
-
-    private ResponsePrinter createNewListInstance(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        ListInstance newListInstance = ListInstanceService.createNewListInstance(loggedInUser.getUserId());
-        return new DefaultResponsePrinter<ListInstance>(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR), newListInstance);
-    }
-
-    private ResponsePrinter updateListInstanceName(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        String listInstanceName = request.getParameter("listInstanceName");
-
-        ListInstanceService.updateListInstanceName(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId), listInstanceName);
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter listUserData(LoggedInUser loggedInUser, HttpServletRequest request) throws PersistenceException, IOException {
-        List<ListTemplate> userListTemplates = ListTemplateService.getUserLists(loggedInUser.getUserId());
-        List<ListInstance> userListInstances = ListInstanceService.getUserLists(loggedInUser.getUserId());
-        return new ResponsePrinterWrapper("userData", Arrays.<ResponsePrinter>asList(
-                new DefaultResponsePrinter<ListTemplate>(new EntityXMLConverter<ListTemplate>(ListTemplate.DESCRIPTOR), userListTemplates), 
-                new DefaultResponsePrinter<ListInstance>(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR), userListInstances) 
-        ));
-        
     }
 
     private ResponsePrinter signOut(LoggedInUser loggedInUser, HttpServletRequest request) {
@@ -141,100 +100,6 @@ public class DoItServlet extends HttpServlet {
     private ResponsePrinter createListFromTemplate(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
         String listTemplateId = request.getParameter("listTemplateId");
         ListInstance listInstance = ListInstanceService.createFromTemplate(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), loggedInUser.getUserId());
-        return new DefaultResponsePrinter<ListInstance>(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR), listInstance);
-    }
-
-    private ResponsePrinter addListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listTemplateId = request.getParameter("listTemplateId");
-        String listTemplateItemName = request.getParameter("listTemplateItemName");
-        String listTemplateItemDescription = request.getParameter("listTemplateItemDescription");
-        String listTemplateItemDefaultAmount = request.getParameter("listTemplateItemDefaultAmount");
-        Integer defaultAmount = null;
-        if (listTemplateItemDefaultAmount != null && !listTemplateItemDefaultAmount.isEmpty()){
-            defaultAmount = Integer.valueOf(listTemplateItemDefaultAmount);
-        }
-        ListTemplateService.addListTemplateItem(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), listTemplateItemName, listTemplateItemDescription, defaultAmount);
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter addListInstanceItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        String listInstanceItemName = request.getParameter("listInstanceItemName");
-        String listInstanceItemDescription = request.getParameter("listInstanceItemDescription");
-        String listInstanceItemDefaultAmount = request.getParameter("listInstanceItemAmount");
-        Integer amount = null;
-        if (listInstanceItemDefaultAmount != null && !listInstanceItemDefaultAmount.isEmpty()){
-            amount = Integer.valueOf(listInstanceItemDefaultAmount);
-        }
-        ListInstanceService.addListInstanceItem(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId), listInstanceItemName, listInstanceItemDescription, amount);
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter removeListTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listTemplateId = request.getParameter("listTemplateId");
-        String listTemplateItemId = request.getParameter("listTemplateItemId");
-        ListTemplateService.removeListTemplateItem(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter removeListInstanceItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        String listInstanceItemId = request.getParameter("listInstanceItemId");
-        ListInstanceService.removeListInstanceItem(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId));
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter pushListTemplateItemDown(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listTemplateId = request.getParameter("listTemplateId");
-        String listTemplateItemId = request.getParameter("listTemplateItemId");
-        ListTemplateService.pushListTemplateItemDown(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter pushListTemplateItemUp(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listTemplateId = request.getParameter("listTemplateId");
-        String listTemplateItemId = request.getParameter("listTemplateItemId");
-        ListTemplateService.pushListTemplateItemUp(ListTemplateItem.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateItemId));
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter pushListInstanceItemDown(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        String listInstanceItemId = request.getParameter("listInstanceItemId");
-        ListInstanceService.pushListInstanceItemDown(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId));
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter pushListInstanceItemUp(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        String listInstanceItemId = request.getParameter("listInstanceItemId");
-        ListInstanceService.pushListInstanceItemUp(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId));
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter gotListInstanceItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        String listInstanceItemId = request.getParameter("listInstanceItemId");
-        ListInstanceService.gotItem(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId));
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter bringBackItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
-        String listInstanceId = request.getParameter("listInstanceId");
-        String listInstanceItemId = request.getParameter("listInstanceItemId");
-        ListInstanceService.gotItem(ListInstanceItem.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceItemId), false);
-        return new EmptyResponsePrinter();
-    }
-
-    private ResponsePrinter getListTemplateFull(LoggedInUser loggedInUser, HttpServletRequest request) throws PersistenceException, IOException {
-        String listTemplateId = request.getParameter("listTemplateId");
-        ListTemplate listTemplate = ListTemplateService.getListTemplateFull(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId));
-        return new DefaultResponsePrinter<ListTemplate>(new EntityXMLConverter<ListTemplate>(ListTemplate.DESCRIPTOR),listTemplate);
-    }
-
-    private ResponsePrinter getListInstanceFull(LoggedInUser loggedInUser, HttpServletRequest request) throws PersistenceException, IOException {
-        String listTemplateId = request.getParameter("listInstanceId");
-        ListInstance listInstance = ListInstanceService.getListInstanceFull(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId));
         return new DefaultResponsePrinter<ListInstance>(new EntityXMLConverter<ListInstance>(ListInstance.DESCRIPTOR), listInstance);
     }
 

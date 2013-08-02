@@ -29,7 +29,14 @@ var ShpanlistController = {
                         break;
                 }
             }
+        }
 
+        var redirectResponse = instructions.redirectResponse;
+        if (redirectResponse != undefined && redirectResponse != null){
+            var targetPage = redirectResponse.target;
+            if (targetPage != null && targetPage != ""){
+                $.mobile.changePage(targetPage, {reloadPage:true});
+            }
         }
 
     },
@@ -118,14 +125,6 @@ var ShpanlistController = {
             });
     },
 
-    listUserData: function(callback){
-        ShpanlistController.doIt({ what: "listUserData"},
-            function(responseText){
-                callback(responseText);
-            });
-
-    },
-
     signIn: function (userName, password) {
         ShpanlistController.doIt(
             { what: "signIn", userName: userName, password: password },
@@ -146,22 +145,6 @@ var ShpanlistController = {
         $.mobile.changePage('/listTemplate/' + listTemplateId, {reloadPage:true, transition:'slide'});
     },
 
-    getListTemplateFull: function(listTemplateId, callback){
-        ShpanlistController.doIt(
-            { what: "getListTemplateFull", listTemplateId: listTemplateId },
-            function(responseText){
-                callback(responseText);
-            });
-    },
-
-    getListInstanceFull: function (listInstanceId, callback) {
-        ShpanlistController.doIt(
-            { what: "getListInstanceFull", listInstanceId: listInstanceId },
-            function (responseText) {
-                callback(responseText)
-            });
-    },
-
     menuListInstance: function(listInstanceId){
         $.mobile.changePage('/listInstance/' + listInstanceId, {transition:'slide', reloadPage:true});
     },
@@ -172,26 +155,26 @@ var ShpanlistController = {
     },
 
     addNewListTemplateItem: function(listTemplateId, listTemplateItemName, listTemplateItemDescription, listTemplateItemDefaultAmount, callback){
-        ShpanlistController.doIt(
+        ShpanlistController.doItPage('/addListTemplateItem',
             { what: "addListTemplateItem", listTemplateId:listTemplateId, listTemplateItemName: listTemplateItemName, listTemplateItemDescription:listTemplateItemDescription, listTemplateItemDefaultAmount:listTemplateItemDefaultAmount},
-            function(responseText){
-                callback(responseText);
+            function(response){
+                callback(response);
             });
     },
 
     addNewListInstanceItem: function(listInstanceId, listInstanceItemName, listInstanceItemDescription, listInstanceItemAmount, callback){
-        ShpanlistController.doIt(
+        ShpanlistController.doItPage('/addListInstanceItem',
             { what: "addListInstanceItem", listInstanceId:listInstanceId, listInstanceItemName: listInstanceItemName, listInstanceItemDescription:listInstanceItemDescription, listInstanceItemAmount:listInstanceItemAmount},
-            function(responseText){
-                callback(responseText);
+            function(response){
+                callback(response);
             });
     },
 
     removeListTemplateItem: function(listTemplateId, listTemplateItemId){
         ShpanlistController.doItPage('/listTemplate',
             { what: "removeListTemplateItem", listTemplateId:listTemplateId, listTemplateItemId: listTemplateItemId},
-            function(resplonse){
-                ShpanlistController.doInstructions(resplonse);
+            function(response){
+                ShpanlistController.doInstructions(response);
             });
 
     },
@@ -240,8 +223,8 @@ var ShpanlistController = {
     gotListInstanceItem: function(listInstanceId, listInstanceItemId, callback){
         ShpanlistController.doIt(
             { what: "gotListInstanceItem", listInstanceId:listInstanceId, listInstanceItemId: listInstanceItemId},
-            function(responseText){
-                callback(responseText);
+            function(response){
+                callback(response);
             });
 
     },
@@ -265,10 +248,10 @@ var ShpanlistController = {
     },
 
     createListFromTemplate:function(listTemplateId){
-        ShpanlistController.doIt(
+        ShpanlistController.doItPage('/listTemplate',
             { what: "createListFromTemplate", listTemplateId:listTemplateId},
-            function(responseText){
-                ShpanlistController.menuListInstance($(responseText).attr("id"));
+            function(response){
+                ShpanlistController.doInstructions(response);
             });
     },
 
@@ -279,7 +262,7 @@ var ShpanlistController = {
     createUser: function(userName, password, firstName, lastName, email){
         ShpanlistController.doIt(
             { what: "createUser", userName:userName, password:password, firstName:firstName, lastName:lastName, email:email},
-            function(responseText){
+            function(response){
                 ShpanlistController.menuHome();
             });
     },
@@ -287,7 +270,7 @@ var ShpanlistController = {
     signOut: function(){
         ShpanlistController.doIt(
             { what: "signOut"},
-            function(responseText){
+            function(response){
                 ShpanlistController.signedInUser = null;
                 localStorage.removeItem("signedInUser");
                 window.location.replace("/");
@@ -318,12 +301,11 @@ var ShpanlistController = {
             });
     },
 
-    menuNewListInstance: function(){
-        ShpanlistController.doIt(
+    createNewListInstance: function(){
+        ShpanlistController.doItPage("/home",
             { what: "createNewListInstance"},
-            function(responseXml){
-                var listInstanceId = $(responseXml).attr('id');
-                ShpanlistController.menuEditListInstance(listInstanceId);
+            function(response){
+                ShpanlistController.doInstructions (response);
             });
     }
 

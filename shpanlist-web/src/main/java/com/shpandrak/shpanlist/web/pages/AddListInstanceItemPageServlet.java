@@ -1,8 +1,12 @@
 package com.shpandrak.shpanlist.web.pages;
 
 import com.shpandrak.persistence.PersistenceException;
+import com.shpandrak.shpanlist.model.ListInstance;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
+import com.shpandrak.shpanlist.services.ListInstanceService;
+import com.shpandrak.shpanlist.web.EmptyResponsePrinter;
 import com.shpandrak.shpanlist.web.HtmlResponsePrinter;
+import com.shpandrak.shpanlist.web.ResponsePrinter;
 import com.shpandrak.shpanlist.web.UserMustSignInException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +23,11 @@ public class AddListInstanceItemPageServlet extends BasePageServlet {
 
     @Override
     public HtmlResponsePrinter doItPlease(HttpServletRequest request, HttpServletResponse response, LoggedInUser loggedInUser, String what) throws IOException, PersistenceException, UserMustSignInException {
-        throw new IllegalArgumentException("Unsupported operation by page: " + what);
+        if ("addListInstanceItem".equals(what)){
+            return addListInstanceItem(loggedInUser, request, response);
+        }else {
+            throw new IllegalArgumentException("Unsupported operation by page: " + what);
+        }
     }
 
     @Override
@@ -91,4 +99,18 @@ public class AddListInstanceItemPageServlet extends BasePageServlet {
                         "</body>\n");
         return true;
     }
+
+    private HtmlResponsePrinter addListInstanceItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listInstanceId = request.getParameter("listInstanceId");
+        String listInstanceItemName = request.getParameter("listInstanceItemName");
+        String listInstanceItemDescription = request.getParameter("listInstanceItemDescription");
+        String listInstanceItemDefaultAmount = request.getParameter("listInstanceItemAmount");
+        Integer amount = null;
+        if (listInstanceItemDefaultAmount != null && !listInstanceItemDefaultAmount.isEmpty()){
+            amount = Integer.valueOf(listInstanceItemDefaultAmount);
+        }
+        ListInstanceService.addListInstanceItem(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId), listInstanceItemName, listInstanceItemDescription, amount);
+        return HtmlResponsePrinter.emptyResponse();
+    }
+
 }

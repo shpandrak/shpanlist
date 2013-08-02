@@ -2,14 +2,14 @@ package com.shpandrak.shpanlist.web.pages;
 
 import com.shpandrak.datamodel.field.EntityKey;
 import com.shpandrak.persistence.PersistenceException;
+import com.shpandrak.shpanlist.model.ListInstance;
 import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.ListTemplateItem;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
+import com.shpandrak.shpanlist.services.ListInstanceService;
 import com.shpandrak.shpanlist.services.ListTemplateService;
-import com.shpandrak.shpanlist.web.HtmlBindingResponse;
-import com.shpandrak.shpanlist.web.HtmlRefreshResponse;
-import com.shpandrak.shpanlist.web.HtmlResponsePrinter;
-import com.shpandrak.shpanlist.web.UserMustSignInException;
+import com.shpandrak.shpanlist.web.*;
+import com.shpandrak.xml.EntityXMLConverter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -138,9 +138,17 @@ public class ListTemplatePageServlet extends BasePageServlet {
             return pushlistTemplateItemDown(loggedInUser, request, response);
         } else if ("removeListTemplateItem".equals(what)) {
             return removelistTemplateItem(loggedInUser, request, response);
+        } else if ("createListFromTemplate".equals(what)) {
+            return createListFromTemplate(loggedInUser, request, response);
         } else {
             throw new IllegalArgumentException("Invalid action " + what);
         }
+    }
+
+    private HtmlResponsePrinter createListFromTemplate(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
+        String listTemplateId = request.getParameter("listTemplateId");
+        ListInstance listInstance = ListInstanceService.createFromTemplate(ListTemplate.DESCRIPTOR.idFieldDescriptor.fromString(listTemplateId), loggedInUser.getUserId());
+        return HtmlResponsePrinter.redirectResponse("/listInstance/" + listInstance.getId().toString());
     }
 
     private HtmlResponsePrinter removelistTemplateItem(LoggedInUser loggedInUser, HttpServletRequest request, HttpServletResponse response) throws PersistenceException, IOException {
