@@ -43,26 +43,24 @@ public class ListInstanceEditPageServlet extends BasePageServlet {
 
         sb.append("<head>\n" +
                 "\t<title>Shpanlist - Edit List</title>\n").append(
-                getHeaderConstants());
-
-        sb.append("\t<script type=\"text/javascript\">\n" +
-                "\n" +
-                "\tfunction onLoad() {\n" +
-                "\tListInstanceEditPageView.listInstanceId = '").append(listInstanceIdString).append("';\n" +
-                "\t}\n" +
-                "\t</script>\n" +
+                getHeaderConstants()).append(
                 "</head>");
 
-
         sb.append(
-                "<body onload=\"onLoad()\" data-listInstanceId=\"").append(listInstanceIdString).append("\">\n" +
+                "<body>\n" +
                         "<div id=\"pageEditListInstance\" data-role=\"page\">\n" +
                         "    <div data-role=\"header\"><h2 id =\"pageEditListInstanceHeader\">").append(
                 listInstanceFull.getName()).append("</h2>\n" +
                 "    </div>\n" +
                 "    <div data-role=\"content\">\n" +
                 "        <input id =\"listInstanceId\" type=\"hidden\" value=\"").append(listInstanceIdString).append("\"/>" +
-                "        List Name:<input id=\"txtListName\" type=\"text\" value=\"").append(listInstanceFull.getName()).append("\">\n" +
+
+                "        List Name:<input id=\"txtListName\" type=\"text\" value=\"").append(listInstanceFull.getName()).append("\"");
+
+        if (listInstanceFull.getListInstanceItemRelationship().getTargetEntities().isEmpty()){
+            sb.append("autofocus=\"autofocus\"");
+        }
+        sb.append("/>\n" +
                 "        <input type=\"button\" value=\"Update List Name\" onclick=\"ListInstanceEditPageView.updateName(txtListName.value)\" />\n" +
                 "        <table id=\"tabListInstanceItems\" data-role=\"table\" class=\"ui-responsive table-stroke\">\n");
 
