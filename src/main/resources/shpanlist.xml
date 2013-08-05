@@ -115,11 +115,6 @@
                     <mandatory>true</mandatory>
                     <related-entity>listUser</related-entity>
                 </one-to-many>
-                <one-to-many>
-                    <name>listTemplate</name>
-                    <mandatory>false</mandatory>
-                    <related-entity>listTemplate</related-entity>
-                </one-to-many>
                 <many-to-one>
                     <name>listInstanceItem</name>
                     <mandatory>false</mandatory>

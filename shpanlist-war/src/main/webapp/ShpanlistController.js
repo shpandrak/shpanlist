@@ -150,7 +150,6 @@ var ShpanlistController = {
     },
 
     menuEditListInstance: function(listInstanceId){
-        ListInstanceEditPageView.listInstanceId = listInstanceId;
         $.mobile.changePage('/listInstanceEdit/' + listInstanceId, {transition:'slide', reloadPage:true});
     },
 
@@ -305,7 +304,7 @@ var ShpanlistController = {
         ShpanlistController.doItPage("/home",
             { what: "createNewListInstance"},
             function(response){
-                ShpanlistController.doInstructions (response);
+                ShpanlistController.doInstructions(response);
             });
     }
 

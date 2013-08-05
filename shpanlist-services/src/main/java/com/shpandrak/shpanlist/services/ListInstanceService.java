@@ -59,9 +59,6 @@ public abstract class ListInstanceService {
                     null,
                     creatingUserId);
 
-            // Relating it to the template
-            listInstance.setListTemplateId(listTemplate.getId());
-
             PersistenceLayerManager.getConnectionProvider().beginTransaction();
 
             listInstanceManager.create(listInstance);

@@ -55,12 +55,13 @@ public class ListInstanceEditPageServlet extends BasePageServlet {
 
 
         sb.append(
-                "<body onload=\"onLoad()\">\n" +
+                "<body onload=\"onLoad()\" data-listInstanceId=\"").append(listInstanceIdString).append("\">\n" +
                         "<div id=\"pageEditListInstance\" data-role=\"page\">\n" +
                         "    <div data-role=\"header\"><h2 id =\"pageEditListInstanceHeader\">").append(
                 listInstanceFull.getName()).append("</h2>\n" +
                 "    </div>\n" +
                 "    <div data-role=\"content\">\n" +
+                "        <input id =\"listInstanceId\" type=\"hidden\" value=\"").append(listInstanceIdString).append("\"/>" +
                 "        List Name:<input id=\"txtListName\" type=\"text\" value=\"").append(listInstanceFull.getName()).append("\">\n" +
                 "        <input type=\"button\" value=\"Update List Name\" onclick=\"ListInstanceEditPageView.updateName(txtListName.value)\" />\n" +
                 "        <table id=\"tabListInstanceItems\" data-role=\"table\" class=\"ui-responsive table-stroke\">\n");

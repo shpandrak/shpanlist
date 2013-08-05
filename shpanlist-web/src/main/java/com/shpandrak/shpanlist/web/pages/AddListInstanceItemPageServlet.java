@@ -45,27 +45,21 @@ public class AddListInstanceItemPageServlet extends BasePageServlet {
 
         sb.append("<head>\n" +
                 "\t<title>").append("Add List Item").append("</title>\n").append(
-                getHeaderConstants()).append("\n");
-
-        sb.append("\t<script type=\"text/javascript\">\n" +
-                "\n" +
-                "\tfunction loadMe() {\n" +
-                "\tListInstanceEditPageView.listInstanceId = '").append(listInstanceIdString).append("';\n" +
-                "\t}\n" +
-                "\t</script>\n" +
+                getHeaderConstants()).append("\n").append(
                 "</head>");
         sb.append(
-                "<body onload=\"loadMe()\">\n" +
+                "<body>\n" +
                         "<div id=\"pageAddListInstanceItem\" data-role=\"page\">\n" +
                         "    <div data-role=\"header\">\n" +
                         "        <h2>Add List Item</h2>\n" +
                         "    </div>\n" +
                         "    <div data-role=\"content\">\n" +
+                        "        <input id =\"listInstanceId\" type=\"hidden\" value=\"").append(listInstanceIdString).append("\"/>" +
                         "        <table style=\"border-spacing:0;padding:0\">\n" +
                         "            <tr>\n" +
                         "                <td>Item:</td>\n" +
                         "                <td>\n" +
-                        "                    <input id=\"txtListInstanceItemName\" type=\"text\"/>\n" +
+                        "                    <input id=\"txtListInstanceItemName\" type=\"text\" autofocus=\"autofocus\"/>\n" +
                         "                </td>\n" +
                         "            </tr>\n" +
                         "            <tr>\n" +
@@ -82,7 +76,7 @@ public class AddListInstanceItemPageServlet extends BasePageServlet {
                         "            </tr>\n" +
                         "            <tr>\n" +
                         "                <td colspan=\"2\">\n" +
-                        "                    <input type=\"button\" onClick=\"ListInstanceEditPageView.createNewItem(txtListInstanceItemName.value, txtListInstanceItemDescription.value, txtListInstanceItemAmount.value)\"\n" +
+                        "                    <input type=\"button\" onClick=\"ListInstanceEditPageView.createNewItem(ListInstanceEditPageView.getListInstanceId(), txtListInstanceItemName.value, txtListInstanceItemDescription.value, txtListInstanceItemAmount.value)\"\n" +
                         "                           value=\"Add\"/>\n" +
                         "                </td>\n" +
                         "            </tr>\n" +

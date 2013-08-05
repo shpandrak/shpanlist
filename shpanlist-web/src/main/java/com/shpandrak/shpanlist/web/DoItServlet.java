@@ -119,7 +119,7 @@ public class DoItServlet extends HttpServlet {
         
     }
 
-    private void attachUserToSession(HttpServletRequest request, LoggedInUser user) {
+    public static void attachUserToSession(HttpServletRequest request, LoggedInUser user) {
         request.getSession().setAttribute("user", user);
     }
     private void detachUserFromSession(HttpServletRequest request, LoggedInUser user) {

@@ -24,7 +24,7 @@ public class AddListTemplateItemPageServlet extends BasePageServlet {
     @Override
     public HtmlResponsePrinter doItPlease(HttpServletRequest request, HttpServletResponse response, LoggedInUser loggedInUser, String what) throws IOException, PersistenceException, UserMustSignInException {
 
-        if ("addListTemplateItem".equals(what)) {
+        if ("removeListInstance".equals(what)) {
             return addListTemplateItem(loggedInUser, request, response);
         }else{
             throw new IllegalArgumentException("Unsupported operation by page: " + what);
@@ -82,7 +82,7 @@ public class AddListTemplateItemPageServlet extends BasePageServlet {
                         "            <tr>\n" +
                         "                <td>Item:</td>\n" +
                         "                <td>\n" +
-                        "                    <input id=\"txtListTemplateItemName\" type=\"text\"/>\n" +
+                        "                    <input id=\"txtListTemplateItemName\" type=\"text\" autofocus=\"autofocus\"/>\n" +
                         "                </td>\n" +
                         "            </tr>\n" +
                         "            <tr>\n" +

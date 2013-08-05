@@ -9,6 +9,8 @@ import com.shpandrak.shpanlist.model.Gender;
 import com.shpandrak.shpanlist.model.ListTemplate;
 import com.shpandrak.shpanlist.model.ListTemplateItem;
 import com.shpandrak.shpanlist.model.ListUser;
+import com.shpandrak.shpanlist.model.auth.LoggedInUser;
+import com.shpandrak.shpanlist.services.ShpanlistAuthService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,17 +30,17 @@ import java.util.List;
  */
 public class InitDataServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            createInitData();
-            httpServletResponse.sendRedirect("/");
+            createInitData(request, response);
+            response.sendRedirect("/");
         } catch (PersistenceException e) {
-            e.printStackTrace(httpServletResponse.getWriter());
+            e.printStackTrace(response.getWriter());
             throw new ServletException("Oops", e);
         }
     }
 
-    private void createInitData() throws PersistenceException {
+    private void createInitData(HttpServletRequest request, HttpServletResponse response) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListUserManager listUserManager = new ListUserManager();
@@ -68,6 +70,9 @@ public class InitDataServlet extends HttpServlet {
                 ListTemplateItem milk = new ListTemplateItem(listTemplate, "Milk", 2, "3% fat milk", null);
                 listTemplateItemManager.create(Arrays.asList(eggs, milk));
             }
+
+            ListUser user = ShpanlistAuthService.signIn("shpandrak", "shpanlist");
+            DoItServlet.attachUserToSession(request, new LoggedInUser(user.getId(), user.getUserName()));
 
 
 
