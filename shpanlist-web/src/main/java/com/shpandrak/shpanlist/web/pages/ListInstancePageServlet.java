@@ -62,7 +62,7 @@ public class ListInstancePageServlet extends BasePageServlet {
                 listInstanceFull.getName()).append("</h2>\n" +
                 "    </div>\n" +
                 "    <div data-role=\"content\">\n" +
-                "        <ul id=\"lstItems\" data-role=\"listview\">\n");
+                "        <ul id=\"lstItems\" data-role=\"listview\" data-split-icon=\"info\">\n");
 
         for (ListInstanceItem currListInstanceItem : listInstanceFull.getListInstanceItemRelationship().getTargetEntities()) {
 
@@ -103,7 +103,12 @@ public class ListInstancePageServlet extends BasePageServlet {
             writer.append(" - ").append(currListInstanceItem.getAmount().toString());
         }
 
-        writer.append("</a></li>");
+        writer.append("</a>");
+
+        if (currListInstanceItem.getImageURL() != null){
+            writer.append("<a HREF=\"javascript:ShpanlistController.menuListInstanceItemInfo('") .append (currListInstanceItem.getId().toString()).append("')\"/>");
+        }
+        writer.append("</li>");
     }
 
 

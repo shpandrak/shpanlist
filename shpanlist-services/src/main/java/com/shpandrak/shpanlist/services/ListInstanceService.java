@@ -9,7 +9,6 @@ import com.shpandrak.persistence.PersistenceLayerManager;
 import com.shpandrak.persistence.query.filter.*;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListInstanceManager;
-import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
 import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
 import com.shpandrak.shpanlist.model.ListInstance;
 import com.shpandrak.shpanlist.model.ListInstanceItem;
@@ -70,7 +69,7 @@ public abstract class ListInstanceService {
             if (!listTemplateItems.isEmpty()){
                 List<ListInstanceItem> listInstanceItems = new ArrayList<ListInstanceItem>(listTemplateItems.size());
                 for (ListTemplateItem currItemTemplate : listTemplateItems){
-                    listInstanceItems.add(new ListInstanceItem(listInstance, currItemTemplate.getName(), currItemTemplate.getItemOrder(), currItemTemplate.getDescription(), currItemTemplate.getDefaultAmount(), false));
+                    listInstanceItems.add(new ListInstanceItem(listInstance, currItemTemplate.getName(), currItemTemplate.getItemOrder(), currItemTemplate.getDescription(), currItemTemplate.getDefaultAmount(), false, null));
                 }
                 listInstanceItemManager.create(listInstanceItems);
             }
@@ -214,7 +213,7 @@ public abstract class ListInstanceService {
         }
     }
 
-    public static void addListInstanceItem(Key listInstanceId, String listInstanceItemName, String listInstanceItemDescription, Integer amount) throws PersistenceException {
+    public static void addListInstanceItem(Key listInstanceId, String listInstanceItemName, String listInstanceItemDescription, Integer amount, String imageURL) throws PersistenceException {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try {
             //todo:transaciton
@@ -224,7 +223,7 @@ public abstract class ListInstanceService {
             if (!existingItems.isEmpty()) {
                 itemOrdinal = existingItems.get(existingItems.size() - 1).getItemOrder() + 1;
             }
-            listInstanceItemManager.create(new ListInstanceItem(listInstanceId, listInstanceItemName, itemOrdinal, listInstanceItemDescription, amount, false));
+            listInstanceItemManager.create(new ListInstanceItem(listInstanceId, listInstanceItemName, itemOrdinal, listInstanceItemDescription, amount, false, imageURL));
         } finally {
             PersistenceLayerManager.endJointConnectionSession();
         }

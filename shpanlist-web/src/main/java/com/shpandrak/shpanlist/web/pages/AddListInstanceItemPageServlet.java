@@ -4,9 +4,7 @@ import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.shpanlist.model.ListInstance;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 import com.shpandrak.shpanlist.services.ListInstanceService;
-import com.shpandrak.shpanlist.web.EmptyResponsePrinter;
 import com.shpandrak.shpanlist.web.HtmlResponsePrinter;
-import com.shpandrak.shpanlist.web.ResponsePrinter;
 import com.shpandrak.shpanlist.web.UserMustSignInException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,11 +97,12 @@ public class AddListInstanceItemPageServlet extends BasePageServlet {
         String listInstanceItemName = request.getParameter("listInstanceItemName");
         String listInstanceItemDescription = request.getParameter("listInstanceItemDescription");
         String listInstanceItemDefaultAmount = request.getParameter("listInstanceItemAmount");
+        String imageURL = request.getParameter("listInstanceItemImageURL");
         Integer amount = null;
         if (listInstanceItemDefaultAmount != null && !listInstanceItemDefaultAmount.isEmpty()){
             amount = Integer.valueOf(listInstanceItemDefaultAmount);
         }
-        ListInstanceService.addListInstanceItem(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId), listInstanceItemName, listInstanceItemDescription, amount);
+        ListInstanceService.addListInstanceItem(ListInstance.DESCRIPTOR.idFieldDescriptor.fromString(listInstanceId), listInstanceItemName, listInstanceItemDescription, amount, imageURL);
         return HtmlResponsePrinter.emptyResponse();
     }
 

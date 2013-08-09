@@ -149,6 +149,10 @@
                 <boolean-field name="gotIt">
                     <mandatory>true</mandatory>
                 </boolean-field>
+                <string-field name="imageURL">
+                    <mandatory>false</mandatory>
+                    <max-length>2000</max-length>
+                </string-field>
             </fields>
         </entity>
 

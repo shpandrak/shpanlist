@@ -14,6 +14,10 @@
         <servlet-class>com.shpandrak.shpanlist.web.pages.ListInstancePageServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ListInstanceItemInfoPageServlet</servlet-name>
+        <servlet-class>com.shpandrak.shpanlist.web.pages.ListInstanceItemInfoPageServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AddListInstanceItemPageServlet</servlet-name>
         <servlet-class>com.shpandrak.shpanlist.web.pages.AddListInstanceItemPageServlet</servlet-class>
     </servlet>
@@ -98,6 +102,10 @@
     <servlet-mapping>
         <servlet-name>AddListTemplateItemPageServlet</servlet-name>
         <url-pattern>/addListTemplateItem/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListInstanceItemInfoPageServlet</servlet-name>
+        <url-pattern>/listInstanceItemInfo/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HomePageServlet</servlet-name>

@@ -2,13 +2,8 @@ package com.shpandrak.shpanlist.web;
 
 import com.shpandrak.persistence.PersistenceException;
 import com.shpandrak.persistence.PersistenceLayerManager;
-import com.shpandrak.shpanlist.gae.datastore.ListTemplateItemManager;
-import com.shpandrak.shpanlist.gae.datastore.ListTemplateManager;
-import com.shpandrak.shpanlist.gae.datastore.ListUserManager;
-import com.shpandrak.shpanlist.model.Gender;
-import com.shpandrak.shpanlist.model.ListTemplate;
-import com.shpandrak.shpanlist.model.ListTemplateItem;
-import com.shpandrak.shpanlist.model.ListUser;
+import com.shpandrak.shpanlist.gae.datastore.*;
+import com.shpandrak.shpanlist.model.*;
 import com.shpandrak.shpanlist.model.auth.LoggedInUser;
 import com.shpandrak.shpanlist.services.ShpanlistAuthService;
 
@@ -44,8 +39,8 @@ public class InitDataServlet extends HttpServlet {
         PersistenceLayerManager.beginOrJoinConnectionSession();
         try{
             ListUserManager listUserManager = new ListUserManager();
-            ListTemplateManager listTemplateManager = new ListTemplateManager();
-            ListTemplateItemManager listTemplateItemManager = new ListTemplateItemManager();
+            ListInstanceManager listInstanceManager = new ListInstanceManager();
+            ListInstanceItemManager listInstanceItemManager = new ListInstanceItemManager();
 
             ListUser shpandrakUser = listUserManager.getByField(ListUser.DESCRIPTOR.userNameFieldDescriptor, "shpandrak");
             if (shpandrakUser == null){
@@ -54,21 +49,21 @@ public class InitDataServlet extends HttpServlet {
                 listUserManager.create(shpandrakUser);
             }
 
-            ListTemplate listTemplate;
-            List<ListTemplate> listTemplates = listTemplateManager.listByField(
-                    ListTemplate.DESCRIPTOR.nameFieldDescriptor, "My first list");
+            ListInstance listInstance;
+            List<ListInstance> listTemplates = listInstanceManager.listByField(
+                    ListInstance.DESCRIPTOR.nameFieldDescriptor, "My first list");
             if (listTemplates.isEmpty()){
-                listTemplate = new ListTemplate("My first list", new Date(), shpandrakUser);
-                listTemplateManager.create(listTemplate);
+                listInstance = new ListInstance("My first list", new Date(), null, shpandrakUser);
+                listInstanceManager.create(listInstance);
             }else {
-                listTemplate = listTemplates.get(0);
+                listInstance = listTemplates.get(0);
             }
 
-            List<ListTemplateItem> listTemplateItems = listTemplateItemManager.listByListTemplateRelationship(listTemplate.getId());
-            if (listTemplateItems.isEmpty()){
-                ListTemplateItem eggs = new ListTemplateItem(listTemplate, "Eggs", 1, "Size L Eggs", 12);
-                ListTemplateItem milk = new ListTemplateItem(listTemplate, "Milk", 2, "3% fat milk", null);
-                listTemplateItemManager.create(Arrays.asList(eggs, milk));
+            List<ListInstanceItem> listInstanceItems = listInstanceItemManager.listByListInstanceRelationship(listInstance.getId());
+            if (listInstanceItems.isEmpty()){
+                ListInstanceItem eggs = new ListInstanceItem(listInstance, "Eggs", 1, "Size L Eggs", 12, false, "http://farm8.staticflickr.com/7382/buddyicons/7797673@N02_r.jpg?1369432289#7797673@N02");
+                ListInstanceItem milk = new ListInstanceItem(listInstance, "Milk", 2, "3% fat milk", null, false, null);
+                listInstanceItemManager.create(Arrays.asList(eggs, milk));
             }
 
             ListUser user = ShpanlistAuthService.signIn("shpandrak", "shpanlist");

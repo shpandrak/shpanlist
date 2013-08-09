@@ -306,6 +306,9 @@ var ShpanlistController = {
             function(response){
                 ShpanlistController.doInstructions(response);
             });
-    }
+    },
 
+    menuListInstanceItemInfo: function(listInstanceItemId){
+        $.mobile.changePage("/listInstanceItemInfo/" + listInstanceItemId);
+    }
 };
